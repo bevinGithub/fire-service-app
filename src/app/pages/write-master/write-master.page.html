@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="read" *ngIf="writingTag" >
+    <form #f='ngForm' class="forms ion-padding">
+      <p class="heading">Select Site</p>
+      <ion-item>
+        <ion-label>Select</ion-label>
+        <ion-select [(ngModel)]="tag.siteID" name="siteID" (ionChange)="getPanelsData($event)" placeholder="Select Site" required #cert="ngModel">
+          <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.site_name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
+        <span class="error-msg">Site is needed!</span>
+      </div>
+
+      <ion-item *ngIf="showPanel" >
+        <ion-label>Select Panel</ion-label>
+        <ion-select [(ngModel)]="tag.panelID" name="panelID" placeholder="Select Panel" required #panel="ngModel">
+          <ion-select-option *ngFor="let item of panels" value="{{item?.id}}">{{ item?.panel_name }}</ion-select-option>
+        </ion-select>
+        <div class="list-bg-trans" *ngIf="!panel.valid && panel.touched">
+          <span class="error-msg">Panel is needed!</span>
+        </div>
+      </ion-item>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.panel_line" name="panel_line" type="tel" autocapitalize="characters" placeholder="Panel Line e.g 1 or 2 or 3 or  4" required #lineNumber="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!lineNumber.valid && lineNumber.touched">
+        <span class="error-msg">Panel line number is required!</span>
+      </div>
+
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.tagNumber" name="tagNumber" type="text" autocapitalize="characters" placeholder="Tag Number" required #tagNumber="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!tagNumber.valid && tagNumber.touched">
+        <span class="error-msg">Tag number is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceNumber" name="deviceNumber" type="tel" placeholder="Device Number" required #deviceNumber="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!deviceNumber.valid && deviceNumber.touched">
+        <span class="error-msg">Device number is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceType" name="deviceType" type="text" autocapitalize="words" placeholder="Device Type" required #deviceType="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!deviceType.valid && deviceType.touched">
+        <span class="error-msg">Device type is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceMessage" name="deviceMessage" type="text" autocapitalize="words" placeholder="Device Message" ></ion-input>
+      </ion-item>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.zone" name="zone" type="text" autocapitalize="words" placeholder="Zone" ></ion-input>
+      </ion-item>
+      <ion-item  lines="none" class="list-bg">
+        Date: {{ writeDate }}
+      </ion-item>
+      <div padding>
+        <!-- <ion-input [(ngModel)]="tag.siteID" name="siteID" type="hidden" placeholder="Site ID" ></ion-input> -->
+        <ion-input [(ngModel)]="tag.serviceTypeID" name="serviceTypeID" type="hidden" placeholder="Service Type ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="hidden" placeholder="writeTime" readonly=""></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="writeTag()"  [disabled]="!f.valid">SUBMIT</ion-button>
+      </div>
+
+    </form>
+  </div>
+
+
+
+</ion-content>

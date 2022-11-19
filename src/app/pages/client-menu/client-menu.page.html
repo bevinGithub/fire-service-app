@@ -1,0 +1,90 @@
+<ion-menu contentId='content' type="overlay">
+  <ion-toolbar class="border-liner" color="light">
+    <ion-title></ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-toggle>
+        <ion-icon name="close-circle-outline" color="primary" ></ion-icon>
+      </ion-menu-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-content color="light" class="content-section">
+
+     <div class="spacer">
+
+    </div>
+    <ion-grid class="grid-menu">
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[0].url})">
+              <img src="assets/img/side-menu/home.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[0].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[1].url})">
+              <img src="assets/img/side-menu/sites-icon.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[1].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[2].url})">
+              <img src="assets/img/side-menu/staff-icon.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[2].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[3].url})">
+              <img src="assets/img/side-menu/contact-icon.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[3].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[4].url})">
+              <img src="assets/img/side-menu/staff-icon.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[4].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
+          <div (click)="logOut()" >
+            <img src="assets/img/side-menu/logout-icon.png" alt="" style="margin-right: 10px">
+            <ion-label class="menu-text">LOGOUT</ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="footer-img">
+      <img src="../../../assets/img/footer-icon.png" alt="">
+    </div>
+  </ion-content>
+
+</ion-menu>
+
+<ion-router-outlet id="content" main></ion-router-outlet>

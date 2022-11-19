@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>SITES</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngIf="sites === 'No Record Found'">
+    <ion-card-content>
+      <p>There is currently no sites at the moment!</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-container *ngIf="sites !== 'No Record Found'">
+    <ion-card *ngFor="let site of sites" routerLink="/site-details/{{ site?.id }}">
+      <ion-card-content>
+        <span class="site-title">{{ site?.site_name }}</span>
+        <div class="address-container">
+          <img class="img-icon" src="/assets/img/list/marker.png" alt="">
+          <span class="address">{{ site.site_address }}</span>
+        </div>
+        <div class="phone-container">
+          <img class="img-icon" src="/assets/img/list/phone.png" alt="">
+          <span class="phone">{{ site.site_contact_number }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <div class="ion-padding ion-text-center">
+    <ion-button color="primary" shape="round" expand="block" routerLink="/request-site">REQUEST A SITE</ion-button>
+  </div>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>

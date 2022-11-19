@@ -1,0 +1,27 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary" class="ion-text-center bottom-radius">
+   <ion-title class="header-title">FIRE SERVICES APP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" >
+
+  <div class="center-logo ion-text-center" style="margin-top: 60px; margin-bottom: 50px">
+    <img id="logo" src="/assets/img/inner-logo.png" alt="">
+  </div>
+
+  <div class="ion-text-center">
+    <span class="black-text">Welcome back</span> <br>
+    <span class="orange-text">{{ userInfo?.firstname }} {{ userInfo?.surname }}</span>
+  </div>
+  <br/>
+  <div class="button-container">
+    <ion-button  *ngIf="roleID === '2'"  expand="block" shape="round" fill="solid" color="secondary" class="button-class signin-btn" routerLink="/client-menu/client-dashboard">PROCEED TO DASHBOARD</ion-button>
+
+    <ion-button  *ngIf="roleID === '3'" expand="block" shape="round" fill="solid" color="secondary" class="button-class client-btn" routerLink="/staff-menu/staff-dashboard"><span>PROCEED TO DASHBOARD</span></ion-button>
+
+    <ion-button  *ngIf="roleID === '4'" expand="block" shape="round" fill="solid" color="secondary" class="button-class client-btn" routerLink="/technician-menu/technician-dashboard"><span>PROCEED TO DASHBOARD</span></ion-button>
+
+  </div>
+</ion-content>
+

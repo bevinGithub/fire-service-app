@@ -1,0 +1,123 @@
+<ion-header style="display: none;">
+  <ion-toolbar>
+      <ion-title>clientRegistration</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+
+    <div class="center-logo ion-text-center padding-top-20">
+      <img src="../../../assets/img/inner-logo.png" alt="">
+      <div class="black-text-20">
+        STAFF REGISTRATION
+      </div>
+    </div>
+
+    <div class="client-data">
+      <ion-grid>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Name
+          </ion-col>
+          <ion-col size="6" class="right">
+            {{ staffInfo?.firstname }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Surname
+          </ion-col>
+          <ion-col size="6" class="right">
+            {{ staffInfo?.surname }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="4" class="left">
+            Email
+          </ion-col>
+          <ion-col size="8" class="right">
+            {{ staffInfo?.email }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Phone No.
+          </ion-col>
+          <ion-col size="6" class="right">
+            {{ staffInfo?.phone_number }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Mobile No.
+          </ion-col>
+          <ion-col size="6" class="right">
+            {{ staffInfo?.mobile_number }}
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Site
+          </ion-col>
+          <ion-col size="6" class="right">
+            <ng-container *ngFor="let item of assigned" >
+              <span>{{ item?.site_name }}</span><br>
+            </ng-container>
+
+          </ion-col>
+        </ion-row>
+        <ion-row class="border-bottom">
+          <ion-col size="6" class="left">
+            Job Function
+          </ion-col>
+          <ion-col size="6" class="right">
+            {{ staffInfo?.job_function }}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <form #f='ngForm' class="forms ion-padding">
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-icon slot="end" color="primary" name="eye-outline" (click)="showPasswordRegister()"></ion-icon>
+        <ion-input [(ngModel)]="staff.password" name="password" type="{{ type1 }}" (ionFocus)="hideFooterOnPass($event)" placeholder="Password (required)" minlength="6" #passwordCtrl="ngModel"></ion-input>
+      </ion-item>
+      <div class="list-bg-trans" *ngIf="!passwordCtrl.valid && passwordCtrl.touched">
+        <span class="error-msg">Password must be atleast 6 characters!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+          <ion-icon slot="end" color="primary" name="eye-outline" (click)="showPasswordRegsiterConfirm()"></ion-icon>
+          <ion-input [(ngModel)]="staff.confirm_password" (ionBlur)="checkPassword()" name="confirm_password" type="{{ type2 }}" (ionFocus)="hideFooterOnPass2($event)" placeholder="Confirm Password (required)" required #passwordCtrl2="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="password !== confirmPassword">
+        <span class="error-msg">Password do not match!</span>
+      </div>
+
+      <div class="list-bg-trans" *ngIf="!passwordCtrl2.valid && passwordCtrl2.touched">
+        <span class="error-msg">Confirm Password cannot be empty!</span>
+      </div>
+
+
+      <div class="left-padding-2" style="margin-bottom: 15px;">
+        <ion-checkbox slot="start" [(ngModel)]="staff.terms" color="light" name="terms" (ionChange)="termsChecked($event)" required></ion-checkbox>
+        <span class="terms-text" color="primary">
+          Agree to <span class="red-text" routerLink="/terms-conditions">Terms & Conditions</span>
+        </span>
+      </div>
+
+      <div padding>
+        <ion-input [(ngModel)]="staff.userID" name="userID" placeholder="userID" type="hidden" required></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="submitClientRegistration()" [disabled]="!f.valid || !isChecked">REGISTER</ion-button>
+      </div>
+    </form>
+
+
+
+  </ion-content>
+  <footer>
+    <div class="footer"  *ngIf="showBanner">
+      <img src="../../../assets/img/footer-flames.png" alt="">
+    </div>
+  </footer>

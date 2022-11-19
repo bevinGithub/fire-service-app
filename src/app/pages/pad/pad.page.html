@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>SIGNATURE PAD</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<div class="sig ion-no-padding ion-text-center">
+  <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>
+</div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col width-50>
+          <ion-button color="primary" shape="round" expand="block" (click)="drawComplete()" >Sign Off</ion-button>
+      </ion-col>
+      <ion-col width-50>
+        <ion-button color="secondary" shape="round" expand="block" (click)="drawClear()" >Clear</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>
+

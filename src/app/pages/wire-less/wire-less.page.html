@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-icon name="arrow-back-outline" size="large" color="primary"  (click)="closeModal()"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>WIRELESS</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="content-form">
+    <form [formGroup]="form"  (ngSubmit)="onSubmit()" class="forms ion-padding">
+      <ion-grid>
+        <ion-row *ngFor="let item of devices" >
+          <ion-col size="5" class="left">
+            N/A
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            <ion-select formControlName="na_{{ item?.id }}" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size="5" class="left">
+            RFTAG
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.rftag }}
+          </ion-col>
+          <ion-col size="5" class="left">
+            ADDR
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.addr }}
+          </ion-col>
+          <ion-col size="5" class="left">
+            Device Type
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.device_type }}
+          </ion-col>
+          <ion-col size="5" class="left">
+            Zone
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.zone }}
+          </ion-col>
+          <ion-col size="5" class="left">
+            Device Message
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.device_message }}
+          </ion-col>
+
+          <ion-col size="5" class="left">
+            Cleaned
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            <ion-select  formControlName="cleaned_{{ item?.id }}" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size="5" class="left">
+            Tested
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            <ion-select formControlName="tested_{{ item?.id }}" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size="5" class="left">
+            Correct Message
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            <ion-select  formControlName="correctMessage_{{ item?.id }}" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="5" class="left">
+            New Message
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            <ion-item lines="none">
+              <ion-input  formControlName="newMessage_{{ item?.id }}" placeholder="New Message" type="text" autocapitalize="on"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-input  formControlName="serviceTypeID_{{ item?.id }}" placeholder="Service Type ID" type="hidden"></ion-input>
+          <ion-input  formControlName="siteID_{{ item?.id }}" placeholder="Site ID" type="hidden"></ion-input>
+          <ion-input  formControlName="id_{{ item?.id }}" placeholder="Record ID" type="hidden"></ion-input>
+          <ion-input  formControlName="dateCreated_{{ item?.id }}" placeholder="Date Created" type="hidden"></ion-input>
+        </ion-row>
+      </ion-grid>
+
+      <div padding>
+
+        <ion-button shape="round" expand="full" type="submit" color="secondary" block>SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

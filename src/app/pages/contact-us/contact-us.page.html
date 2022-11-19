@@ -1,0 +1,85 @@
+<ion-header class="hidden">
+  <ion-toolbar>
+    <ion-title>contactUs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="center-logo ion-text-center padding-top-20px">
+    <img id="logo" src="/assets/img/inner-logo.png" alt="">
+    <div class="black-text-20">
+      CONTACT US
+    </div>
+  </div>
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-list class="list-bg-sec">
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.name" name="name" placeholder="Name (*)" type="text" autocapitalize="on" required minlength="2" #nameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!nameCtrl.valid && nameCtrl.touched">
+          <span class="error-msg">Name must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.surname" name="surname" placeholder="Surname (*)" type="text" autocapitalize="on" required minlength="2" #surnameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!surnameCtrl.valid && surnameCtrl.touched">
+          <span class="error-msg">Surname must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.mobile_number" name="mobile_number" placeholder="Mobile Number (*)" type="tel" required minlength="10" maxlength="10" #mobileCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!mobileCtrl.valid && mobileCtrl.touched">
+          <span class="error-msg">Invalid contact number!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.subject" name="subject" autocapitalize="on" placeholder="Subject (*)" type="text" required #subjectCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!subjectCtrl.valid && subjectCtrl.touched">
+          <span class="error-msg">Subject cannot be empty!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.email" name="email" placeholder="Email (*)" type="text" (ionBlur)="checkEmail()" required #emailCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="validEmail === false">
+          <span class="error-msg">Invalid email address!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="contact.message" name="message" rows="6" cols="20" placeholder="Enter your message here..." required minlength="5" #msg="ngModel"></ion-textarea>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!msg.valid && msg.touched">
+          <span class="error-msg">Message cannot be less than 5 characters!</span>
+        </div>
+
+      </ion-list>
+
+      <div padding>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="sendEnquiry()" [disabled]="!f.valid || !validEmail">SUBMIT</ion-button>
+      </div>
+
+      <br>
+      <div class="black-text-20 ion-text-center">
+        OR CALL US ON <br>
+        <span (click)="callFireServices()" class="spacer">062 211 5954</span> <span class="spacer">or</span> <span class="spacer" (click)="callCell()" >082 821 3161 </span>
+      </div>
+
+      <div class="return-home ion-text-center" style="padding-top: 10px;" routerLink="/welcome" >
+        <span>Return Home</span>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

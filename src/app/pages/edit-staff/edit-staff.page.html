@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>EDIT MEMBER STAFF</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-list class="list-bg-sec">
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="staff.firstname" name="firstname" placeholder="Name (*)" type="text" autocapitalize="on" required minlength="2" #nameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!nameCtrl.valid && nameCtrl.touched">
+          <span class="error-msg">Name must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="staff.surname" name="surname" placeholder="Surname (required)" type="text" autocapitalize="on" required minlength="2" #surnameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!surnameCtrl.valid && surnameCtrl.touched">
+          <span class="error-msg">Surname must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="staff.email" name="email" placeholder="Email (*)" type="text" (ionBlur)="checkEmail()" required #emailCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="validEmail === false">
+          <span class="error-msg">Invalid email address!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="staff.mobile_number" name="mobile_number" placeholder="Mobile Number (required)" type="tel" required minlength="10" maxlength="10" #mobileCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!mobileCtrl.valid && mobileCtrl.touched">
+          <span class="error-msg">Invalid mobile number!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="staff.job_function" name="job_function" autocapitalize="on" placeholder="Job Function (required)" type="text" required #jobFunction="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!jobFunction.valid && jobFunction.touched">
+          <span class="error-msg">Job function cannot be empty!</span>
+        </div>
+
+        <div class="ion-text-left label-text">
+          Assigned Sites
+        </div>
+
+        <ul class="sites-selected">
+          <ng-container *ngFor="let item of assignedSites" >
+            <li>{{ item.site_name }}</li>
+          </ng-container>
+        </ul>
+
+        <!-- <ion-item lines="none" *ngIf="siteOne">
+          <ion-label>Site (required)</ion-label>
+          <ion-select [(ngModel)]="staff.site_one" name="site_one" placeholder="" (ionChange)="siteSelectChange($event)"  required #siteSelect="ngModel">
+            <ion-select-option *ngFor="let site of siteList" value="{{ site?.id }}">{{ site?.site_name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="siteTwo">
+          <ion-label>Site (required)</ion-label>
+          <ion-select [(ngModel)]="staff.site_two" name="site_two" placeholder="" (ionChange)="siteSelectChange2($event)">
+            <ion-select-option *ngFor="let site of siteList2" value="{{ site?.id }}">{{ site?.site_name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="siteThree">
+          <ion-label>Site (required)</ion-label>
+          <ion-select [(ngModel)]="staff.site_three" name="site_three" placeholder="">
+            <ion-select-option *ngFor="let site of siteList3" value="{{ site?.id }}">{{ site?.site_name }}</ion-select-option>
+          </ion-select>
+        </ion-item> -->
+
+        <!-- <div class="ion-text-right add-site" (click)="displaySites()" >
+            <span>Add another site</span><img src="assets/img/add-site.png" alt="">
+        </div> -->
+
+      </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="staff.id" name="id" placeholder="staffID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="staff.client_id" name="client_id" placeholder="ClientID" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="updateStaffMember()">UPDATE STAFF MEMBER</ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>

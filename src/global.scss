@@ -1,0 +1,80 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+.hidden {
+  display: none !important;
+}
+
+.error-msg {
+	color: #B50909;
+	font-size: 13px !important;
+	font-family: "Poppins Light";
+}
+
+.return-home {
+  font-size: 14px;
+  font-family: 'Poppins Medium';
+  color: #FF1C1D
+}
+
+.counter {
+	background: black;
+	width: 15px;
+	height: 15px;
+	color: #fff;
+	display: block;
+	border-radius: 50%;
+	font-size: 12px;
+	position: relative;
+	text-align: center;
+	top: -8px;
+	left: -5px;
+}
+
+.footer {
+  background: transparent !important;
+}
+
+.logo-bottom {
+  background: #fff !important;
+}
+
+.showDiv {
+  display: block !important;
+}
+.hideDiv {
+  display: none !important;
+}
+
+.app-bg {
+  --background: url("/assets/img/app-bg.png") 100% 100% no-repeat !important;
+}
+
+
+canvas {
+	margin-bottom: -4px !important;
+}

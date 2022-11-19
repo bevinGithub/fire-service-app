@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>SERVICE REQUEST</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Status
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ serviceData?.service_status }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Category
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ serviceData?.system_category }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Service Reference
+      </ion-col>
+      <ion-col size="6" class="right">
+        #{{ serviceReference }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Date
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ refDate | date: 'dd/MM/yyyy' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Instructed By
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ serviceData?.firstname }} {{ serviceData?.surname }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Company
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ serviceData?.company_name }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Site
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ serviceData?.site_name }}
+      </ion-col>
+    </ion-row>
+
+    </ion-grid>
+
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-item>
+        <!-- <ion-label>Preferred Service Date</ion-label> -->
+        <ion-input [(ngModel)]="service.preferred_service_date" name="preferred_service_date" placeholder="Preferred Service Date" value="{{ date | date: 'YYYY-MM-dd' }}" id="date" class="ion-text-end" ></ion-input>
+        <ion-popover trigger="date" size="cover">
+          <ng-template>
+            <ion-datetime presentation="date"  [(ngModel)]="date" name="date" min="{{ minDate }}"></ion-datetime>
+          </ng-template>
+        </ion-popover>
+      </ion-item>
+
+      <div class="priority">
+        <ion-checkbox slot="start" [(ngModel)]="service.service_priority" name="service_priority"></ion-checkbox>
+        Flag as urgent
+      </div>
+
+      <div padding>
+        <ion-input [(ngModel)]="service.serviceDetails" name="serviceDetails" placeholder="Sservice Details" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="service.site_id" name="site_id" placeholder="SiteID One" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="service.serviceReference" name="serviceReference" placeholder="Service Reference" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="service.referenceDate" name="referenceDate" placeholder="Ref Date" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="service.staff_id" name="staff_id" placeholder="Staff ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="service.client_id" name="client_id" placeholder="Client ID" type="hidden"></ion-input>
+        <br>
+        <ion-button shape="round" expand="full" color="primary" block (click)="submitServiceRequest()" [disabled]="!f.valid">SUBMIT SERVICE REQUEST</ion-button>
+        <br>
+        <br>
+      </div>
+    </form>
+
+  </ion-content>
+  <footer class="footer">
+    <div class="ion-text-center logo-bottom">
+      <img valign="center" src="/assets/img/footer-icon.png" alt="">
+    </div>
+    <app-staff-footer></app-staff-footer>
+  </footer>

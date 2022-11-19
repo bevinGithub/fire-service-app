@@ -1,0 +1,125 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">0</span>
+    </ion-buttons>
+
+    <ion-title>FAULT REPORT DETAILS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Fault Reference
+      </ion-col>
+      <ion-col size="6" class="right">
+         #{{ fault?.fault_reference }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Date
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.date_requested | date: 'dd/MM/yyyy HH:mm' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border" *ngIf="fault?.fault_status === 'Accepted' && fault?.job_approved === 'Approved'" >
+      <ion-col size="6" class="left">
+        Date Assigned
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Instucted By
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.firstname}} {{ fault?.surname }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Company Name
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.company_name}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Site
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.site_name}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Status
+      </ion-col>
+      <ion-col size="6" class="right">
+        <span *ngIf="fault?.fault_status === 'In Progress'" style="color: #E9A800">{{ fault?.fault_status}}</span>
+        <span *ngIf="fault?.fault_status === 'Service Pending'" style="color: #E9A800">{{ fault?.fault_status}}</span>
+        <span *ngIf="fault?.fault_status === 'Assigned'" style="color: #E9A800">In Progress</span>
+        <span class="orange" *ngIf="fault?.status === 'Accepted' &&  fault?.job_approved !== 'Approved'">In Progress</span>
+        <span *ngIf="fault?.fault_status === 'Accepted' &&  fault?.job_approved === 'Approved'" style="color: #11AC00">Assigned</span>
+        <span *ngIf="fault?.fault_status === 'Completed'" style="color: #11AC00">{{ fault?.fault_status}}</span>
+        <span *ngIf="fault?.fault_status === 'Return Visit Required'" style="color: #E9A800">{{ fault?.fault_status}}</span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Function
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ fault?.category}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="ion-padding ion-text-center border-line" *ngIf="fault?.control_panel_photo_2" >
+    <div class="title">FAULT REPORT IMAGE</div>
+    <img width="400" height="" src="{{ url }}fault_images/{{ fault?.control_panel_photo_2 }}" alt="">
+  </div>
+
+  <div class="ion-padding details" *ngIf="fault?.fault_details" >
+    <div class="title ion-text-left">FAULT DETAILS</div>
+    {{ fault?.fault_details }}
+  </div>
+
+  <div class="rating ion-padding">
+    <ion-button class="btn-space" expand="block" color="primary" shape="round" routerLink="/staff-menu/alarms-fault-reports">VIEW FAULT REQUESTS</ion-button>
+
+    <ion-button *ngIf="fault?.fault_status === 'Completed'"  class="btn-space" expand="block" color="secondary" shape="round" routerLink="/rate-technician/{{  fault?.id }}">RATE THE TECHNICIAN</ion-button>
+
+    <ion-button *ngIf="reviews?.length > 0 && fault?.fault_status === 'Completed'" class="btn-space" expand="block" color="secondary" shape="round" routerLink="/reviews/{{  fault?.technician_id }}">VIEW RATINGS</ion-button>
+  </div>
+
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

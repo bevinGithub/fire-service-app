@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>WRITING</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button routerLink="/tag-reading">READ CHIP</ion-button>
+        </ion-col>
+      </ion-row>
+
+  </ion-grid>
+
+  <form #f='ngForm' class="forms ion-padding">
+
+    <ion-item>
+      <ion-label>Select</ion-label>
+      <ion-select [(ngModel)]="tag.siteID" name="siteID" placeholder="Select Site Template">
+        <ion-select-option *ngFor="let item of sites" value="{{item.site_id}}">{{ item.service_name }} - {{ item.site_name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item  lines="none" class="list-bg">
+      <ion-input [(ngModel)]="tag.deviceNumber" name="deviceNumber" type="tel" placeholder="Device Number" required #deviceNumber="ngModel"></ion-input>
+    </ion-item>
+
+    <div class="list-bg-trans" *ngIf="!deviceNumber.valid && deviceNumber.touched">
+      <span class="error-msg">Device number is required!</span>
+    </div>
+
+    <ion-item  lines="none" class="list-bg">
+      <ion-input [(ngModel)]="tag.deviceType" name="deviceType" type="text" autocapitalize="words" placeholder="Device Type"></ion-input>
+    </ion-item>
+
+    <ion-item  lines="none" class="list-bg">
+      <ion-input [(ngModel)]="tag.deviceMessage" name="deviceMessage" type="text" autocapitalize="words" placeholder="Device Message" ></ion-input>
+    </ion-item>
+
+    <ion-item  lines="none" class="list-bg">
+      <ion-input [(ngModel)]="tag.zone" name="zone" type="text" autocapitalize="words" placeholder="Zone" ></ion-input>
+    </ion-item>
+
+    <div padding>
+      <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="text" placeholder="writeTime" ></ion-input>
+      <ion-button shape="round" expand="full" color="primary" block (click)="writeTag()" >SUBMIT</ion-button>
+    </div>
+
+  </form>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>
+

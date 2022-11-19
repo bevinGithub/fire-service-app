@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>SITE SELECTION</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="page-title ion-text-center">
+    SELECT A SITE
+  </div>
+
+  <form #f='ngForm' class="forms ion-padding">
+    <ng-container *ngIf="sites?.length > 0" >
+      <div class="checkbox-holder" *ngIf="sites[0]" >
+        <ion-checkbox slot="start" [(ngModel)]="site.check_one" name="check_one" id="{{ sites[0]?.id }}" checked="false" value="{{sites[0]?.id}}" (ionChange)="siteOneChange($event)"></ion-checkbox> <span class="check-title">{{sites[0]?.site_name}}</span>
+      </div>
+
+      <div class="checkbox-holder" *ngIf="sites[1]" >
+        <ion-checkbox slot="start" [(ngModel)]="site.check_two" name="check_two" id="{{ sites[1]?.id }}" checked="false" value="{{sites[1]?.id}}" (ionChange)="siteTwoChange($event)"></ion-checkbox> <span class="check-title">{{sites[1]?.site_name}}</span>
+      </div>
+
+      <div class="checkbox-holder" *ngIf="sites[2]" >
+        <ion-checkbox slot="start" [(ngModel)]="site.check_three" name="check_three" id="{{ sites[2]?.id }}" checked="false" value="{{sites[2]?.id}}" (ionChange)="siteThreeChange($event)"></ion-checkbox> <span class="check-title">{{sites[2]?.site_name}}</span>
+      </div>
+
+      <div class="checkbox-holder" *ngIf="sites[3]" >
+        <ion-checkbox slot="start" [(ngModel)]="site.check_four" name="check_four" id="{{ sites[3]?.id }}" checked="false" value="{{sites[3]?.id}}" (ionChange)="siteFourChange($event)"></ion-checkbox> <span class="check-title">{{sites[3]?.site_name}}</span>
+      </div>
+
+      <div class="checkbox-holder" *ngIf="sites[4]" >
+        <ion-checkbox slot="start" [(ngModel)]="site.check_five" name="check_five" id="{{ sites[4]?.id }}" checked="false" value="{{sites[4]?.id}}" (ionChange)="siteFiveChange($event)"></ion-checkbox> <span class="check-title">{{sites[4]?.site_name}}</span>
+      </div>
+    </ng-container>
+
+    <div padding>
+      <ion-input [(ngModel)]="site.site_one" name="site_one" placeholder="SiteID One" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="site.site_two" name="ussite_twoerID" placeholder="SiteID Two" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="site.site_three" name="site_three" placeholder="SiteID Three" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="site.site_four" name="site_four" placeholder="SiteID Four" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="site.site_five" name="site_five" placeholder="SiteID Five" type="hidden"></ion-input>
+      <ion-button expand="full" shape="round" color="primary" routerLink="/service-request/{{ siteSelected }}" [disabled]="!buttonActive">NEXT STEP</ion-button>
+    </div>
+
+  </form>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

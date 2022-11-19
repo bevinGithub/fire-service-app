@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>SERVICE CERTIFICATE DETAILS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Service Reference
+      </ion-col>
+      <ion-col size="6" class="right">
+         #{{ service?.service_certificate_number }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Date
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ service?.service_card_created | date: 'dd/MM/yyyy' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Instucted By
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ staff?.firstname}} {{ staff?.surname }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Company Name
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ service?.company_name}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Site
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ site?.site_name}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Service Date
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ service?.final_service_date }}
+      </ion-col>
+      <ion-col size="6" class="left">
+        Service Time
+      </ion-col>
+      <ion-col size="6" class="right">
+         {{ service?.service_time }}
+      </ion-col>
+    </ion-row>
+    <ion-row class="bottom-border">
+      <ion-col size="6" class="left">
+        Status
+      </ion-col>
+      <ion-col size="6" class="right">
+        <span *ngIf="service?.cert_status === 'Rejected'" style="color: #FE0000">{{ service?.cert_status}}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <h4>Rejection Reason</h4>
+        <span class="text">{{ service?.rejectionReason }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <br><br>
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

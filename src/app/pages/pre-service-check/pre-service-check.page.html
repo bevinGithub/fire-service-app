@@ -1,0 +1,578 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-icon name="arrow-back-outline" size="large" color="primary"  (click)="closeModal()"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>PANELS & DEVICE TESTING</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            1 Control Test
+          </ion-col>
+          <ion-col size="8" class="left">
+            Panel control test, all buttons fully functional
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.control_tests_1" name="control_tests_1" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.control_test_comment_1" name="control_test_comment_1" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            2 Comms Test
+          </ion-col>
+          <ion-col size="8" class="left">
+            Fire panel com's functional, talking to all networked panels
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.comm_tests_2" name="comm_tests_2" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.comm_tests_comment_2" name="comm_tests_comment_2" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            3 Battery Test
+          </ion-col>
+          <ion-col size="8" class="left">
+            Battery test - Date sticker on each battery ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.battery_tests_3" name="battery_tests_3" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size="8" class="left">
+            Battery terminals testsed & no corrosion
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.battery_terminals_3" name="battery_terminals_3" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size="8" class="left">
+            Battery voltage under load (mains switched off & sounders active)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.battery_voltage_under_load_3" name="battery_voltage_under_load_3" placeholder="Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+
+          <ion-col size="8" class="left">
+            Battery voltage no load (mains switched off)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.battery_voltage_no_load_3" name="battery_voltage_no_load_3" placeholder="Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+
+          <ion-col size="8" class="left">
+            Charge volatge battery connected. (mains switched on)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.charge_voltage_battery_connected_3" name="charge_voltage_battery_connected_3" placeholder="Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.battery_tests_comment_3" name="battery_tests_comment_3" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+      <ion-grid *ngIf="loop1 === 'Yes'" >
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            4 LOOP 1 TEST
+          </ion-col>
+          <ion-col size="8" class="left">
+            All cable terminations testsed ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_termination_4" name="cable_termination_4" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Return and feed briged out ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.feed_bridged_4" name="feed_bridged_4" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop screen cable earthed one side ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_earthed_4" name="cable_earthed_4" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Open loop tests for loop fault?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_checked_4" name="loop_checked_4" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="4" class="left">
+            Cable type (tick)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr20_4" name="cable_fr20_4" placeholder="FR20">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr30_4" name="cable_fr30_4" placeholder="PH30">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Configured Class
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_configure_class_4" name="loop_configure_class_4" placeholder="Class Option">
+              <ion-select-option value="A">A</ion-select-option>
+              <ion-select-option value="B">B</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Voltage
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.loop_voltage_4" name="loop_voltage_4" placeholder="Loop Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.loop_1_comment_4" name="loop_1_comment_4" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid  *ngIf="loop2 === 'Yes'" >
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            5 LOOP 2 TEST
+          </ion-col>
+          <ion-col size="8" class="left">
+            All cable terminations testsed ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_termination_5" name="cable_termination_5" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Return and feed bridged out ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.feed_bridged_5" name="feed_bridged_5" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop screen cable earthed one side ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_earthed_5" name="cable_earthed_5" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Open loop tests for loop fault?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_checked_5" name="loop_checked_5" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="4" class="left">
+            Cable type (tick)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr20_5" name="cable_fr20_5" placeholder="FR20">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr30_5" name="cable_fr30_5" placeholder="PH30">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Configured Class
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_configure_class_5" name="loop_configure_class_5" placeholder="Class Option">
+              <ion-select-option value="A">A</ion-select-option>
+              <ion-select-option value="B">B</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Voltage
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.loop_voltage_5" name="loop_voltage_5" placeholder="Loop Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.loop_1_comment_5" name="loop_1_comment_5" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid  *ngIf="loop3 === 'Yes'" >
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            6 LOOP 3 TEST
+          </ion-col>
+          <ion-col size="8" class="left">
+            All cable terminations testsed ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_termination_6" name="cable_termination_6" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Return and feed bridged out ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.feed_bridged_6" name="feed_bridged_6" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop screen cable earthed one side ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_earthed_6" name="cable_earthed_6" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Open loop tests for loop fault?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_checked_6" name="loop_checked_6" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="4" class="left">
+            Cable type (tick)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr20_6" name="cable_fr20_6" placeholder="FR20">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr30_6" name="cable_fr30_6" placeholder="PH30">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Configured Class
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_configure_class_6" name="loop_configure_class_6" placeholder="Class Option">
+              <ion-select-option value="A">A</ion-select-option>
+              <ion-select-option value="B">B</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Voltage
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.loop_voltage_6" name="loop_voltage_6" placeholder="Loop Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.loop_1_comment_6" name="loop_1_comment_6" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid  *ngIf="loop4 === 'Yes'" >
+        <ion-row class="">
+          <ion-col size="12" class="title">
+            7 LOOP 4 TEST
+          </ion-col>
+          <ion-col size="8" class="left">
+            All cable terminations testsed ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_termination_7" name="cable_termination_7" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Return and feed bridged out ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.feed_bridged_7" name="feed_bridged_7" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop screen cable earthed one side ?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_earthed_7" name="cable_earthed_7" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Open loop tests for loop fault?
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_checked_7" name="loop_checked_7" placeholder="Response">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="4" class="left">
+            Cable type (tick)
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr20_7" name="cable_fr20_7" placeholder="FR20">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.cable_fr30_7" name="cable_fr30_7" placeholder="PH30">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Configured Class
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="tests.loop_configure_class_7" name="loop_configure_class_7" placeholder="Class Option">
+              <ion-select-option value="A">A</ion-select-option>
+              <ion-select-option value="B">B</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="8" class="left">
+            Loop Voltage
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="tests.loop_voltage_7" name="loop_voltage_7" placeholder="Loop Voltage" type="text" autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="tests.loop_1_comment_7" name="loop_1_comment_7" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div padding>
+        <ion-input [(ngModel)]="tests.service_type_id" name="service_type_id" placeholder="Service Type ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="tests.site_id" name="site_id" placeholder="Site ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="tests.panel_id" name="panel_id" placeholder="Panel ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="tests.service_cert_id" name="service_cert_id" placeholder="Cert ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="tests.tech_id" name="tech_id" placeholder="Tech ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="tests.panel_date" name="panel_date" placeholder="Date Created" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="submitServiceCheck()">SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

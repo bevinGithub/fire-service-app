@@ -1,0 +1,51 @@
+.title-default {
+  font-family: 'Poppins Medium';
+  font-size: 14px;
+}
+.border-liner {
+  border-bottom: 1px solid #fefefe;
+}
+.menu-listing, .item-label .item-native {
+  background: #040505 !important;
+}
+
+.menu-text {
+  font-family: 'Poppins Medium';
+  font-size: 14px;
+}
+
+ion-menu {
+  ion-content {
+    background: #fff;
+  }
+}
+
+.grid-menu ion-col {
+  margin-bottom: 15px !important;
+}
+.left-padding {
+  padding-left: 10px;
+}
+.spacer {
+  height: 30px;
+}
+
+ion-row {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+ion-icon {
+  font-size: 25px;
+}
+
+.footer-img img {
+  position: absolute;
+  left: 0;
+  bottom: 0
+}
+
+ion-col div > img {
+  position: relative;
+  top: 4px;
+}

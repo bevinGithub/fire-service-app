@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>WELCOME</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="5" class="padding-10">
+        <img src="/assets/img/alarms.png" alt="">
+      </ion-col>
+      <ion-col size="7" class="padding-10">
+        <img class="services"  src="/assets/img/faults.png" alt="" routerLink="/staff-menu/alarms-fault-reports">
+        <img class="services" src="/assets/img/servics.png" alt="" routerLink="/staff-menu/alarms-services">
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="5" class="padding-10">
+        <img src="/assets/img/sprinklers.png" alt="">
+      </ion-col>
+      <ion-col size="7" class="padding-10">
+        <img src="/assets/img/faults.png" alt="">
+        <img class="services" src="/assets/img/servics.png" alt="">
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="5" class="padding-10">
+        <img src="/assets/img/fire-hydrants.png" alt="">
+      </ion-col>
+      <ion-col size="7" class="padding-10">
+        <img src="/assets/img/faults.png" alt="">
+        <img class="services" src="/assets/img/servics.png" alt="">
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <!-- <ion-button routerLink="/staff-menu/fault-reports-list">View</ion-button> -->
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>
+

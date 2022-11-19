@@ -1,0 +1,29 @@
+.title-default {
+  width: 80%;
+  font-family: 'Poppins Semi Bold';
+  font-size: 15px;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+.logo-bottom {
+  border-bottom: 6px solid #FF1C1D
+}
+ion-col {
+  text-align: center;
+}
+
+
+// TABLET CSS STARTS HERE
+@media (min-width: 767px) and (max-width: 1080px)  {
+  ion-col {
+    text-align: center;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1366px)  {
+  ion-col {
+    text-align: center;
+  }
+}

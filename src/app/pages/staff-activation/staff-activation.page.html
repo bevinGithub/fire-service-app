@@ -1,0 +1,44 @@
+<ion-header class="hidden">
+  <ion-toolbar>
+    <ion-title>Account Activation</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="center-logo ion-text-center padding-top-20">
+    <img id="logo" src="/assets/img/inner-logo.png" alt="">
+    <div class="black-text-20">
+      STAFF REGISTRATION
+    </div>
+  </div>
+
+  <div class="page-text ion-text-center">
+    An activation code has been sent to your <br>
+    email account. Insert code below:
+  </div>
+  <form #f='ngForm' class="forms ion-padding">
+
+    <ion-item  lines="none" class="list-bg">
+      <ion-input [(ngModel)]="user.activation_code" name="activation_code" type="tel" (ionFocus)="hideFooterOnMobile($event)" placeholder="Activation Code" required #codeCtrl="ngModel"></ion-input>
+    </ion-item>
+    <div class="list-bg-trans" *ngIf="!codeCtrl.valid && codeCtrl.touched">
+      <span class="error-msg">Activation code is required!</span>
+    </div>
+
+    <div padding>
+      <ion-button shape="round" expand="full" color="primary" block (click)="activateAccount()" [disabled]="!f.valid">ACTIVATE</ion-button>
+    </div>
+
+    <div class="return-home ion-text-center" style="padding-top: 10px;" routerLink="/welcome" >
+      <span>Return Home</span>
+    </div>
+
+  </form>
+
+
+  <div class="footer-img" *ngIf="showBanner">
+    <img src="../../../assets/img/footer-flames.png" alt="">
+  </div>
+
+</ion-content>

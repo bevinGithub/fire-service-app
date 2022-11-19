@@ -1,0 +1,42 @@
+
+.title-default {
+  // width: 100%;
+  font-family: "Poppins Semi Bold";
+  font-size: 15px;
+}
+#logo {
+  margin-bottom: 20px;
+}
+
+.black-text-20 {
+  color: #313131;
+  font-size: 20px;
+  font-family: 'Poppins Semi Bold';
+}
+
+.padding-top-20 {
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+ion-button {
+  height: 50px;
+}
+
+// TABLET CSS STARTS HERE
+@media (min-width: 767px) and (max-width: 1080px)  {
+  .footer-img {
+    width: 100%
+  }
+  .footer-img img {
+    width: 100%
+  }
+}
+@media (min-width: 1024px) and (max-width: 1366px)  {
+  .footer-img {
+    width: 100%
+  }
+  .footer-img img {
+    width: 100%
+  }
+}

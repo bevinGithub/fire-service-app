@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>JOB CARD</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Job Card No.</ion-col>
+      <ion-col size="6" class="right">#{{ job?.fault_reference }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Status</ion-col>
+      <ion-col size="6" class="right">
+        <span *ngIf="job?.status === 'Assigned'" style="color: #E9A800;" >{{ job?.status }}</span>
+        <span *ngIf="job?.status === 'Accepted'" style="color: #11AC00;" >{{ job?.status }}</span>
+        <span *ngIf="job?.status === 'Completed'" style="color: #11AC00;" >{{ job?.status }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="heading ion-padding">Client Information</div>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Company Name</ion-col>
+      <ion-col size="6" class="right">{{ staff?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Site</ion-col>
+      <ion-col size="6" class="right">{{ job?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Instructed By</ion-col>
+      <ion-col size="6" class="right">{{ staff?.firstname }} {{ staff?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Address</ion-col>
+      <ion-col size="6" class="right">{{ job?.site_address }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date Requested</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="job?.date_assigned" >
+      <ion-col size="6" class="left">Date Assigned</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="job?.date_accepted" >
+      <ion-col size="6" class="left">Date Accepted</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Function</ion-col>
+      <ion-col size="6" class="right">{{ job?.function }}</ion-col>
+    </ion-row>
+    </ion-grid>
+
+    <div class="heading ion-padding" *ngIf="job?.fault_details" >
+      <div class="title ion-text-left">Fault Details</div>
+      <span class="instructions">{{ job?.fault_details }}</span>
+    </div>
+
+    <div class="heading ion-padding">Instruction</div>
+    <ion-grid>
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="instructions">{{ job?.scope_of_work }}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="ion-text-center ion-padding photo" *ngIf="job?.control_panel_photo_2" >
+      <span class="heading">Control Panel Photo</span>
+      <img width="400" height="" src="{{ url }}fault_images/{{ job?.control_panel_photo_2 }}" alt="">
+    </div>
+
+    <div class="heading ion-padding">Estimated Time Of Arrival</div>
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-item>
+        <ion-input [(ngModel)]="jobCard.arrivalTime" name="arrivalTime" placeholder="Estimated Arrival Time" value="{{ time | date: 'yyyy-MM-dd HH:mm' }}" required #arrivalTime="ngModel" id="date" class="ion-text-end" ></ion-input>
+        <ion-popover trigger="date" size="cover">
+          <ng-template>
+            <ion-datetime presentation="date-time"  [(ngModel)]="time" hour-cycle="h23" displayFormat="yyyy-MM-dd HH:mm" name="time"></ion-datetime>
+          </ng-template>
+        </ion-popover>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!arrivalTime.valid && arrivalTime.touched">
+        <span class="error-msg">Estimated arrival time is required!</span>
+      </div>
+      <br/>
+      <div padding *ngIf="job?.tech_status === ''" >
+        <ion-input [(ngModel)]="jobCard.id" name="id" placeholder="job ID" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="acceptJob()" [disabled]="!f.valid">ACCEPT JOB CARD</ion-button>
+      </div>
+      <br/>
+    </form>
+    <br><br><br><br><br><br><br><br>
+</ion-content>
+
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

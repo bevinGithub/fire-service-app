@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>EDIT SITE</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-list class="list-bg-sec">
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="site.site_name" name="site_name" placeholder="Site name (required)" type="text" autocapitalize="on" required minlength="2" #nameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!nameCtrl.valid && nameCtrl.touched">
+          <span class="error-msg">Site name must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="site.site_contact_number" name="site_contact_number" placeholder="Site Contact Number (required)" type="tel" required minlength="10" maxlength="10" #mobileCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!mobileCtrl.valid && mobileCtrl.touched">
+          <span class="error-msg">Invalid site contact number!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="site.site_location" name="site_location" autocapitalize="on" placeholder="Site Location (required)" type="text" required #siteLocation="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!siteLocation.valid && siteLocation.touched">
+          <span class="error-msg">Site location cannot be empty!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="site.site_address" name="site_address" autocapitalize="on" placeholder="Site Address (required)" type="text" required #siteAddress="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!siteAddress.valid && siteAddress.touched">
+          <span class="error-msg">Site address cannot be empty!</span>
+        </div>
+
+      </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="site.id" name="id" placeholder="Site ID" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="updateSiteData()">UPDATE SITE</ion-button>
+      </div>
+
+    </form>
+  </div>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>

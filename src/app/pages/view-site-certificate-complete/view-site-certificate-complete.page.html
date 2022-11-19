@@ -1,0 +1,899 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>SERVICE CERTIFICATES</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Contract Number</ion-col>
+      <ion-col size="6" class="right">{{ cert?.site_contract }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Certificate Number</ion-col>
+      <ion-col size="6" class="right" style="color: #11AC00;">{{ cert?.service_certificate_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Certificate Status</ion-col>
+      <ion-col size="6" class="right" style="color: #11AC00;">{{ cert?.service_status }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Type</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.service_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.service }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">{{ site?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">{{ site?.system_category }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Company</ion-col>
+      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Client/Customer</ion-col>
+      <ion-col size="8" class="right">{{ cert?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Site Location</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Address</ion-col>
+      <ion-col size="8" class="right">{{ site?.site_address }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Protected Areas</ion-col>
+      <ion-col size="8" class="right">{{ site?.protected_areas }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Due Date of Service</ion-col>
+      <ion-col size="6" class="right">{{ cert?.final_service_date | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Responsible Person</ion-col>
+      <ion-col size="8" class="right">{{ site?.responsible_person }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Contact Number</ion-col>
+      <ion-col size="8" class="right">{{ site?.site_contact_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">System Category: {{ site?.system_category }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">System Code</ion-col>
+      <ion-col size="7" class="right">{{ site?.system_code }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+<br>
+  <ion-grid class="tables">
+    <ng-container style="margin-bottom: 15px;" *ngIf="site?.service_precheck_1 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>1</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.1</ion-col>
+        <ion-col size="9" class="left">Log book analysis (Section 13.2)</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.log_book_analysis_1_1 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.2</ion-col>
+        <ion-col size="9" class="left">Event archive (Download & Printout)</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.event_archive_1_2 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.3</ion-col>
+        <ion-col size="9" class="left">Analogue values check (Download & Printout)</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.analogue_value_check_1_3 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.4</ion-col>
+        <ion-col size="9" class="left">Configuration check, programming</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.configuration_check_programming_1_4 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.5</ion-col>
+        <ion-col size="9" class="left">Disabled device check</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.disabled_device_check }}</ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- <br> -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.fire_detection_panel_2 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>2</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Fire Detection Panel & Device Testing (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">2.1</ion-col>
+        <ion-col size="9" class="left">Call points remain unobstructed and conspicuous & New exits created?</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.call_points_2_1 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">2.2</ion-col>
+        <ion-col size="9" class="left">Call points remain unobstructed and conspicuous & New exits created?</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.building_structure_changes_2_2 }}</ion-col>
+      </ion-row>
+    </ng-container>
+    <br>
+    <ng-container style="margin-bottom: 0px;" *ngIf="site?.fire_detection_panel_3 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>3</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_1 === 'Yes' || cert?.fire_panel_1 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.1</ion-col>
+        <ion-col size="9" class="left">{{ panels[0]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_1 }} </ion-col>
+      </ion-row>
+      <!-- Panel 2 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_2 === 'Yes' || cert?.fire_panel_2 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.2</ion-col>
+        <ion-col size="9" class="left">{{ panels[1]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_2 }} </ion-col>
+      </ion-row>
+      <!-- panel 3 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_3 === 'Yes' || cert?.fire_panel_3 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.3</ion-col>
+        <ion-col size="9" class="left">{{ panels[2]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_3 }} </ion-col>
+      </ion-row>
+      <!-- Panel 4 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_4 === 'Yes' || cert?.fire_panel_4 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.4</ion-col>
+        <ion-col size="9" class="left">{{ panels[3]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_4 }} </ion-col>
+      </ion-row>
+      <!-- Panel 5 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_5 === 'Yes' || cert?.fire_panel_5 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.5</ion-col>
+        <ion-col size="9" class="left">{{ panels[4]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_5 }} </ion-col>
+      </ion-row>
+      <!-- Panel 6 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_6 === 'Yes' || cert?.fire_panel_6 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.6</ion-col>
+        <ion-col size="9" class="left">{{ panels[5]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_6 }} </ion-col>
+      </ion-row>
+      <!-- Panel 7 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_7 === 'Yes' || cert?.fire_panel_7 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.7</ion-col>
+        <ion-col size="9" class="left">{{ panels[6]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_7 }} </ion-col>
+      </ion-row>
+      <!-- Panel 8      -->
+      <ion-row class="" *ngIf="cert?.fire_panel_8 === 'Yes' || cert?.fire_panel_8 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.8</ion-col>
+        <ion-col size="9" class="left">{{ panels[7]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_8 }} </ion-col>
+      </ion-row>
+      <!-- panel 9 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_9 === 'Yes' || cert?.fire_panel_9 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.9</ion-col>
+        <ion-col size="9" class="left">{{ panels[8]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_9 }} </ion-col>
+      </ion-row>
+      <!-- panel 10 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_10 === 'Yes' || cert?.fire_panel_10 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.10</ion-col>
+        <ion-col size="9" class="left">{{ panels[9]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_10 }} </ion-col>
+      </ion-row>
+      <!-- panel 11 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_11 === 'Yes' || cert?.fire_panel_11 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.11</ion-col>
+        <ion-col size="9" class="left">{{ panels[10]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_11 }} </ion-col>
+      </ion-row>
+      <!-- panel 12 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_12 === 'Yes' || cert?.fire_panel_12 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.12</ion-col>
+        <ion-col size="9" class="left">{{ panels[11]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_12 }} </ion-col>
+      </ion-row>
+      <!-- panel 13 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_13 === 'Yes' || cert?.fire_panel_13 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.13</ion-col>
+        <ion-col size="9" class="left">{{ panels[12]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_13 }} </ion-col>
+      </ion-row>
+      <!-- panel 14 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_14 === 'Yes' || cert?.fire_panel_14 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.14</ion-col>
+        <ion-col size="9" class="left">{{ panels[13]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_14 }} </ion-col>
+      </ion-row>
+      <!-- panel 15 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_15 === 'Yes' || cert?.fire_panel_15 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.15</ion-col>
+        <ion-col size="9" class="left">{{ panels[14]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_15 }} </ion-col>
+      </ion-row>
+      <!-- panel 16 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_16 === 'Yes' || cert?.fire_panel_16 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.16</ion-col>
+        <ion-col size="9" class="left">{{ panels[15]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_16 }} </ion-col>
+      </ion-row>
+      <!-- panel 17 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_17 === 'Yes' || cert?.fire_panel_17 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.17</ion-col>
+        <ion-col size="9" class="left">{{ panels[16]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_17 }} </ion-col>
+      </ion-row>
+      <!-- panel 18 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_18 === 'Yes' || cert?.fire_panel_18 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.18</ion-col>
+        <ion-col size="9" class="left">{{ panels[17]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_18 }} </ion-col>
+      </ion-row>
+      <!-- panel 19 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_19 === 'Yes' || cert?.fire_panel_19 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.19</ion-col>
+        <ion-col size="9" class="left">{{ panels[18]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_19 }} </ion-col>
+      </ion-row>
+      <!-- panel 20 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_20 === 'Yes' || cert?.fire_panel_20 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.20</ion-col>
+        <ion-col size="9" class="left">{{ panels[19]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_20 }} </ion-col>
+      </ion-row>
+      <!-- panel 21 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_21 === 'Yes' || cert?.fire_panel_21 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.21</ion-col>
+        <ion-col size="9" class="left">{{ panels[20]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_21 }} </ion-col>
+      </ion-row>
+      <!-- panel 22 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_22 === 'Yes' || cert?.fire_panel_22 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.22</ion-col>
+        <ion-col size="9" class="left">{{ panels[21]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_22 }} </ion-col>
+      </ion-row>
+      <!-- panel 23 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_23 === 'Yes' || cert?.fire_panel_23 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.23</ion-col>
+        <ion-col size="9" class="left">{{ panels[22]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_23 }} </ion-col>
+      </ion-row>
+      <!-- panel 24 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_24 === 'Yes' || cert?.fire_panel_24 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.24</ion-col>
+        <ion-col size="9" class="left">{{ panels[23]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_24 }} </ion-col>
+      </ion-row>
+      <!-- panel 25 -->
+      <ion-row class="" *ngIf="cert?.fire_panel_25 === 'Yes' || cert?.fire_panel_25 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">3.25</ion-col>
+        <ion-col size="9" class="left">{{ panels[24]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.fire_panel_25 }} </ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- 4.0 -->
+    <ng-container style="margin-bottom: 0px;" *ngIf="site?.cleaning_devices_4 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>4</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Cleaning Devices (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class="" *ngIf="cert?.clean_device_1 === 'Yes' || cert?.clean_device_1 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.1</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[0]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_1 }} </ion-col>
+      </ion-row>
+      <!-- Panel 2 -->
+      <ion-row class="" *ngIf="cert?.clean_device_2 === 'Yes' || cert?.clean_device_2 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.2</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[1]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_2 }} </ion-col>
+      </ion-row>
+      <!-- Panel 3 -->
+      <ion-row class="" *ngIf="cert?.clean_device_3 === 'Yes' || cert?.clean_device_3 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.3</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[2]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_3 }} </ion-col>
+      </ion-row>
+      <!-- Panel 4 -->
+      <ion-row class="" *ngIf="cert?.clean_device_4 === 'Yes' || cert?.clean_device_4 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.4</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[3]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_4 }} </ion-col>
+      </ion-row>
+      <!-- Panel 5 -->
+      <ion-row class="" *ngIf="cert?.clean_device_5 === 'Yes' || cert?.clean_device_5 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.5</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[4]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_5 }} </ion-col>
+      </ion-row>
+      <!-- Panel 6 -->
+      <ion-row class="" *ngIf="cert?.clean_device_6 === 'Yes' || cert?.clean_device_6 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.6</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[5]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_6 }} </ion-col>
+      </ion-row>
+      <!-- Panel 7 -->
+      <ion-row class="" *ngIf="cert?.clean_device_7 === 'Yes' || cert?.clean_device_7 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.7</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[6]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_7 }} </ion-col>
+      </ion-row>
+      <!-- Panel 8 -->
+      <ion-row class="" *ngIf="cert?.clean_device_8 === 'Yes' || cert?.clean_device_8 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.8</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[7]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_8 }} </ion-col>
+      </ion-row>
+      <!-- Panel 9 -->
+      <ion-row class="" *ngIf="cert?.clean_device_9 === 'Yes' || cert?.clean_device_9 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.9</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[8]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_9 }} </ion-col>
+      </ion-row>
+      <!-- Panel 10 -->
+      <ion-row class="" *ngIf="cert?.clean_device_10 === 'Yes' || cert?.clean_device_10 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.10</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[9]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_10 }} </ion-col>
+      </ion-row>
+      <!-- Panel 11 -->
+      <ion-row class="" *ngIf="cert?.clean_device_11 === 'Yes' || cert?.clean_device_11 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.11</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[10]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_11 }} </ion-col>
+      </ion-row>
+      <!-- Panel 12 -->
+      <ion-row class="" *ngIf="cert?.clean_device_12 === 'Yes' || cert?.clean_device_12 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.12</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[11]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_12 }} </ion-col>
+      </ion-row>
+      <!-- Panel 13 -->
+      <ion-row class="" *ngIf="cert?.clean_device_13 === 'Yes' || cert?.clean_device_13 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.13</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[12]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_13 }} </ion-col>
+      </ion-row>
+      <!-- Panel 14 -->
+      <ion-row class="" *ngIf="cert?.clean_device_14 === 'Yes' || cert?.clean_device_14 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.14</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[13]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_14 }} </ion-col>
+      </ion-row>
+      <!-- Panel 15 -->
+      <ion-row class="" *ngIf="cert?.clean_device_15 === 'Yes' || cert?.clean_device_15 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.15</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[14]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_15 }} </ion-col>
+      </ion-row>
+      <!-- Panel 16 -->
+      <ion-row class="" *ngIf="cert?.clean_device_16 === 'Yes' || cert?.clean_device_16 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.16</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[15]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_16 }} </ion-col>
+      </ion-row>
+      <!-- Panel 17 -->
+      <ion-row class="" *ngIf="cert?.clean_device_17 === 'Yes' || cert?.clean_device_17 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.17</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[16]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_17 }} </ion-col>
+      </ion-row>
+      <!-- Panel 18 -->
+      <ion-row class="" *ngIf="cert?.clean_device_18 === 'Yes' || cert?.clean_device_18 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.18</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[17]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_18 }} </ion-col>
+      </ion-row>
+      <!-- Panel 19 -->
+      <ion-row class="" *ngIf="cert?.clean_device_19 === 'Yes' || cert?.clean_device_19 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.19</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[18]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_19 }} </ion-col>
+      </ion-row>
+      <!-- Panel 20 -->
+      <ion-row class="" *ngIf="cert?.clean_device_20 === 'Yes' || cert?.clean_device_20 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.20</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[19]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_20 }} </ion-col>
+      </ion-row>
+      <!-- Panel 21 -->
+      <ion-row class="" *ngIf="cert?.clean_device_21 === 'Yes' || cert?.clean_device_21 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.21</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[20]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_21 }} </ion-col>
+      </ion-row>
+      <!-- Panel 22 -->
+      <ion-row class="" *ngIf="cert?.clean_device_22 === 'Yes' || cert?.clean_device_22 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.22</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[21]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_22 }} </ion-col>
+      </ion-row>
+      <!-- Panel 23 -->
+      <ion-row class="" *ngIf="cert?.clean_device_23 === 'Yes' || cert?.clean_device_23 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.23</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[22]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_23 }} </ion-col>
+      </ion-row>
+      <!-- Panel 24 -->
+      <ion-row class="" *ngIf="cert?.clean_device_24 === 'Yes' || cert?.clean_device_24 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.24</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[23]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_24 }} </ion-col>
+      </ion-row>
+      <!-- Panel 25 -->
+      <ion-row class="" *ngIf="cert?.clean_device_25 === 'Yes' || cert?.clean_device_25 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">4.24</ion-col>
+        <ion-col size="9" class="left">Device required to be cleaned {{ panels[24]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.clean_device_25 }} </ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- Number 5.0 -->
+    <ng-container style="margin-bottom: 0px;" *ngIf="site?.test_device_loop_5 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>5</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Testing Devices Loop (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_1 === 'Yes' || cert?.test_device_single_knock_5_1 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.1</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[0]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_1 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_1 === 'Yes' || cert?.test_sounders_single_knock_5_1 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.2</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[0]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_1 }} </ion-col>
+      </ion-row>
+      <!-- 2nd row -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_2 === 'Yes' || cert?.test_device_single_knock_5_2 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.3</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[1]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_2 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_2 === 'Yes' || cert?.test_sounders_single_knock_5_2 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.4</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[1]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_2 }} </ion-col>
+      </ion-row>
+      <!-- 3rd row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_3 === 'Yes' || cert?.test_device_single_knock_5_3 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.5</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[2]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_3 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_3 === 'Yes' || cert?.test_sounders_single_knock_5_3 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.6</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[2]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_3 }} </ion-col>
+      </ion-row>
+      <!-- 4th Row      -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_4 === 'Yes' || cert?.test_device_single_knock_5_4 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.7</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[3]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_4 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_4 === 'Yes' || cert?.test_sounders_single_knock_5_4 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.8</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[3]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_4 }} </ion-col>
+      </ion-row>
+      <!-- 5th Row        -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_5 === 'Yes' || cert?.test_device_single_knock_5_5 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.9</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[4]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_5 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_5 === 'Yes' || cert?.test_sounders_single_knock_5_5 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.10</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[4]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_5 }} </ion-col>
+      </ion-row>
+      <!-- 6th row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_6 === 'Yes' || cert?.test_device_single_knock_5_6 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.11</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[5]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_6 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_6 === 'Yes' || cert?.test_sounders_single_knock_5_6 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.12</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[5]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_6 }} </ion-col>
+      </ion-row>
+      <!-- 7th row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_7 === 'Yes' || cert?.test_device_single_knock_5_7 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.13</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[6]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_7 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_7 === 'Yes' || cert?.test_sounders_single_knock_5_7 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.14</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[6]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_7 }} </ion-col>
+      </ion-row>
+      <!-- 8th row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_8 === 'Yes' || cert?.test_device_single_knock_5_8 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.15</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[7]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_8 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_8 === 'Yes' || cert?.test_sounders_single_knock_5_8 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.16</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[7]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_8 }} </ion-col>
+      </ion-row>
+      <!-- 9th row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_9 === 'Yes' || cert?.test_device_single_knock_5_9 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.17</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[8]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_9 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_9 === 'Yes' || cert?.test_sounders_single_knock_5_9 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.18</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[8]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_9 }} </ion-col>
+      </ion-row>
+      <!-- 10th row     -->
+      <ion-row class="" *ngIf="cert?.test_device_single_knock_5_10 === 'Yes' || cert?.test_device_single_knock_5_10 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.19</ion-col>
+        <ion-col size="9" class="left">Testing devices single knock  {{ panels[9]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_device_single_knock_5_10 }} </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.test_sounders_single_knock_5_10 === 'Yes' || cert?.test_sounders_single_knock_5_10 === 'No'">
+        <ion-col size="1"  class="title-head right-border1">5.20</ion-col>
+        <ion-col size="9" class="left">Testing devices sounders knock  {{ panels[9]?.panel_name }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center"> {{ cert?.test_sounders_single_knock_5_10 }} </ion-col>
+      </ion-row>
+      </ng-container>
+      <!-- Number 6.0 -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="site?.other_detection_devices_6 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>6</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Testing of other detection devices</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.1</ion-col>
+        <ion-col size="9" class="left">Beam detection</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.beam_detection_6_1 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.2</ion-col>
+        <ion-col size="9" class="left">Air sampling</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.air_sampling_6_2 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.3</ion-col>
+        <ion-col size="9" class="left">Liner Heat</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.liner_heat_6_3 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.4</ion-col>
+        <ion-col size="9" class="left">Flame Detection</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.flame_detection_6_4 }}</ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.5</ion-col>
+        <ion-col size="9" class="left">Wireless</ion-col>
+        <ion-col size="2"  class="right">{{ cert?.wireless_6_5 }}</ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- 7.0 Auxiliary -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.auxiliary_interface_7 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>7</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Auxiliary interfacing (Double Knock)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_stair_pressure_fans !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.1</ion-col>
+        <ion-col size="9" class="left">Stair pressure fans</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.stair_pressure_fans_7_1 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_lift_pressure_fans !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.2</ion-col>
+        <ion-col size="9" class="left">Lift pressure fans</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.lift_pressure_fans_7_2 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_smoke_extraction !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.3</ion-col>
+        <ion-col size="9" class="left">Smoke extraction fans</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.smoke_extraction_fans_7_3 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_smoke_ventilation !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.4</ion-col>
+        <ion-col size="9" class="left">Smoke Ventilation louvers</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.smoke_ventilation_louvers_7_4 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_roller_shutter_doors !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.5</ion-col>
+        <ion-col size="9" class="left">Roller shutter doors/ Make up supply air</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.roller_shutter_doors_7_5 }}</ion-col>
+      </ion-row>
+      <!-- <ion-row class="" *ngIf="cert?.aux_fire_door_hold !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.6</ion-col>
+        <ion-col size="9" class="left">Fire door hold open devices</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.roller_shutter_doors_7_5 }}</ion-col>
+      </ion-row> -->
+      <ion-row class="" *ngIf="cert?.aux_fire_door_hold !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.6</ion-col>
+        <ion-col size="9" class="left">Fire door hold open devices</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.fire_doors_7_6 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_escape_door_release !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.7</ion-col>
+        <ion-col size="9" class="left">Escape door release/ Access control interfacing</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.escape_door_release_7_7 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_auto_evacuation !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.8</ion-col>
+        <ion-col size="9" class="left">Auto evacuation activation</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.auto_evacuation_7_8 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_auto_remote_signal !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.9</ion-col>
+        <ion-col size="9" class="left">Auto remote signal (Remrad, alarm, sms unit)</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.auto_remote_signal_7_9 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_gas_shutoff_valves !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.10</ion-col>
+        <ion-col size="9" class="left">Gas shut off valves</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.gas_valves_7_10 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_cooker_head_suppression !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.11</ion-col>
+        <ion-col size="9" class="left">Cooker head suppression interface</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.cooker_suppression_7_11 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_lift_homing !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.12</ion-col>
+        <ion-col size="9" class="left">Lift Homing/Grounding</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.lift_homing_7_12 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_ac_shutdown !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.13</ion-col>
+        <ion-col size="9" class="left">A/C Shutdown</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.ac_shutdown_7_13 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_fresh_air_shutdown !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.14</ion-col>
+        <ion-col size="9" class="left">Fresh Air Shutdown</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.fresh_air_shutdown_7_14 }}</ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="cert?.aux_other !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.15</ion-col>
+        <ion-col size="9" class="left">OTHER</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.other_7_15 }}</ion-col>
+      </ion-row>
+      </ng-container>
+      <!-- 8.0 Monitoring -->
+      <ng-container style="margin-bottom: 15px;" *ngIf="cert?.monitoring_8 !== 'Disabled'">
+        <ion-row class="dark-bg">
+          <ion-col size="1"  class="title-head right-border1"><b>8</b></ion-col>
+          <ion-col size="11" class="title-head"><b>Monitoring (Where installed)</b></ion-col>
+        </ion-row>
+
+        <ion-row class="" *ngIf="cert?.mon_escape_doors !== 'Disabled'" >
+          <ion-col size="1"  class="title-head right-border1">8.1</ion-col>
+          <ion-col size="9" class="left">Escape doors</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.escape_doors_8_1 }}</ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_sprinkler_flow_switch !== 'Disabled'" >
+          <ion-col size="1"  class="title-head right-border1">8.2</ion-col>
+          <ion-col size="9" class="left">Sprinkler flow switch's & Value chamber</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.sprinkler_flow_8_2 }}</ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_spinkler_pump_room !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.3</ion-col>
+          <ion-col size="9" class="left">Sprinkler pump room</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.sprinkler_pump_room_8_3 }}</ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_sump_pump !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.4</ion-col>
+          <ion-col size="9" class="left">Sump pump</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.sump_pump_8_4 }}</ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_generator_signal !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.5</ion-col>
+          <ion-col size="9" class="left">Generator signals</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.generator_signals_8_5 }}</ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_other !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.6</ion-col>
+          <ion-col size="9" class="left">OTHER</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.other_8_6 }}</ion-col>
+        </ion-row>
+      </ng-container>
+      <!-- 8.0 Monitoring -->
+      <ng-container style="margin-bottom: 15px;" *ngIf="cert?.gas_suppression_9 !== 'Disabled'">
+        <ion-row class="dark-bg">
+          <ion-col size="1"  class="title-head right-border1"><b>9</b></ion-col>
+          <ion-col size="11" class="title-head"><b>Gas Suppression
+            NOTE: DISCONNECT ALL SOLINOIDS BEFORE TESTING</b></ion-col>
+        </ion-row>
+
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.1</ion-col>
+          <ion-col size="9" class="left">Single knock activation test</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.single_knock_9_1 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.2</ion-col>
+          <ion-col size="9" class="left">Double Knock activation test</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.double_knock_9_2 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.3</ion-col>
+          <ion-col size="9" class="left">Fire Bells Functional</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.fire_bells_9_3 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.4</ion-col>
+          <ion-col size="9" class="left">Sounders Functional</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.sounders_functional_9_4 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.5</ion-col>
+          <ion-col size="9" class="left">Strobes Functional</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.strobes_functional_9_5 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.6</ion-col>
+          <ion-col size="9" class="left">Suppression Detonator activation</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.suppression_detonator_9_6 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.7</ion-col>
+          <ion-col size="9" class="left">Door monitor Functional (If required)</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.door_monitor_9_7 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.8</ion-col>
+          <ion-col size="9" class="left">Suppression cylinder test (if required) is pressure indicator in the green</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.suppression_cylinder_9_8 }}</ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.9</ion-col>
+          <ion-col size="9" class="left">Auto / Manual switch function</ion-col>
+          <ion-col size="2"  class="text ion-text-center">{{ cert?.manual_switch_9_9 }}</ion-col>
+        </ion-row>
+
+      </ng-container>
+  </ion-grid>
+
+  <div class="ion-padding heading" *ngIf="cert?.service_certificate_comments !== ''" >Comments</div>
+  <div class="ion-padding  details" *ngIf="cert?.service_certificate_comments !== ''">{{ cert?.service_certificate_comments }}</div>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Company</ion-col>
+      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+    </ion-row>
+
+    <!-- <ion-row class="border-bottom">
+      <ion-col size="12" class="left">
+        We, currently being a Fire Detection Company of Fire System Installations of the types identified in Section 4 of SANS 10139 of the schedule comply with the standard or Code of Practice identified in the above schedule and with all the other requirements. The completed system has been tested and inspected by the
+        ndersigned and is fully operational with the condition applicable to Section 12 of SANS 10139.
+      </ion-col>
+    </ion-row> -->
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">SAQCC NO.</ion-col>
+      <ion-col size="8" class="right">{{ tech?.saqcc_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Technician</ion-col>
+      <ion-col size="7" class="right">{{ tech?.firstname }} {{ tech?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date Service Completed</ion-col>
+      <ion-col size="6" class="right">{{ cert?.date_service_completed | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Next Service Date</ion-col>
+      <ion-col size="7" class="right">{{ site?.next_service_date | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="heading">
+        Acceptance by Client or Representative
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Date</ion-col>
+      <ion-col size="7" class="right">{{ dateClientSigned | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="text-header">
+           <div *ngIf="cert?.client_signature" >
+          <img src="{{ cert?.client_signature }}" alt="">
+        </div>
+
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Name</ion-col>
+      <ion-col size="7" class="right">{{ cert?.responsible_person }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="heading">
+        Representative of Service Company
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Date</ion-col>
+      <ion-col size="7" class="right">{{ dateTechSigned | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="text-header">
+        <div *ngIf="cert?.company_rep_signature" >
+          <img src="{{ cert?.company_rep_signature }}" alt="">
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Name</ion-col>
+      <ion-col size="7" class="right">{{ tech?.firstname }} {{ tech?.surname }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <br>
+
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>
+

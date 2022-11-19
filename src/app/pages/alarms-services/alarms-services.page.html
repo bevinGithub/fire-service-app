@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>SERVICES</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <div class="btn-container ion-padding">
+    <ion-button expand="block" shape="round" color="primary" routerLink="/add-service">REQUEST A SERVICE</ion-button>
+  </div>
+
+  <div class="ion-text-center heading-text">
+    OPEN SERVICES
+  </div>
+
+  <ng-container *ngIf="services?.length === 0">
+    <ion-card>
+      <ion-card-content class="ion-tect-center">
+        There are no service certificates at the moment!
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+ <ng-container style="padding: 15px;" *ngIf="services?.length > 0">
+   <ng-container *ngFor="let item of services">
+     <div *ngIf="item.cert_status === 'Assigned'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
+       <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+       <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
+     </div>
+     <!-- <div *ngIf="item.cert_status === 'Available'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
+       <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+       <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.service_card_created | date: 'dd/MM/yyyy' }}</div>
+     </div> -->
+     <div *ngIf="item.cert_status === 'Accepted'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
+      <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+   </ng-container>
+  </ng-container>
+
+  <div class="ion-text-center heading-text">
+    SERVICES HISTORY
+  </div>
+
+  <ng-container style="padding: 15px;" *ngIf="services?.length > 0">
+    <ng-container *ngFor="let item of services">
+      <div *ngIf="item.cert_status === 'Completed'" class="border-liner list ion-padding" routerLink="/complete-service-history/{{ item.id }}">
+        <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+        <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+        <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+        <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

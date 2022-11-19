@@ -1,0 +1,45 @@
+.page-title {
+  font-size: 36px;
+  font-family: 'Poppins Semi Bold';
+  color: #B50909;
+}
+ion-button {
+  height: 50px;
+  font-family: 'Poppins Semi Bold';
+  font-size: 15px;
+}
+.buttons {
+  margin-bottom: 20px;
+}
+.contact-container {
+  background-color: #313131;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.contact-text {
+  display: block;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Poppins Semi Bold';
+  font-size: 15px;
+}
+.powered-by {
+  background-color: #B50909;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: #ffffff;
+  font-family: 'Poppins Semi Bold';
+  font-size: 11px;
+}
+
+@media (min-width: 767px) and (max-width: 1080px)  {
+  #fire {
+    width: 100%
+  }
+}
+@media (min-width: 1024px) and (max-width: 1366px)  {
+  #fire {
+    width: 100%
+  }
+}
+

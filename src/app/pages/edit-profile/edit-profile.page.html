@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>EDIT PROFILE</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-list class="list-bg-sec">
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="user.firstname" name="firstname" placeholder="Name (*)" type="text" autocapitalize="on" required minlength="2" #nameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!nameCtrl.valid && nameCtrl.touched">
+          <span class="error-msg">Name must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="user.surname" name="surname" placeholder="Surname (required)" type="text" autocapitalize="on" required minlength="2" #surnameCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!surnameCtrl.valid && surnameCtrl.touched">
+          <span class="error-msg">Surname must be at least 2 characters!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="user.email" name="email" placeholder="Email (*)" type="text" (ionChange)="checkEmail()" required #emailCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="validEmail === false">
+          <span class="error-msg">Invalid email address!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="user.mobile_number" name="mobile_number" placeholder="Mobile Number (required)" type="tel" required minlength="10" maxlength="10" #mobileCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!mobileCtrl.valid && mobileCtrl.touched">
+          <span class="error-msg">Invalid mobile number!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="user.job_function" name="job_function" autocapitalize="on" placeholder="Job Function (required)" type="text" required #jobFunction="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!jobFunction.valid && jobFunction.touched">
+          <span class="error-msg">Job function cannot be empty!</span>
+        </div>
+
+          </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="user.id" name="id" placeholder="ClientID" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="updateUserProfile()" [disabled]="!f.valid || !validEmail">UPDATE USER PROFILE</ion-button>
+      </div>
+
+    </form>
+  </div>
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>

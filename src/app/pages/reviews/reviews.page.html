@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>REVIEWS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngFor="let item of reviews" >
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" class="left">
+            {{ item?.firstname }} {{ item?.surname }}
+          </ion-col>
+          <ion-col size="6" class="right">
+            <span *ngIf="item?.rating_value === '1'"  class="star-icon inactive">
+              <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/inactive-star.png" alt=""> <img src="../../../assets/img/inactive-star.png" alt="">
+              <img src="../../../assets/img/inactive-star.png" alt=""><img src="../../../assets/img/inactive-star.png" alt="">
+            </span>
+            <span *ngIf="item?.rating_value === '2'"  class="star-icon inactive">
+              <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/inactive-star.png" alt="">
+              <img src="../../../assets/img/inactive-star.png" alt=""><img src="../../../assets/img/inactive-star.png" alt="">
+            </span>
+            <span *ngIf="item?.rating_value === '3'"  class="star-icon inactive">
+              <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt="">
+              <img src="../../../assets/img/inactive-star.png" alt=""><img src="../../../assets/img/inactive-star.png" alt="">
+            </span>
+            <span *ngIf="item?.rating_value === '4'"  class="star-icon inactive">
+              <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt="">
+              <img src="../../../assets/img/active-star.png" alt=""><img src="../../../assets/img/inactive-star.png" alt="">
+            </span>
+            <span *ngIf="item?.rating_value === '5'"  class="star-icon inactive">
+              <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt=""> <img src="../../../assets/img/active-star.png" alt="">
+              <img src="../../../assets/img/active-star.png" alt=""><img src="../../../assets/img/active-star.png" alt="">
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

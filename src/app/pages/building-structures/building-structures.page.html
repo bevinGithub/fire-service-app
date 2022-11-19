@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-icon name="arrow-back-outline" size="large" color="primary"  (click)="closeModal()"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>BUILDING STRUCTURES</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-grid>
+        <ion-col size="12">1. Any new or relocated partitions have been erected within 500 mm horizontally of any automatic fire detector
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_one" name="structure_one" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">2. Any storage encroaches within 300 mm of ceilings
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_two" name="structure_two" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">3. A clear space of 500 mm is maintained below each automatic fire detector, and that the ability of the detector to receive the stimulus that it has been designed to detect has not been
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_three" name="structure_three" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">4. Ability of the detector to receive the stimulus that it has been designed to detect has not been impeded by other means, any changes to the use or occupancy of an area make the existing types of automatic fire detector unsuitable for detection of fire or prone to unwanted alarms.
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_four" name="structure_four" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">
+          5
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_five" name="structure_five" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">6. Any building alterations or extensions require additional fire detection and alarm equipment to be installed.
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="building.structure_six" name="structure_six" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="building.service_type_id" name="service_type_id" placeholder="Service Type ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="building.site_id" name="site_id" placeholder="Site ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="building.service_cert_id" name="service_cert_id" placeholder="Cert ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="building.tech_id" name="tech_id" placeholder="Tech ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="building.structure_created" name="structure_created" placeholder="Date Created" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="submitStructures()">SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

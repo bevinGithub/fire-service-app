@@ -1,0 +1,34 @@
+
+<ion-header>
+  <ion-toolbar color="primary" class="ion-text-center">
+    <!-- <ion-buttons slot="end">
+      <ion-button color="light" expand="full" [disabled]="isCanvasBlank()" (click)="save()"> Save</ion-button>
+      <ion-button color="light" expand="full" (click)="undo()"> Undo</ion-button>
+      <ion-button color="light" expand="full" (click)="clear()"> Clear</ion-button>
+    </ion-buttons> -->
+    <ion-title>
+      Signature Pad
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="signature-pad">
+    <div>
+      <canvas class="signature-pad-canvas" #canvas width="" height=""  style="touch-action: none;"></canvas>
+    </div>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col width-50>
+          <ion-button color="primary" expand="block" (click)="save()" >Save</ion-button>
+      </ion-col>
+      <ion-col width-50>
+        <ion-button color="primary" expand="block" (click)="clear()" >Clear</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="read" *ngIf="writingTag" >
+    <form #f='ngForm' class="forms ion-padding">
+      <p class="heading">Select Service Certificate</p>
+      <ion-item>
+        <ion-label>Select</ion-label>
+        <ion-select [(ngModel)]="tag.serviceID" name="serviceID" (ionChange)="getCertificateData($event)" placeholder="Select Service Card" required #cert="ngModel">
+          <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.service_certificate_number }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
+        <span class="error-msg">Service certificate is needed!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.tagNumber" name="tagNumber" type="text" autocapitalize="characters" placeholder="Tag Number" required #tagNumber="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!tagNumber.valid && tagNumber.touched">
+        <span class="error-msg">Tag number is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceNumber" name="deviceNumber" type="tel" placeholder="Device Number" required #deviceNumber="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!deviceNumber.valid && deviceNumber.touched">
+        <span class="error-msg">Device number is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceType" name="deviceType" type="text" autocapitalize="words" placeholder="Device Type" required #deviceType="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!deviceType.valid && deviceType.touched">
+        <span class="error-msg">Device type is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.deviceMessage" name="deviceMessage" type="text" autocapitalize="words" placeholder="Device Message" ></ion-input>
+      </ion-item>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="tag.zone" name="zone" type="text" autocapitalize="words" placeholder="Zone" ></ion-input>
+      </ion-item>
+      <ion-item  lines="none" class="list-bg">
+        Date: {{ writeDate }}
+      </ion-item>
+      <div padding>
+        <ion-input [(ngModel)]="tag.siteID" name="siteID" type="hidden" placeholder="Site ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.serviceTypeID" name="serviceTypeID" type="hidden" placeholder="Service Type ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="hidden" placeholder="writeTime" readonly=""></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="writeTag()"  [disabled]="!f.valid">SUBMIT</ion-button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="read-data"  *ngIf="deviceData === 'No Record Found'" >
+    <ion-card *ngIf="deviceData === 'No Record Found'" >
+      <ion-card-content>
+        Device data could not be found!
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="read-data"  *ngIf="showDevice && deviceData !== 'No Record Found'" >
+
+    <ion-grid fixed>
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="heading">Tag Data From Database</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Tag Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.rftag }}</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Device Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.addr }}</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Device Type</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.device_type }}</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Message</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.device_message }}</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Zone</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.zone }}</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Date Written</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.date_scanned }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- <ion-button color="primary" (click)="playTones()" > Play Sound </ion-button> -->
+
+</ion-content>

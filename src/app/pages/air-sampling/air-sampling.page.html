@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-icon name="arrow-back-outline" style="size: 30px !important" color="primary"  (click)="closeModal()"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>AIR SAMPLING</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-grid>
+        <ion-col size="12">1.  Type/Make
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="beam.type_make" name="type_make" placeholder="Type/Make" type="text" autocapitalize="on"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">2. Number of Units
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="beam.units" name="units" placeholder="Number of units" type="text" autocapitalize="on"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-grid>
+        <ion-col size="12">3. Units Tested
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="beam.units_tested" name="units_tested" placeholder="Units Tested" type="text" autocapitalize="on"></ion-input>
+        </ion-item>
+      </ion-list>
+
+
+
+      <ion-grid>
+        <ion-col size="12">Comments
+        </ion-col>
+      </ion-grid>
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="beam.comment" name="comment" rows="3" autocapitalize="text" cols="20" placeholder="Comments here..."></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="beam.service_type_id" name="service_type_id" placeholder="Service Type ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="beam.site_id" name="site_id" placeholder="Site ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="beam.service_cert_id" name="service_cert_id" placeholder="Cert ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="beam.tech_id" name="tech_id" placeholder="Tech ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="beam.detection_created" name="detection_created" placeholder="Date Created" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="submitBeams()">SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

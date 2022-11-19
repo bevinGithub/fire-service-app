@@ -1,0 +1,79 @@
+.fire-home {
+  --background: url("../../../assets/img/app-bg.png") 100% 100% no-repeat !important;
+}
+.segment-button-checked {
+  background: #B50909;
+  color: #ffffff !important;
+}
+ion-segment {
+  background: #E4E4E4;
+  --color: #ffffff !important;
+}
+
+.sc-ion-label-md-s {
+  color: #ffffff !important;
+}
+
+#logo {
+  margin-bottom: 20px;
+}
+
+.black-text-20 {
+  color: #313131;
+  font-size: 20px;
+  font-family: 'Poppins Semi Bold';
+}
+
+.error-msg {
+  color: #B50909;
+  font-size: 15px;
+  font-family: 'Poppins Light';
+}
+
+ion-item {
+  border: 2px solid #e4e4e4;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+ion-input {
+  --border-style: none !important;
+  font-size: 13px;
+  font-family: 'Poppins Light';
+}
+
+ion-button {
+  height: 50px;
+}
+
+.footer-img img {
+  position: absolute;
+  left: 0;
+  bottom: 0
+}
+
+.forgot-pass {
+  font-size: 14px;
+  font-family: 'Poppins Medium';
+  color: #FF1C1D;
+  z-index: 9999 !important;
+
+}
+
+// TABLET CSS STARTS HERE
+@media (min-width: 767px) and (max-width: 1080px)  {
+  .footer-img {
+    width: 100%
+  }
+  .footer-img img {
+    width: 100%
+  }
+}
+@media (min-width: 1024px) and (max-width: 1366px)  {
+  .footer-img {
+    width: 100%
+  }
+  .footer-img img {
+    width: 100%
+  }
+}

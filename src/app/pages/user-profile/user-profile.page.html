@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <!-- <ion-buttons slot="end">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">0</span>
+    </ion-buttons> -->
+
+    <ion-title>USER PROFILE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left padding-15 title">{{ staff?.firstname }}  {{ staff?.surname }}</ion-col>
+    </ion-row>
+    <ion-row class="border-bottom" *ngIf="staff?.company_registration !== ''">
+      <ion-col size="6" class="contract padding-15">Company Registration</ion-col>
+      <ion-col size="6" class="right contract padding-15">{{ staff?.company_registration }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="staff?.saqcc_number" >
+      <ion-col size="6" class="contract padding-15" >SAQCC</ion-col>
+      <ion-col size="6" class="right contract padding-15">{{ staff?.saqcc_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="contract padding-15" >COMPANY</ion-col>
+      <ion-col size="6" class="right contract padding-15">{{ staff?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom padding-15">
+      <ion-col size="12" class="phone-container">
+        <img class="img-icon" src="/assets/img/list/mail.png" alt="">
+        <span class="phone">{{ staff?.email }}</span>
+      </ion-col>
+
+      <ion-col size="12" class="phone-container">
+        <img class="img-icon" src="/assets/img/list/phone.png" alt="">
+        <span class="phone">{{ staff?.phone_number }}</span>
+      </ion-col>
+
+      <ion-col size="12" class="email-container">
+        <img class="img-icon" src="/assets/img/list/mobile.png" alt="">
+        <span class="phone">{{ staff?.mobile_number }}</span>
+      </ion-col>
+
+      <ion-col size="12" class="email-container">
+        <img class="img-icon" src="/assets/img/list/job.png" alt="">
+        <span class="phone">{{ staff?.job_function }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="btn-container ion-padding">
+    <ion-button expand="block" color="primary" shape="round" routerLink="/edit-profile/{{ staff?.id }}">EDIT PROFILE</ion-button>
+
+    <ion-button expand="block" color="secondary" shape="round" routerLink="/reset-password/{{ staff?.id }}">RESET PASSWORD</ion-button>
+  </div>
+
+  <!-- <div class="ion-text-center ion-padding photo" *ngIf="staff?.profile_photo" >
+    {{ url }}
+    <img src="{{ link }}fault_images/{{ staff?.profile_photo }}" alt="">
+  </div>
+  <div class="camera">
+      <ion-button (click)="presentActionSheet()" >Take Photo</ion-button>
+  </div> -->
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer *ngIf="roleID === '2'" ></app-footer>
+  <app-staff-footer *ngIf="roleID === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="roleID === '4'" ></app-tech-footer>
+</footer>

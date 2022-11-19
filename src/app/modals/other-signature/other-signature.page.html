@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+    <ion-buttons slot="start">
+      <ion-menu-button (click)="closeModal()"  class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>THIRD PARTY SIGN OFF  </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="margin-bottom: 25px;">
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Job Card No.</ion-col>
+      <ion-col size="6" class="right">{{ ref }}</ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <form #f='ngForm'>
+    <div class="ion-padding">
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="partyData.partyName " name="partyName" type="text" placeholder="First Name (required)" required #firstname="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!firstname.valid && firstname.touched">
+        <span class="error-msg">Name is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="partyData.partySurname " name="partySurname" type="text" placeholder="Surname (required)" required #surname="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!surname.valid && surname.touched">
+        <span class="error-msg">Surname is required!</span>
+      </div>
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-input [(ngModel)]="partyData.partyJobFunction " name="partyJobFunction" type="text" placeholder="Job Function (required)" required #jobFunction="ngModel"></ion-input>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!jobFunction.valid && jobFunction.touched">
+        <span class="error-msg">Job function is required!</span>
+      </div>
+  </div>
+
+  <div class="signature-pad">
+    <div class="ion-text-center">
+      <canvas class="signature-pad-canvas" #canvas width="600" height="240"  style="touch-action: none;"></canvas>
+    </div>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col width-50>
+          <ion-button color="primary" type="submit" shape="round" expand="block" [disabled]="!f.valid" (click)="save()" >Sign Off</ion-button>
+      </ion-col>
+      <ion-col width-50>
+        <ion-button color="secondary" type="button" shape="round" expand="block" (click)="clear()" >Clear</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+</ion-content>
+

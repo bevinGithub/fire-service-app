@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ count }}</span>
+    </ion-buttons>
+
+    <ion-title>NOTIFICATIONS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- //routerLink="/service-notification/{{ item.id }}" -->
+  <div class="container border ion-padding" *ngFor="let item of serviceNotifications" routerLink="/service-notification/{{ item.id }}" >
+    <div class="title padding-5px">{{ item?.site_name }}</div>
+    <div class="descr padding-5px"><img src="assets/img/list/services.png" alt=""> {{ item?.description }}</div>
+    <div class="status padding-5px"><img src="assets/img/list/viewer.png" alt="">
+       <span style="color: #E9A800" *ngIf="item?.status === 'Service Due'"> {{ item?.status }}</span>
+       <span style="color:  #2dd36f;" *ngIf="item?.status === 'Service Requested'"> {{ item?.status }}</span>
+      </div>
+      <div class="descr padding-5px"><img src="assets/img/list/calendar.png" alt=""> {{ item?.service_date }}</div>
+  </div>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

@@ -1,0 +1,180 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-icon name="arrow-back-outline" style="size: 30px !important" color="primary"  (click)="closeModal()"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>ROLLER SHUTTER DOORS</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="content-form">
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12">
+            1
+          </ion-col>
+          <ion-col size="8" class="left">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="stairPressure.location_1" name="location_1" placeholder="Location" type="text"
+                  autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="stairPressure.functional_1" name="functional_1" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="stairPressure.comment_1" name="comment_1" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12">
+            1.2
+          </ion-col>
+          <ion-col size="8" class="left">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="stairPressure.location_2" name="location_2" placeholder="Location" type="text"
+                  autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="stairPressure.functional_2" name="functional_2" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="stairPressure.comment_2" name="comment_2" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12">
+            1.3
+          </ion-col>
+          <ion-col size="8" class="left">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="stairPressure.location_3" name="location_3" placeholder="Location" type="text"
+                  autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="stairPressure.functional_3" name="functional_3" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="stairPressure.comment_3" name="comment_3" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12">
+            1.4
+          </ion-col>
+          <ion-col size="8" class="left">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="stairPressure.location_4" name="location_4" placeholder="Location" type="text"
+                  autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="stairPressure.functional_4" name="functional_4" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="stairPressure.comment_4" name="comment_4" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <ion-row class="">
+          <ion-col size="12">
+            1.5
+          </ion-col>
+          <ion-col size="8" class="left">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-input [(ngModel)]="stairPressure.location_5" name="location_5" placeholder="Location" type="text"
+                  autocapitalize="on"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+          <ion-col size="4" class="text ion-text-center">
+            <ion-select [(ngModel)]="stairPressure.functional_5" name="functional_5" placeholder="Functional">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="12">
+            <ion-list class="list-bg-sec">
+              <ion-item lines="none">
+                <ion-textarea [(ngModel)]="stairPressure.comment_5" name="comment_5" rows="3" autocapitalize="text" cols="20"
+                  placeholder="Comments here..."></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div padding>
+        <ion-input [(ngModel)]="stairPressure.service_type_id" name="service_type_id" placeholder="Service Type ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="stairPressure.site_id" name="site_id" placeholder="Site ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="stairPressure.service_cert_id" name="service_cert_id" placeholder="Cert ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="stairPressure.tech_id" name="tech_id" placeholder="Tech ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="stairPressure.detection_created" name="detection_created" placeholder="Date Created" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="submitstairPressures()">SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

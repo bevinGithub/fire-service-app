@@ -1,0 +1,10 @@
+{
+  "name": "fire-services-app",
+  "integrations": {
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
+  },
+  "type": "angular"
+}

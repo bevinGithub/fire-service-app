@@ -1,0 +1,98 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="activeTab">
+      <ion-segment-button value="signin">
+        <ion-label>SIGN IN</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="register">
+        <ion-label>REGISTER</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll="false">
+
+  <div [ngSwitch]="activeTab">
+    <div *ngSwitchCase="'signin'" ngSelected="selected" style="padding-top: 25px;">
+      <div class="center-logo ion-text-center">
+        <img id="logo" src="/assets/img/inner-logo.png" alt="">
+        <div class="black-text-20">
+          SIGN IN
+        </div>
+      </div>
+      <div class="content-form">
+        <form #f='ngForm' class="forms ion-padding">
+          <ion-list class="list-bg-sec">
+
+            <ion-item lines="none">
+              <ion-input [(ngModel)]="userSignIn.email" name="email" placeholder="Email" type="text"  (ionFocus)="hideFooter($event)" (ionBlur)="checkEmail()" required #emailCtrl="ngModel"></ion-input>
+            </ion-item>
+
+            <div class="list-bg-trans" *ngIf="validEmail === false">
+              <span class="error-msg">Invalid email address!</span>
+            </div>
+
+            <ion-item lines="none">
+              <ion-icon slot="end" color="danger" name="eye" (click)="showPasswordText()"></ion-icon>
+              <ion-input [(ngModel)]="userSignIn.password" name="password" placeholder="Password" type="{{type}}" (ionFocus)="hideFooterOnPass($event)"  required  #passwordCtrl="ngModel"></ion-input>
+            </ion-item>
+
+            <div class="list-bg-trans" *ngIf="!passwordCtrl.valid && passwordCtrl.touched">
+              <span class="error-msg">Password is required!</span>
+            </div>
+
+          </ion-list>
+
+          <div padding>
+            <ion-button shape="round" expand="full" color="secondary" block (click)="loginUser()" [disabled]="!f.valid || !validEmail">SIGN IN</ion-button>
+          </div>
+          <div class="forgot-pass ion-text-center" style="padding-top: 10px;" routerLink="/forgot-password" >
+            <span>Forgot Password?</span>
+          </div>
+          <div class="return-home ion-text-center" style="padding-top: 10px;" routerLink="/welcome" >
+            <span>Return Home</span>
+          </div>
+        </form>
+      </div>
+
+      <div style="height: 40px;"></div>
+
+    </div>
+
+    <div *ngSwitchCase="'register'" style="padding-top: 25px;">
+      <div class="center-logo ion-text-center">
+        <img id="logo" src="/assets/img/inner-logo.png" alt="">
+        <div class="black-text-20">
+          CLIENT REGISTRATION
+        </div>
+      </div>
+
+      <form #f='ngForm' class="forms ion-padding">
+
+        <ion-list class="list-bg">
+          <ion-item lines="none" class="list-bg">
+            <ion-input [(ngModel)]="userSignUp.company_registration_number" name="company_registration_number" (ionFocus)="hideFooter($event)" placeholder="Company Registration Number (required)" type="text"  required #registration="ngModel"></ion-input>
+          </ion-item>
+
+          <div *ngIf="!registration.valid && registration.touched">
+              <p class="error-msg">Company registration cannot be blank!</p>
+          </div>
+        </ion-list>
+
+        <div padding>
+          <ion-button shape="round" expand="full" color="primary" block (click)="checkUser()" [disabled]="!f.valid">CHECK</ion-button>
+        </div>
+        <div class="return-home ion-text-center" style="padding-top: 10px;" routerLink="/welcome" >
+          <span>Return Home</span>
+        </div>
+
+      </form>
+      </div>
+    </div>
+
+
+<div class="footer-img" *ngIf="showBanner" >
+  <img src="../../../assets/img/footer-flames.png" alt="">
+</div>
+</ion-content>

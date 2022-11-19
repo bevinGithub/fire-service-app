@@ -1,0 +1,1487 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>SERVICE CERTIFICATES</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Contract Number</ion-col>
+      <ion-col size="6" class="right">{{ cert?.site_contract }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Certificate Number</ion-col>
+      <ion-col size="6" class="right" style="color: #11AC00;">{{ cert?.service_certificate_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Type</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.service_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.service }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Due Date</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.final_service_date | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">{{ cert?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">{{ cert?.system_category }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Company</ion-col>
+      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Client/Customer</ion-col>
+      <ion-col size="8" class="right">{{ cert?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Site Location</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Address</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_address }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Protected Areas</ion-col>
+      <ion-col size="8" class="right">{{ cert?.protected_areas }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Due Date of Service</ion-col>
+      <ion-col size="6" class="right">{{ site?.final_service_date }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Responsible Person</ion-col>
+      <ion-col size="8" class="right">{{ cert?.responsible_person }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Contact Number</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_contact_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">System Category: {{ cert?.system_category }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="10" class="left">System Code</ion-col>
+      <ion-col size="2" class="right">{{ cert?.system_code }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+<br>
+
+<form #f='ngForm' class="forms ion-padding">
+  <ion-grid class="tables">
+    <ng-container style="margin-bottom: 15px;" *ngIf="site?.service_precheck_1 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>1</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.1</ion-col>
+        <ion-col size="7" class="left">Log book analysis (Section 13.2)</ion-col>
+        <ion-col size="3"  class="text ion-text-center">
+            <ion-select [(ngModel)]="service.log_book_analysis_1_1" name="log_book_analysis_1_1" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+        </ion-col>
+        <ion-col size="1"  class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/log-book/{{ certficateID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="logBookModal(certficateID)"></ion-button>
+        </ion-col>
+
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1" class="title-head right-border1">1.2</ion-col>
+        <ion-col size="7" class="left">Event archive (Download & Printout)</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.event_archive_1_2" name="event_archive_1_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          &nbsp;
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.3</ion-col>
+        <ion-col size="7" class="left">Analogue values check (Download & Printout)</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.analogue_values_1_3" name="analogue_values_1_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          &nbsp;
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.4</ion-col>
+        <ion-col size="7" class="left">Configuration check, programming</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.configuration_check_programming_1_4" name="configuration_check_programming_1_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          &nbsp;
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">1.5</ion-col>
+        <ion-col size="7" class="left">Disabled device check</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.disable_device_1_5" name="disable_device_1_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- <br> -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.fire_detection_panel_2 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>2</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Fire Detection Panel & Device Testing (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">2.1</ion-col>
+        <ion-col size="7" class="left">Call points remain unobstructed and conspicuous & New exits created?</ion-col>
+        <ion-col size="3"  class="text ion-text-center">
+          <ion-select [(ngModel)]="service.call_points_2_1" name="call_points_2_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+      </ion-col>
+      <ion-col size="1"  class="text ion-text-center">
+        <!-- <ion-button class="small-btn" routerLink="/call-points/{{ certficateID }}"></ion-button> -->
+        <ion-button class="small-btn" (click)="callPointsModal(certficateID)"></ion-button>
+      </ion-col>
+
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">2.2</ion-col>
+        <ion-col size="7" class="left">Call points remain unobstructed and conspicuous & New exits created?</ion-col>
+        <ion-col size="3"  class="text ion-text-center">
+          <ion-select [(ngModel)]="service.building_structure_2_2" name="building_structure_2_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+      </ion-col>
+      <ion-col size="1"  class="text ion-text-center">
+        <!-- <ion-button class="small-btn" routerLink="/building-structures/{{ certficateID }}"></ion-button> -->
+        <ion-button class="small-btn" (click)="buildingStructuresModal(certficateID)"></ion-button>
+      </ion-col>
+      </ion-row>
+    </ng-container>
+    <br>
+    <!-- Add Panels here 3 -4 5 -->
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.fire_detection_panel_3 === ''">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>3</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class="" *ngIf="panelD1 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.1</ion-col>
+        <ion-col size="7" class="left">{{ panelD1?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_1" name="fire_panel_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID1 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID1)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 2 -->
+      <ion-row class=""  *ngIf="panelD2 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD2?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_2" name="fire_panel_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID2 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID2)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 3 -->
+      <ion-row class=""  *ngIf="panelD3 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD3?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_3" name="fire_panel_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID3 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID3)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 4 -->
+      <ion-row class=""  *ngIf="panelD4 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD4?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_4" name="fire_panel_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID4 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID4)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 5 -->
+      <ion-row class=""  *ngIf="panelD5 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD5?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_5" name="fire_panel_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID5 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID5)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 6 -->
+      <ion-row class=""  *ngIf="panelD6 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD6?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_6" name="fire_panel_6" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID6 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID6)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 7 -->
+      <ion-row class=""  *ngIf="panelD7 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD7?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_7" name="fire_panel_7" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID7 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID7)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 8 -->
+      <ion-row class=""  *ngIf="panelD8 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD8?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_8" name="fire_panel_8" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID8 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID8)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 9 -->
+      <ion-row class=""  *ngIf="panelD9 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD9?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_9" name="fire_panel_9" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID9 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID9)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- Panel 10 -->
+      <ion-row class=""  *ngIf="panelD10 !== 'none'">
+        <ion-col size="1" class="title-head right-border1">3.2</ion-col>
+        <ion-col size="7" class="left">{{ panelD10?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_panel_10" name="fire_panel_10" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/pre-service-check/{{ certficateID }}/{{ panelID10 }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="preServiceCheckModal(certficateID, panelID10)"></ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+    <!-- CLEANING DEVICES -->
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.cleaning_devices_4 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>4</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Cleaning Devices (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class=""  *ngIf="panelD1 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.1</ion-col>
+        <ion-col size="7" class="left">Device to be cleaned {{ panelD1?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_1" name="clean_device_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID1)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 2 -->
+      <ion-row class="" *ngIf="panelD2 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.2</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD2?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_2" name="clean_device_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID2)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 3 -->
+      <ion-row class=""  *ngIf="panelD3 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.3</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD3?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_3" name="clean_device_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID3)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 4 -->
+      <ion-row class=""  *ngIf="panelD4 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.4</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD4?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_4" name="clean_device_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID4)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 5 -->
+      <ion-row class=""  *ngIf="panelD5 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.5</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD5?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_5" name="clean_device_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID5)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 6 -->
+      <ion-row class=""  *ngIf="panelD6 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.6</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD6?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_6" name="clean_device_6" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID6)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 7 -->
+      <ion-row class=""  *ngIf="panelD7 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.7</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD7?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_7" name="clean_device_7" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID7)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 8 -->
+      <ion-row class=""  *ngIf="panelD8 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.8</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD8?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_8" name="clean_device_8" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID8)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 9 -->
+      <ion-row class=""  *ngIf="panelD9 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.9</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD9?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_9" name="clean_device_9" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID9)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- Panel 10 -->
+      <ion-row class=""  *ngIf="panelD10 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">4.10</ion-col>
+        <ion-col size="7" class="left">Device required to be cleaned {{ panelD10?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.clean_device_10" name="clean_device_10" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/cleaning-devices/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="cleaningDevicesModal(serviceTypeID, siteID, panelID10)"></ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+
+    <!-- Point 5  -->
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.test_device_loop_5 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>5</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Testing Devices Loop (Section 12 SANS 10139)</b></ion-col>
+      </ion-row>
+      <!-- Panel 1 -->
+      <ion-row class=""  *ngIf="panelD1 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.1</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD1?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_1" name="test_device_single_knock_5_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID1)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class=""  *ngIf="panelD1 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.2</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD1?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_1" name="test_sounders_single_knock_5_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID1)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- 2nd row -->
+      <ion-row class=""  *ngIf="panelD2 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.3</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD2?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_2" name="test_device_single_knock_5_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID2)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class=""  *ngIf="panelD2 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.4</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD2?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_2" name="test_sounders_single_knock_5_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID2)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- 3rd row     -->
+      <ion-row class=""  *ngIf="panelD3 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.5</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD3?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_3" name="test_device_single_knock_5_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID3)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class=""  *ngIf="panelD3 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.6</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD3?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_3" name="test_sounders_single_knock_5_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID3)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- 4th Row      -->
+      <ion-row class=""  *ngIf="panelD4 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.7</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD4?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_4" name="test_device_single_knock_5_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID4)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class=""   *ngIf="panelD4 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.8</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD4?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_4" name="test_sounders_single_knock_5_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID4)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- 5th Row        -->
+      <ion-row class=""  *ngIf="panelD5 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.9</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD5?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_5" name="test_device_single_knock_5_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID5)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class=""  *ngIf="panelD5 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.10</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD5?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_5" name="test_sounders_single_knock_5_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID5)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <!-- 6th row     -->
+      <ion-row class="" *ngIf="panelD6 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.11</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD6?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_6" name="test_device_single_knock_5_6" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID6)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="panelD6 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.12</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD6?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_6" name="test_sounders_single_knock_5_6" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID6)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- 7th row     -->
+      <ion-row class="" *ngIf="panelD7 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.13</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD7?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_7" name="test_device_single_knock_5_7" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID7)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="panelD7 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.14</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD7?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_7" name="test_sounders_single_knock_5_7" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID7)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- 8th row     -->
+      <ion-row class="" *ngIf="panelD8 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.15</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD8?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_8" name="test_device_single_knock_5_8" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID8)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="panelD8 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.16</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD8?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_8" name="test_sounders_single_knock_5_8" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID8)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- 9th row     -->
+      <ion-row class="" *ngIf="panelD9 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.17</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD9?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_9" name="test_device_single_knock_5_9" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID9)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="panelD9 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.18</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD9?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_9" name="test_sounders_single_knock_5_9" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID9)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- 10th row     -->
+      <ion-row class="" *ngIf="panelD10 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.19</ion-col>
+        <ion-col size="7" class="left">Testing devices single knock  {{ panelD10?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_device_single_knock_5_10" name="test_device_single_knock_5_10" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-device-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testDeviceKnockModal(serviceTypeID, siteID, panelID10)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="" *ngIf="panelD10 !== 'none'">
+        <ion-col size="1"  class="title-head right-border1">5.20</ion-col>
+        <ion-col size="7" class="left">Testing devices sounders knock  {{ panelD10?.panel_name }}</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.test_sounders_single_knock_5_10" name="test_sounders_single_knock_5_10" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/test-double-knock/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="testSounderKockModal(serviceTypeID, siteID, panelID10)"></ion-button>
+        </ion-col>
+      </ion-row>
+      </ng-container>
+
+      <!-- Number 6.0 -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="site?.other_detection_devices_6 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>6</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Testing of other detection devices</b></ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.1</ion-col>
+        <ion-col size="7" class="left">Beam detection</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.beam_detection_6_1" name="beam_detection_6_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/beam-detection/{{ certficateID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="beamDetectionModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.2</ion-col>
+        <ion-col size="7" class="left">Air sampling</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.air_sampling_6_2" name="air_sampling_6_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/air-sampling/{{ certficateID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="airSamplingModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.3</ion-col>
+        <ion-col size="7" class="left">Liner Heat</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.liner_heat_6_3" name="liner_heat_6_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/liner-heat/{{ certficateID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="linerHeatModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.4</ion-col>
+        <ion-col size="7" class="left">Flame Detection</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.flame_detection_6_4" name="flame_detection_6_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/flame-detection/{{ certficateID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="flameDetectionModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col size="1"  class="title-head right-border1">6.5</ion-col>
+        <ion-col size="7" class="left">Wireless</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.wireless_6_5" name="wireless_6_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <!-- <ion-button class="small-btn" routerLink="/wire-less/{{ serviceTypeID }}/{{ siteID }}"></ion-button> -->
+          <ion-button class="small-btn" (click)="wirelessModal(serviceTypeID, siteID)"></ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <!-- 7.0 Auxiliary -->
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.auxiliary_interface_7 !== 'Disabled'">
+      <ion-row class="dark-bg">
+        <ion-col size="1"  class="title-head right-border1"><b>7</b></ion-col>
+        <ion-col size="11" class="title-head"><b>Auxiliary interfacing (Double Knock)</b></ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_stair_pressure_fans !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.1</ion-col>
+        <ion-col size="7" class="left">Stair pressure fans</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.stair_pressure_fans_7_1" name="stair_pressure_fans_7_1" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="stairPressureModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_lift_pressure_fans !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.2</ion-col>
+        <ion-col size="7" class="left">Lift pressure fans</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.lift_pressure_fans_7_2" name="lift_pressure_fans_7_2" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="liftPressureModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_smoke_extraction !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.3</ion-col>
+        <ion-col size="7" class="left">Smoke extraction fans</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.smoke_extraction_fans_7_3" name="smoke_extraction_fans_7_3" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="smokeExtractionModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_smoke_ventilation !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.4</ion-col>
+        <ion-col size="7" class="left">Smoke Ventilation louvers</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.smoke_ventilation_louvers_7_4" name="smoke_ventilation_louvers_7_4" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="smokeVentilationModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_roller_shutter_doors !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.5</ion-col>
+        <ion-col size="7" class="left">Roller shutter doors/ Make up supply air</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.roller_shutter_doors_7_5" name="roller_shutter_doors_7_5" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="rollerShutterModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_fire_door_hold !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.6</ion-col>
+        <ion-col size="7" class="left">Fire door hold open devices</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fire_doors_7_6" name="fire_doors_7_6" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="doorHoldsModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_escape_door_release !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.7</ion-col>
+        <ion-col size="7" class="left">Escape door release/ Access control interfacing</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.escape_door_release_7_7" name="escape_door_release_7_7" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="escapeDoorsModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_auto_evacuation !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.8</ion-col>
+        <ion-col size="7" class="left">Auto evacuation activation</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.auto_evacuation_7_8" name="auto_evacuation_7_8" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="autoEvacuationModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_auto_remote_signal !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.9</ion-col>
+        <ion-col size="7" class="left">Auto remote signal (Remrad, alarm, sms unit)</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.auto_remote_signal_7_9" name="auto_remote_signal_7_9" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="remoteSignalModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_gas_shutoff_valves !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.10</ion-col>
+        <ion-col size="7" class="left">Gas shut off valves</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.gas_valves_7_10" name="gas_valves_7_10" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="gasValvesModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_cooker_head_suppression !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.11</ion-col>
+        <ion-col size="7" class="left">Cooker head suppression interface</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.cooker_suppression_7_11" name="cooker_suppression_7_11" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="cookerHeadModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_lift_homing !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.12</ion-col>
+        <ion-col size="7" class="left">Lift Homing/Grounding</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.lift_homing_7_12" name="lift_homing_7_12" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="liftHomingModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_ac_shutdown !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.13</ion-col>
+        <ion-col size="7" class="left">A/C Shutdown</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.ac_shutdown_7_13" name="ac_shutdown_7_13" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="acShutdownModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_fresh_air_shutdown !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.14</ion-col>
+        <ion-col size="7" class="left">Fresh Air Shutdown</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.fresh_air_shutdown_7_14" name="fresh_air_shutdown_7_14" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="freshAirShutModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="" *ngIf="cert?.aux_other !== 'Disabled'">
+        <ion-col size="1"  class="title-head right-border1">7.15</ion-col>
+        <ion-col size="7" class="left">OTHER</ion-col>
+        <ion-col size="3" class="text ion-text-center">
+          <ion-select [(ngModel)]="service.other_7_15" name="other_7_15" placeholder="Select Option">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="1" class="text ion-text-center">
+          <ion-button class="small-btn" (click)="otherModal(certficateID)"></ion-button>
+        </ion-col>
+      </ion-row>
+      </ng-container>
+
+      <!-- 8.0 Monitoring -->
+      <ng-container style="margin-bottom: 15px;" *ngIf="cert?.monitoring_8 !== 'Disabled'">
+        <ion-row class="dark-bg">
+          <ion-col size="1"  class="title-head right-border1"><b>8</b></ion-col>
+          <ion-col size="11" class="title-head"><b>Monitoring (Where installed)</b></ion-col>
+        </ion-row>
+
+        <ion-row class="" *ngIf="cert?.mon_escape_doors !== 'Disabled'" >
+          <ion-col size="1"  class="title-head right-border1">8.1</ion-col>
+          <ion-col size="7" class="left">Escape doors</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.escape_doors_8_1" name="escape_doors_8_1" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_sprinkler_flow_switch !== 'Disabled'" >
+          <ion-col size="1"  class="title-head right-border1">8.2</ion-col>
+          <ion-col size="7" class="left">Sprinkler flow switch's & Value chamber</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.sprinkler_flow_8_2" name="sprinkler_flow_8_2" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_spinkler_pump_room !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.3</ion-col>
+          <ion-col size="7" class="left">Sprinkler pump room</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.sprinkler_pump_room_8_3" name="sprinkler_pump_room_8_3" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_sump_pump !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.4</ion-col>
+          <ion-col size="7" class="left">Sump pump</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.sump_pump_8_4" name="sump_pump_8_4" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_generator_signal !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.5</ion-col>
+          <ion-col size="7" class="left">Generator signals</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.generator_signals_8_5" name="generator_signals_8_5" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="" *ngIf="cert?.mon_other !== 'Disabled'">
+          <ion-col size="1"  class="title-head right-border1">8.6</ion-col>
+          <ion-col size="7" class="left">OTHER</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.other_8_6" name="other_8_6" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="monitoringModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <!-- 8.0 Monitoring -->
+      <ng-container style="margin-bottom: 15px;" *ngIf="cert?.gas_suppression_9 !== 'Disabled'">
+        <ion-row class="dark-bg">
+          <ion-col size="1"  class="title-head right-border1"><b>9</b></ion-col>
+          <ion-col size="11" class="title-head"><b>Gas Suppression
+            NOTE: DISCONNECT ALL SOLINOIDS BEFORE TESTING</b></ion-col>
+        </ion-row>
+
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.1</ion-col>
+          <ion-col size="7" class="left">Single knock activation test</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.single_knock_9_1" name="single_knock_9_1" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="singleKnockModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.2</ion-col>
+          <ion-col size="7" class="left">Double Knock activation test</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.double_knock_9_2" name="double_knock_9_2" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="doubleKnockModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.3</ion-col>
+          <ion-col size="7" class="left">Fire Bells Functional</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.fire_bells_9_3" name="fire_bells_9_3" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="fireBellsModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.4</ion-col>
+          <ion-col size="7" class="left">Sounders Functional</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.sounders_functional_9_4" name="sounders_functional_9_4" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="soundersFunctionalModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.5</ion-col>
+          <ion-col size="7" class="left">Strobes Functional</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.strobes_functional_9_5" name="strobes_functional_9_5" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="strobesFunctionalModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.6</ion-col>
+          <ion-col size="7" class="left">Suppression Detonator activation</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.suppression_detonator_9_6" name="suppression_detonator_9_6" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="suppressionDetonatorsModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.7</ion-col>
+          <ion-col size="7" class="left">Door monitor Functional (If required)</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.door_monitor_9_7" name="door_monitor_9_7" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="doorMonitorModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.8</ion-col>
+          <ion-col size="7" class="left">Suppression cylinder test (if required) is pressure indicator in the green</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.suppression_cylinder_9_8" name="suppression_cylinder_9_8" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="suppressionCylinderModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="">
+          <ion-col size="1"  class="title-head right-border1">9.9</ion-col>
+          <ion-col size="7" class="left">Auto / Manual switch function</ion-col>
+          <ion-col size="3" class="text ion-text-center">
+            <ion-select [(ngModel)]="service.manual_switch_9_9" name="manual_switch_9_9" placeholder="Select Option">
+              <ion-select-option value="Yes">Yes</ion-select-option>
+              <ion-select-option value="No">No</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="text ion-text-center">
+            <ion-button class="small-btn" (click)="autoManualSwitchModal(certficateID)"></ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ng-container>
+  </ion-grid>
+
+  <div class="ion-padding heading" *ngIf="cert?.service_certificate_comments !== ''" >Comments</div>
+  <div class="ion-padding  details" *ngIf="cert?.service_certificate_comments !== ''">{{ cert?.service_certificate_comments }}</div>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Company</ion-col>
+      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+    </ion-row>
+
+    <!-- <ion-row class="border-bottom">
+      <ion-col size="12" class="left">
+        We, currently being a Fire Detection Company of Fire System Installations of the types identified in Section 4 of SANS 10139 of the schedule comply with the standard or Code of Practice identified in the above schedule and with all the other requirements. The completed system has been tested and inspected by the
+        ndersigned and is fully operational with the condition applicable to Section 12 of SANS 10139.
+      </ion-col>
+    </ion-row> -->
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">SAQCC NO.</ion-col>
+      <ion-col size="8" class="right">{{ tech?.saqcc_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="5" class="left">Service Technician</ion-col>
+      <ion-col size="7" class="right">{{ tech?.firstname }} {{ tech?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date Service Completed</ion-col>
+      <ion-col size="6" class="right">{{ cert?.date_service_completed | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+
+    <ion-list class="list-bg-sec">
+      <ion-item  lines="none" class="list-bg">
+        <ion-textarea [(ngModel)]="service.service_comments" name="service_comments" rows="6" cols="20" placeholder="Client comments here..." autocapitalize="on" required minlength="5" #faultDetails="ngModel"></ion-textarea>
+      </ion-item>
+      <ion-item  lines="none" class="list-bg">
+        <ion-textarea [(ngModel)]="service.service_company_comments" name="service_company_comments" rows="6" cols="20" placeholder="Technician comments here..." autocapitalize="on" required minlength="5" #faultDetails="ngModel"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox [(ngModel)]="service.signOff" name="signOff" slot="start" (ionChange)="signOffEvent($event)" ></ion-checkbox>
+        <ion-label>Ready for Sign Off</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- *ngIf="cert?.isSignOff === 'Yes'"  -->
+    <ng-container *ngIf="signOff" >
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="heading">
+          Acceptance by Client or Representative
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="5" class="left">Date</ion-col>
+        <ion-col size="7" class="right">{{ dateClientSigned | date: 'dd/MM/yyyy' }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="text-header">
+          <ion-button [hidden]="hideClientBtn" class="btn" shape="round" expand="block" color="primary"
+            (click)="clientSignOff()">SIGN</ion-button>
+
+          <div *ngIf="clientSignature">
+            <img src="{{ clientSignature }}" alt="">
+          </div>
+
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="5" class="left">Name</ion-col>
+        <ion-col size="7" class="right">{{ cert?.responsible_person }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="heading">
+          Representative of Service Company
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="5" class="left">Date</ion-col>
+        <ion-col size="7" class="right">{{ dateTechSigned | date: 'dd/MM/yyyy' }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="text-header">
+          <ion-button [hidden]="hideRepBtn" class="btn" shape="round" expand="block" color="primary"
+            (click)="techSignOff()">SIGN</ion-button>
+
+          <div *ngIf="repSignature">
+            <img src="{{ repSignature }}" alt="">
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="5" class="left">Name</ion-col>
+        <ion-col size="7" class="right">{{ tech?.firstname }} {{ tech?.surname }}</ion-col>
+      </ion-row>
+      </ng-container>
+  </ion-grid>
+
+
+
+    <div padding>
+      <ion-input [(ngModel)]="service.id" name="id" placeholder="Service ID" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.isSync" name="isSync" placeholder="isSync" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.date_signed_off" name="date_signed_off" placeholder="Tech Signoff" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.date_signed_off_client" name="date_signed_off_client" placeholder="Client Signoff" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.client_signature" name="client_signature" placeholder="Client Signature" type="hidden" required></ion-input>
+      <ion-input [(ngModel)]="service.company_rep_signature" name="company_rep_signature" placeholder="Company Rep Signature" type="hidden" required></ion-input>
+      <ion-input [(ngModel)]="service.party_name" name="party_name" placeholder="Third Party name" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.date_client_signed" name="date_client_signed" placeholder="Date Client Signed" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.date_completed" name="date_completed" placeholder="Date Completed" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.date_tech_signed" name="date_tech_signed" placeholder="Date Tech Signed" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.service_certificate_number" name="service_certificate_number" placeholder="Service Certificate" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="service.technician_id" name="technician_id" placeholder="Technician ID" type="hidden"></ion-input>
+      <ion-button shape="round" expand="full" color="primary" block (click)="processServiceCard()" [disabled]="!f.valid">SUBMIT</ion-button>
+    </div>
+  </form>
+  <br>
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

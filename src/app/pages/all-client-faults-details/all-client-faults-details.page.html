@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>FAULT REPORT DETAILS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Job Card No.</ion-col>
+      <ion-col size="6" class="right">#{{ job?.fault_reference }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Status</ion-col>
+      <ion-col size="6" class="right" style="color: #11AC00;">{{ job?.status }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <div class="ion-padding heading">Client Information</div>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Company Name</ion-col>
+      <ion-col size="6" class="right">{{ staff?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Site</ion-col>
+      <ion-col size="6" class="right">{{ job?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Instructed By</ion-col>
+      <ion-col size="6" class="right">{{ staff?.firstname }} {{ staff?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="4" class="left">Address</ion-col>
+      <ion-col size="8" class="right">{{ job?.site_address }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date Requested</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="job?.date_accepted">
+      <ion-col size="6" class="left">Date Assigned</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="job?.date_completed" >
+      <ion-col size="6" class="left">Date Completed</ion-col>
+      <ion-col size="6" class="right">{{ job?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="job?.function" >
+      <ion-col size="6" class="left">Function</ion-col>
+      <ion-col size="6" class="right">{{ job?.function }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <div class="ion-padding heading" *ngIf="job?.arrival_time" >Estimated Time of Arrival</div>
+  <div class="ion-padding  details" *ngIf="job?.arrival_time" >{{ job?.arrival_time }}</div>
+
+  <div class="ion-padding heading"  *ngIf="job?.work_completed">Work Completed</div>
+  <div class="ion-padding  details" *ngIf="job?.work_completed">{{ job?.work_completed }}</div>
+
+  <div *ngIf="job?.isReturn === 'Yes'"  class="ion-padding heading">Reason for Return Visit</div>
+  <div *ngIf="job?.isReturn === 'Yes'" class="ion-padding  details">{{ job?.return_details }}</div>
+
+  <div *ngIf="job?.control_panel_photo_2" class="ion-padding heading">Control Panel Image</div>
+  <div *ngIf="job?.control_panel_photo_2"  class="ion-text-center ion-padding ">
+    <img width="400" height="" src="{{ url }}fault_images/{{ job?.control_panel_photo_2 }}" alt="">
+  </div>
+
+  <div *ngIf="job?.before_photo_2" class="ion-padding heading">Before Image</div>
+  <div *ngIf="job?.before_photo_2" class="ion-text-center ion-padding " >
+    <img width="400" height="" src="{{ url }}fault_images/{{ job?.before_photo_2 }}" alt="">
+  </div>
+
+  <div *ngIf="job?.after_photo_2" class="ion-padding heading">After Image</div>
+  <div *ngIf="job?.after_photo_2" class="ion-text-center ion-padding " >
+    <img width="400" height="" src="{{ url }}fault_images/{{ job?.after_photo_2 }}" alt="">
+  </div>
+
+  <div *ngIf="job?.client_signature"  class="ion-padding heading">Client Signature</div>
+  <div *ngIf="job?.client_signature" class="ion-padding  details">
+    <img src="{{ job?.client_signature }}" alt="">
+  </div>
+
+  <div *ngIf="job?.third_party_signature" class="ion-padding heading">Third Party Signature</div>
+  <div *ngIf="job?.third_party_signature" class="ion-padding  details">
+    <img src="{{ job?.third_party_signature }}" alt="">
+  </div>
+
+  <ion-grid *ngIf="job?.third_party_signature">
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Name</ion-col>
+      <ion-col size="6" class="right">{{ job?.third_party_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Surname</ion-col>
+      <ion-col size="6" class="right">{{ job?.third_party_surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Job Function</ion-col>
+      <ion-col size="6" class="right">{{ job?.third_party_function }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <br/>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>

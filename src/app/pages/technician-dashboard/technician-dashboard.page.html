@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>DASHBOARD</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="6" class="padding-10" routerLink="/technician-menu/technician-job-cards">
+        <img src="/assets/img/job-cards.png" alt="">
+      </ion-col>
+      <ion-col size="6" class="padding-10">
+        <img src="/assets/img/service-cards.png" alt="" routerLink="/technician-menu/technician-service-cards">
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <!-- <ion-button routerLink="/tag-writing" expand="block">DEMO WRITE</ion-button> -->
+  <!-- <br /> -->
+  <!-- <ion-button routerLink="/tag-reading" expand="block">READ CHIP</ion-button> -->
+  <br />
+
+  <ion-button routerLink="/readwrite/read" expand="block">READ RFID</ion-button>
+  <br />
+  <ion-button routerLink="/readwrite/write" expand="block">WRITE TO RFID</ion-button>
+  <br />
+  <ion-button routerLink="/write-master" expand="block">WRITE TO RFID AND MASTER</ion-button>
+  <br />
+  <ion-button routerLink="/sync" expand="block">SYNC DATA</ion-button>
+  <br>
+  <ion-button color="secondary" (click)="openSettings()"  expand="block">CONNECTION STATUS</ion-button>
+  <br>
+  <ion-button routerLink="/test-camera" expand="block">SCAN BLUETOOTH</ion-button>
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>
+

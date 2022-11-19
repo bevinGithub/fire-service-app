@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+     <ion-title>RATE TECHNICIAN</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Name</ion-col>
+      <ion-col size="6" class="right">{{ tech?.firstname }} {{ tech?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Company Reg No.</ion-col>
+      <ion-col size="6" class="right">{{ tech?.company_registration }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <div class="rating ion-text-center">
+    <span *ngIf="starW1"  class="star-icon inactive" (click)="rateOne({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 1})" ><img src="../../../assets/img/inactive-star.png" alt=""></span>
+    <span *ngIf="star1"  class="star-icon active" (click)="rateOne({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 1})" ><img src="../../../assets/img/active-star.png" alt=""></span>
+
+    <span *ngIf="starW2" class="star-icon inactive_2"  (click)="rateTwo({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 2})"><img src="../../../assets/img/inactive-star.png" alt=""></span>
+    <span *ngIf="star2"  class="star-icon active" (click)="rateTwo({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 2})" ><img src="../../../assets/img/active-star.png" alt=""></span>
+
+    <span *ngIf="starW3" class="star-icon inactive_3"  (click)="rateThree({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 3})"><img src="../../../assets/img/inactive-star.png" alt=""></span>
+    <span *ngIf="star3"  class="star-icon active" (click)="rateThree({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 3})" ><img src="../../../assets/img/active-star.png" alt=""></span>
+
+    <span *ngIf="starW4" class="star-icon inactive_4"  (click)="rateFour({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 4})"><img src="../../../assets/img/inactive-star.png" alt=""></span>
+    <span *ngIf="star4"  class="star-icon active" (click)="rateFour({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 4})" ><img src="../../../assets/img/active-star.png" alt=""></span>
+
+    <span *ngIf="starW5" class="star-icon inactive_4"  (click)="rateFive({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 5})"><img src="../../../assets/img/inactive-star.png" alt=""></span>
+    <span *ngIf="star5"  class="star-icon active" (click)="rateFive({technicianID: tech?.id, staffID: staffID, jobID: job?.id, rate_value: 5})" ><img src="../../../assets/img/active-star.png" alt=""></span>
+
+
+  </div>
+
+  <form #f='ngForm' class="forms ion-padding" (ngSubmit)="submitRating()" >
+    <ion-list class="list-parent">
+
+      <ion-item   lines="none" class="list-bg">
+        <ion-textarea [(ngModel)]="rate.rating_comment" name="rating_comment" rows="6" cols="20" autocapitalize="on" placeholder="Comment (required)" required minlength="3" #rateComment="ngModel"></ion-textarea>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!rateComment.valid && rateComment.touched">
+        <span class="error-msg">Rating comment is required!</span>
+      </div>
+
+    </ion-list>
+    <ion-input [(ngModel)]="rate.jobID" name="jobID" type="hidden" size="small" placeholder="Job ID..."></ion-input>
+    <ion-input [(ngModel)]="rate.rating_value" name="rating_value" type="hidden" size="small" placeholder="rating_value..."></ion-input>
+    <ion-input [(ngModel)]="rate.staffID" name="staffID" type="hidden" size="small" placeholder="Staff ID..."></ion-input>
+    <ion-input [(ngModel)]="rate.technicianID" name="technicianID" type="hidden" size="small" placeholder="Tech ID..."></ion-input>
+
+    <ion-button shape="round" expand="full" color="primary" block type="submit" [disabled]="!f.valid" class="register-btn"><span>RATE</span></ion-button>
+
+  </form>
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>

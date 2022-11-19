@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>FAULT REPORT</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Fault Reference
+      </ion-col>
+      <ion-col size="6" class="right">
+        #{{ faultReference }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Date
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ refDate | date: 'dd/MM/yyyy HH:mm' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Instructed By
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ staff?.firstname }} {{ staff?.surname }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Company
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ staff?.company_name }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" class="left">
+        Site
+      </ion-col>
+      <ion-col size="6" class="right">
+        {{ siteData?.site_name }}
+      </ion-col>
+    </ion-row>
+
+    </ion-grid>
+
+    <div class="ion-text-center heading-text">
+      ADD A PHOTO
+    </div>
+
+    <div class="ion-text-center black-text-13">
+      Please take a photo of the Control Panel or add a photo<br> form your device's gallery.
+    </div>
+
+    <ion-grid>
+      <ion-row class="">
+        <ion-col class="ion-text-center">
+          <ion-button shape="round" (click)="presentActionSheet()" >
+            <ion-icon name="camera-outline"></ion-icon> ADD A PHOTO
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="ion-text-center ion-padding photo" *ngIf="photo" >
+        <img src="{{ photo }}" alt="">
+    </div>
+
+    <div class="ion-text-center heading-text">
+      FAULT DETAILS
+    </div>
+
+    <form #f='ngForm' class="forms ion-padding">
+
+      <ion-item  lines="none" class="list-bg">
+        <ion-textarea [(ngModel)]="fault.faultDetails" name="faultDetails" rows="6" cols="20" placeholder="General comment here..." autocapitalize="on" required minlength="5" #faultDetails="ngModel"></ion-textarea>
+      </ion-item>
+
+      <div class="list-bg-trans" *ngIf="!faultDetails.valid && faultDetails.touched">
+        <span class="error-msg">Must be at least more than 5 characters!</span>
+      </div>
+
+      <div padding>
+        <ion-input [(ngModel)]="fault.siteID" name="siteID" placeholder="SiteID One" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.faultReference" name="faultReference" placeholder="Fault Reference" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.referenceDate" name="referenceDate" placeholder="Ref Date" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.staffID" name="staffID" placeholder="Staff ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.controlPanelPhoto" name="controlPanelPhoto" placeholder="Control panel photo" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.controlPanelPhoto_2" name="controlPanelPhoto_2" placeholder="Control panel photo 2" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="submitFaultReport()" [disabled]="!f.valid">SUBMIT FAULT REPORT</ion-button>
+      </div>
+    </form>
+
+  </ion-content>
+  <footer class="footer">
+    <div class="ion-text-center logo-bottom">
+      <img valign="center" src="/assets/img/footer-icon.png" alt="">
+    </div>
+    <app-staff-footer></app-staff-footer>
+  </footer>

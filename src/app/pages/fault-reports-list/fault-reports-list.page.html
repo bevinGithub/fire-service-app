@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
+      <span class="counter" routerLink="/staff-menu/notifications">{{ total }}</span>
+    </ion-buttons>
+
+    <ion-title>FAULT REPORTS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="btn-container ion-padding">
+    <ion-button expand="block" shape="round" color="primary" routerLink="/add-fault-report">REPORT A FAULT</ion-button>
+  </div>
+
+  <div class="ion-text-center heading-text">
+    OPEN FAULT REPORTS
+  </div>
+
+  <div *ngIf="faults === 'No Record Found'" >
+    <ion-card>
+      <ion-card-content class="ion-text-center">
+        There is currently no job cards at the moment!
+      </ion-card-content>
+    </ion-card>
+</div>
+
+  <div class="faults"  *ngIf="faults !== 'No Record Found'">
+    <ion-card *ngFor="let item of faults" routerLink="/view-fault-report/{{ item.id }}">
+      <ion-card-content class="list" *ngIf="item.status !== 'Completed'">
+        <div class="title">Fault Reference #{{ item.fault_reference }}</div>
+        <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+        <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+          <span class="orange" *ngIf="item.status === 'In Progress'">{{ item.status }}</span>
+          <span class="orange" *ngIf="item.status === 'Service Pending'">{{ item.status }}</span>
+          <span class="orange" *ngIf="item.status === 'Assigned'">In Progress</span>
+          <span class="orange" *ngIf="item.status === 'Accepted' &&  item.job_approved !== 'Approved'">In Progress</span>
+          <span class="green" *ngIf="item.status === 'Accepted' &&  item.job_approved === 'Approved'">Assigned</span>
+        </div>
+        <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.fault_details }}</div>
+        <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="ion-text-center heading-text">
+    FAULT REPORTS HISTORY
+  </div>
+  <div *ngIf="faults === 'No Record Found'" >
+    <ion-card>
+      <ion-card-content class="ion-text-center">
+        There is currently no job cards at the moment!
+      </ion-card-content>
+    </ion-card>
+</div>
+  <div class="faults"  *ngIf="faults !== 'No Record Found'">
+    <ion-card *ngFor="let item of faults" routerLink="/complete-fault-report/{{ item.id }}">
+      <ion-card-content class="list" *ngIf="item.status === 'Completed'" >
+        <div class="title">Fault Reference #{{ item.fault_reference }}</div>
+        <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+        <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+          <span class="green" *ngIf="item.status === 'Completed'">{{ item.status }}</span></div>
+        <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.fault_details }}</div>
+        <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer></app-staff-footer>
+</footer>
