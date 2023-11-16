@@ -17,7 +17,7 @@
       <ion-item>
         <ion-label>Select</ion-label>
         <ion-select [(ngModel)]="tag.siteID" name="siteID" (ionChange)="getPanelsData($event)" placeholder="Select Site" required #cert="ngModel">
-          <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.site_name }}</ion-select-option>
+          <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.site_name }} - {{ item?.module_name }}</ion-select-option>
         </ion-select>
       </ion-item>
       <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
@@ -78,8 +78,6 @@
         Date: {{ writeDate }}
       </ion-item>
       <div padding>
-        <!-- <ion-input [(ngModel)]="tag.siteID" name="siteID" type="hidden" placeholder="Site ID" ></ion-input> -->
-        <ion-input [(ngModel)]="tag.serviceTypeID" name="serviceTypeID" type="hidden" placeholder="Service Type ID" ></ion-input>
         <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="hidden" placeholder="writeTime" readonly=""></ion-input>
         <ion-button shape="round" expand="full" color="primary" block (click)="writeTag()"  [disabled]="!f.valid">SUBMIT</ion-button>
       </div>

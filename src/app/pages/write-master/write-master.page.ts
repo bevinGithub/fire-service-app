@@ -9,6 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TagsDataPage } from 'src/app/modals/tags-data/tags-data.page';
 import { AudioService } from 'src/app/services/audio.service';
+import { NetworkCheckerService } from 'src/app/services/network-checker.service';
+import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
 @Component({
   selector: 'app-write-master',
@@ -56,6 +58,8 @@ export class WriteMasterPage implements OnInit {
   songs: any;
   panels: any;
   showPanel: boolean;
+  networkStatus: any;
+  database: SQLiteObject;
   subscriptions: Array<Subscription> = new Array<Subscription>();
 
   constructor(
@@ -70,16 +74,18 @@ export class WriteMasterPage implements OnInit {
     private modalController: ModalController,
     private zone: NgZone,
     private activatedRoute: ActivatedRoute,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private networkCheckerService: NetworkCheckerService,
+    private sqlite: SQLite,
   ) {
     this.showPanel = false;
     this.storage.get('currentUser').then((user: any) => {
       console.log(user);
       this.techID = user?.id;
-      this.writeDate = moment().format('YYYY-MM-DD');
+      this.writeDate = moment().format('YYYY-MM-DD HH:mm:ss');
       this.tag.writeTime = this.writeDate;
       console.log(this.writeDate);
-      this.http.get(this.url + 'get-sites.php').subscribe((res: any) => {
+      this.http.get(this.url + 'sp-get-tech-sites-list-new.php?techID=' + this.techID).subscribe((res: any) => {
         console.log(res);
         this.sites = res;
       });
@@ -93,6 +99,8 @@ export class WriteMasterPage implements OnInit {
   ionViewWillEnter(){
     this.pageTitle = 'WRITING TO RFID';
     this.writingTag = true;
+    this.networkCheckerService.checkNetworkChange();
+   this.networkStatus = this.networkCheckerService.isConnected();
   }
 
 //WRITE TO TAG
@@ -107,20 +115,13 @@ writeTag() {
       this.presentToast(error);
     }).subscribe(() => {
       console.log('Ready for Writing');
-      const siteID = this.ndef.textRecord(this.tag.siteID);
-      const tagNumber = this.ndef.textRecord(this.tag.tagNumber);
-      const deviceNumber = this.ndef.textRecord(this.tag.deviceNumber);
-      const deviceType = this.ndef.textRecord(this.tag.deviceType);
-      const message = this.ndef.textRecord(this.tag.deviceMessage);
-      const zone = this.ndef.textRecord(this.tag.zone);
+      const refNumber = 'ZA' + this.tag.siteID + this.tag.tagNumber;
+      const referenceNumber = this.ndef.textRecord(refNumber);
       const date = this.ndef.textRecord(this.tag.writeTime);
-      const serviceID = this.ndef.textRecord('');
-      const serviceTypeID = this.ndef.textRecord('');
-
-      this.nfc.write([siteID,tagNumber, deviceNumber,deviceType,zone,message,date,serviceID,serviceTypeID]).then(success => {
+      this.nfc.write([referenceNumber,date]).then(success => {
         console.log('Writing Complete: ' + success);
         if (success === 'OK') {
-          this.http.post(this.url + 'post-master.php', this.tag).subscribe((res: any) => {
+          this.http.post(this.url + 'sp-post-master-new.php', this.tag).subscribe((res: any) => {
             console.log(res);
           });
           this.presentToast('Successfully written to RFID Chip!');
@@ -162,7 +163,7 @@ async presentAlert(msg) {
 async presentToast(msg) {
   const toast = await this.toastController.create({
     message: msg,
-    duration: 3000
+    duration: 10000
   });
   toast.present();
 }
@@ -184,7 +185,7 @@ async presentToast(msg) {
     if (siteID) {
       this.showPanel = true;
     }
-    this.http.get(this.url + 'get-site-panels-list.php?siteID=' + siteID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-get-site-panels-list.php?siteID=' + siteID).subscribe((data: any) => {
       console.log(data);
       this.panels = data;
     });

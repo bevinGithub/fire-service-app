@@ -40,8 +40,9 @@ export class AddStaffPage implements OnInit {
     this.storage.get('currentUser').then((user: any) => {
       this.clientID = user.id;
       this.staff.clientID = user.id;
+      this.staff.spID = user.sp_id;
       console.log(user);
-      this.http.get(this.url + 'get-client-sites.php?clientID=' + user.id).subscribe((sites: any) => {
+      this.http.get(this.url + 'sp-get-client-sites.php?clientID=' + user.id).subscribe((sites: any) => {
         this.siteList = sites;
         console.log(this.siteList);
       });
@@ -64,7 +65,7 @@ export class AddStaffPage implements OnInit {
 
   addStaffMember() {
     console.log(this.staff);
-    this.http.post(this.url + 'client-add-staff.php', this.staff).subscribe((data: any) => {
+    this.http.post(this.url + 'sp-client-add-staff.php', this.staff).subscribe((data: any) => {
       console.log(data);
       if (data.status === 'success') {
         this.systemConfirmation('Staff member successfuly added!');
@@ -78,7 +79,7 @@ export class AddStaffPage implements OnInit {
   async systemConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000
+      duration: 10000
     });
     toast.present();
   }

@@ -23,7 +23,7 @@ export class ViewSiteCertificateDetailsPage implements OnInit {
   ) {
     this.serviceID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.serviceID);
-    this.http.get(this.url + 'get-site-service-details-new.php?id=' + this.serviceID).subscribe((data: any) => {
+    this.http.get(this.url + 'get-site-service-details-staff.php?id=' + this.serviceID).subscribe((data: any) => {
       console.log(data);
       this.service = data.certificate;
       this.site = data.site;

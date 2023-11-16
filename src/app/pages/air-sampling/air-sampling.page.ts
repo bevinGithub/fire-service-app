@@ -44,7 +44,7 @@ export class AirSamplingPage implements OnInit {
       this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_air_sampling_template  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         sampling_id INTEGER,
-        service_type_id ENTEGER,
+        service_type_id INTEGER,
         site_id INTEGER,
         service_cert_id INTEGER,
         admin_id INTEGER,
@@ -57,6 +57,47 @@ export class AirSamplingPage implements OnInit {
         detection_created TEXT)`, []).then((res: any) => {
           console.log('Air Sampling table Created: ' + JSON.stringify(res));
         });
+
+        this.certID = this.cert;
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        console.log('Connection Status: ' + this.networkStatus);
+        console.log('ID' + this.certID);
+        if (this.networkStatus === 'none') { //Offline
+          const beamSql = 'SELECT * FROM fire_air_sampling_template WHERE service_cert_id=?';
+          this.database.executeSql(beamSql, [this.certID]).then((beamR: any) => {
+            console.log('Record Found: ' + JSON.stringify(beamR));
+            if (beamR.rows.length > 0) {
+              const beam = beamR.rows.item(0);
+              console.log(beam);
+              this.beam.type_make = beam?.type_make;
+              this.beam.units = beam?.units;
+              this.beam.units_tested = beam?.units_tested;
+              this.beam.comment = beam?.comment;
+              this.beam.tech_id = beam?.tech_id;
+              this.beam.service_type_id = beam?.service_type_id;
+              this.beam.service_cert_id = beam?.service_cert_id;
+              this.beam.site_id = beam?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+
+          const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.beam.service_type_id = log?.service_type_id;
+              this.beam.site_id = log?.site_id;
+              this.beam.service_cert_id = log?.cert_id;
+              this.beam.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
     });
    }
 
@@ -89,7 +130,7 @@ export class AirSamplingPage implements OnInit {
         console.log('Cert error: ' + JSON.stringify(err));
       });
 
-      const certSql = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -116,32 +157,30 @@ export class AirSamplingPage implements OnInit {
     if (this.networkStatus === 'none') {
       const bsSql = 'SELECT * FROM fire_air_sampling_template WHERE service_cert_id=?';
       this.database.executeSql(bsSql, [this.certID]).then((bsRes: any) => {
-        console.log('BS RESULT: ' + JSON.stringify(bsRes));
         if (bsRes.rows.length > 0) {
-          console.log('Record Available');
           const beam = bsRes.rows.item(0);
-          if (this.beam.type_make) {
-            this.typeMake = this.beam.type_make;
+          if (this.beam?.type_make) {
+            this.typeMake = this.beam?.type_make;
           } else {
             this.typeMake = '';
           }
-          if (this.beam.units) {
-            this.units = this.beam.units;
+          if (this.beam?.units) {
+            this.units = this.beam?.units;
           } else {
             this.units = '';
           }
-          if (this.beam.units_tested) {
-            this.unitsTested = this.beam.units_tested;
+          if (this.beam?.units_tested) {
+            this.unitsTested = this.beam?.units_tested;
           } else {
             this.unitsTested = '';
           }
-          if (this.beam.comment) {
-            this.comments = this.beam.comment;
+          if (this.beam?.comment) {
+            this.comments = this.beam?.comment;
           } else {
             this.comments = '';
           }
           // eslint-disable-next-line max-len
-          const updateBeam = [this.beam.service_type_id,this.beam.site_id,this.beam.service_cert_id,this.beam.tech_id,this.typeMake,this.units,this.unitsTested,this.comments];
+          const updateBeam = [this.beam?.service_type_id,this.beam?.site_id,this.beam?.service_cert_id,this.beam?.tech_id,this.typeMake,this.units,this.unitsTested,this.comments];
           // eslint-disable-next-line max-len
           this.database.executeSql(`UPDATE fire_air_sampling_template SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, type_make=?, units=?, units_tested=?, comment=? WHERE id=${beam.id}`, updateBeam)
           .then((bs: any) => {
@@ -193,7 +232,7 @@ export class AirSamplingPage implements OnInit {
   async presentToast(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }

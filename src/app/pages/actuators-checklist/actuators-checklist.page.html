@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>ACTUATOR {{ actuator?.actuator_number }}</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Location</ion-col>
+      <ion-col size="6" class="right">{{ actuator?.actuator_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Actuator Type</ion-col>
+      <ion-col size="6" class="right" >{{ actuator?.actuator_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Actuator Sub Type</ion-col>
+      <ion-col size="6" class="right" >{{ actuator?.actuator_sub_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date</ion-col>
+      <ion-col size="6" class="right" >{{ checklist?.date_tested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+      <ion-col size="9"  class="title-head right-border1">
+       Checklist
+      </ion-col>
+      <ion-col size="3"  class="title-head right-border1 right"  style="text-align: right;">Yes/No</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check if actuator open and close freely</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.open_closed }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check that actuators mounting and fixing brackets are tight.</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.is_tight }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Is actuator tested</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.isActuatorTested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">General Comments</ion-col>
+      <ion-col size="12" class="left" >{{ checklist?.general_comments }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer *ngIf="role === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="role === '4'" ></app-tech-footer>
+</footer>

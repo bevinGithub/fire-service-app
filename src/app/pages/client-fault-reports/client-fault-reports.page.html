@@ -39,9 +39,10 @@
         <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
         <div class="status"><img src="/assets/img/list/viewer.png" alt="">
           <span class="orange" *ngIf="item.status === 'In Progress'">{{ item.status }}</span>
-          <span class="orange" *ngIf="item.status === 'Service Pending'">{{ item.status }}</span>
           <span class="orange" *ngIf="item.status === 'Assigned'">In Progress</span>
-          <span class="green" *ngIf="item.status === 'Accepted'">Assigned</span>
+          <span class="orange" *ngIf="item.status === 'Accepted' && item?.job_approved === ''">In Progress</span>
+          <span class="green" *ngIf="item.status === 'Accepted'  && item?.job_approved === 'Approved'">Assigned - {{item?.job_approved}}</span>
+          <span class="orange" *ngIf="item.status === 'Return Visit Required'">{{ item?.status}}</span>
         </div>
         <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.fault_details }}</div>
         <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>

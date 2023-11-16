@@ -11,7 +11,7 @@
 
 <ion-content>
 
-  <ion-card *ngFor="let item of devices" >
+  <!-- <ion-card *ngFor="let item of devices" >
     <ion-card-header>
       {{ item.name || 'Unname' }} - <ion-button   (click)="onConnectDevice(item.id)" *ngIf="showConnect" >Connect</ion-button>
     </ion-card-header>
@@ -19,7 +19,21 @@
       {{ item.id }}<br>
       {{ item.rssi }}
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
+
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="scan">
+        <ion-icon name="tablet-portrait-outline"></ion-icon>
+        <ion-label>Scan</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="broadcast">
+        <ion-icon name="wifi-outline"></ion-icon>
+        <ion-label>Broadcast</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 
 
 </ion-content>

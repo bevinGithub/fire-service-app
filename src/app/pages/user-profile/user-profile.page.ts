@@ -100,7 +100,7 @@ export class UserProfilePage implements OnInit {
         const postData = {
           userID: user.id, profileImage: this.photo,  basePhoto: imageData
         };
-        this.http.post(this.url + 'process-photo.php', postData).subscribe((data: any) => {
+        this.http.post(this.url + 'sp-staff-process-photo.php', postData).subscribe((data: any) => {
           console.log(data);
           this.getUserData();
         });
@@ -114,7 +114,7 @@ export class UserProfilePage implements OnInit {
   async faultConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }
@@ -123,7 +123,7 @@ export class UserProfilePage implements OnInit {
     this.storage.ready().then(() => {
       this.storage.get('currentUser').then((user: any) => {
         this.roleID = user.role_id;
-        this.http.get(this.url + 'get-user.php?userID=' + user.id).subscribe((data: any) => {
+        this.http.get(this.url + 'sp-get-user.php?userID=' + user.id).subscribe((data: any) => {
           console.log(data);
           this.staff = data.user;
           this.sites = data.sites;

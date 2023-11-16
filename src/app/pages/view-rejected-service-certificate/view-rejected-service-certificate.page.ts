@@ -56,7 +56,7 @@ export class ViewRejectedServiceCertificatePage implements OnInit {
     console.log(scID);
     const offData = [];
     // eslint-disable-next-line max-len
-    const querySC = 'SELECT *,fire_service_certificates.service_status AS cert_status  FROM fire_service_certificates INNER JOIN fire_users ON fire_service_certificates.client_id=fire_users.user_id  WHERE fire_service_certificates.cert_id=?';
+    const querySC = 'SELECT *,fire_sp_service_certificates.service_status AS cert_status  FROM fire_sp_service_certificates INNER JOIN fire_users ON fire_sp_service_certificates.client_id=fire_sp_users.user_id  WHERE fire_sp_service_certificates.cert_id=?';
     this.database.executeSql(querySC,[scID]).then((rec: any) => {
       console.log('SC: ' + JSON.stringify(rec));
       console.log('Record Found: ' + rec.rows.length);
@@ -64,7 +64,7 @@ export class ViewRejectedServiceCertificatePage implements OnInit {
        this.service = rec.rows.item(0);
        console.log(this.service);
        //#GET TECH DATA
-       const query = 'SELECT * FROM fire_users WHERE user_id=?';
+       const query = 'SELECT * FROM fire_sp_users WHERE user_id=?';
        this.database.executeSql(query, [this.service?.service_technician_id]).then((res2: any) => {
           console.log('TECH DATA: ' + JSON.stringify(res2));
           if (res2.rows.length > 0) {
@@ -72,7 +72,7 @@ export class ViewRejectedServiceCertificatePage implements OnInit {
           }
        });
        //GET CLIENT DATA
-       const queryClient = 'SELECT * FROM fire_users WHERE client_id=?';
+       const queryClient = 'SELECT * FROM fire_sp_users WHERE client_id=?';
        this.database.executeSql(queryClient, [this.service?.client_id]).then((resClient: any) => {
           console.log('TECH DATA: ' + JSON.stringify(resClient));
           if (resClient.rows.length > 0) {
@@ -80,7 +80,7 @@ export class ViewRejectedServiceCertificatePage implements OnInit {
           }
        });
        //GET SITE DATA
-       const querySite = 'SELECT * FROM fire_sites WHERE site_id=?';
+       const querySite = 'SELECT * FROM fire_sp_sites WHERE site_id=?';
        this.database.executeSql(querySite, [this.service?.site_id]).then((resSite: any) => {
           console.log('TECH DATA: ' + JSON.stringify(resSite));
           if (resSite.rows.length > 0) {

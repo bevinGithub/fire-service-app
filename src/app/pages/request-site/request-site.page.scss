@@ -33,3 +33,9 @@ ion-input, ion-textarea {
 ion-button {
   height: 50px;
 }
+
+ion-input, ion-textarea, ion-select, ion-label, .label {
+  --border-style: none !important;
+  font-size: 13px;
+  font-family: 'Poppins Light';
+}

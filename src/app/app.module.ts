@@ -15,8 +15,9 @@ import { Keyboard } from '@awesome-cordova-plugins/keyboard/ngx';
 import { NFC, Ndef } from '@awesome-cordova-plugins/nfc/ngx';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
-import { BLE } from '@awesome-cordova-plugins/ble/ngx';
 import { OpenNativeSettings } from '@awesome-cordova-plugins/open-native-settings/ngx';
+import { BluetoothLE } from '@awesome-cordova-plugins/bluetooth-le/ngx';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,7 +36,8 @@ import { OpenNativeSettings } from '@awesome-cordova-plugins/open-native-setting
     NFC,Ndef,
     Network,
     SQLite,
-    BLE,
+    BluetoothLE,
+    Device,
     OpenNativeSettings,
      {
       provide: RouteReuseStrategy,

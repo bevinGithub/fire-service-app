@@ -89,7 +89,7 @@ export class StaffRegistrationPage implements OnInit {
   async systemConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }
@@ -118,7 +118,7 @@ export class StaffRegistrationPage implements OnInit {
 
   submitClientRegistration() {
     console.log(this.staff);
-    this.http.post(this.url + 'process-staff-registration.php', this.staff).subscribe((user: any) => {
+    this.http.post(this.url + 'sp-process-staff-registration.php', this.staff).subscribe((user: any) => {
       console.log(user);
       if(user.status === 'success') {
         this.systemConfirmation('User successfully registered! Please check your email for activation code');

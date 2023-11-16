@@ -19,12 +19,18 @@ export class StaffFooterComponent implements OnInit {
 
   ngOnInit() {}
 
+  home() {
+    this.router.navigate(['/staff-menu/staff-dashboard']);
+  }
+
   staffFaults() {
-    this.router.navigate(['/staff-menu/alarms-fault-reports']);
+    this.router.navigate(['/staff-menu/staff-dashboard']);
+    // /staff-menu/alarms-fault-reports
   }
 
   services() {
-    this.router.navigate(['/staff-menu/alarms-services']);
+    this.router.navigate(['/staff-menu/staff-dashboard']);
+    // /staff-menu/alarms-services
   }
 
   contactUs() {

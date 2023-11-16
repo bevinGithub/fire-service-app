@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>FAN {{ fan?.fan_number }}</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Location</ion-col>
+      <ion-col size="6" class="right">{{ fan?.fan_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Fan Type</ion-col>
+      <ion-col size="6" class="right" >{{ fan?.fan_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date</ion-col>
+      <ion-col size="6" class="right" >{{ checklist?.date_tested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+      <ion-col size="9"  class="title-head right-border1">
+       Checklist
+      </ion-col>
+      <ion-col size="3"  class="title-head right-border1 right" style="text-align: right;">Yes/No</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check the motor runs</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.motor_run }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check that the direction is correct</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.device_direction }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check for excessive bearing noise</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.bearing_noise }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check for excessive vibration noise</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.excessive_vibration }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check units for mechanical defects</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.mechanical_defects }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Make sure the responsible person on site is familiar with the operation of the system</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.operation_system }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Is fan tested</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.isVentTested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">General Comments</ion-col>
+      <ion-col size="12" class="left" >{{ checklist?.general_comments }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer *ngIf="role === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="role === '4'" ></app-tech-footer>
+</footer>

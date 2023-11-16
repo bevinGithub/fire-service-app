@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>CHANGE REQUEST</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="center-logo ion-text-center padding-top-20px">
+    <!-- <img id="logo" src="/assets/img/inner-logo.png" alt=""> -->
+    <div class="black-text-20">
+      CHANGE REQUEST
+    </div>
+  </div>
+  <div class="content-form">
+
+    <form #f='ngForm' class="forms ion-padding">
+      <ion-list class="list-bg-sec">
+
+        <ion-item lines="none">
+          <ion-input [(ngModel)]="contact.subject" name="subject" autocapitalize="on" placeholder="Subject (*)" type="text" required #subjectCtrl="ngModel"></ion-input>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!subjectCtrl.valid && subjectCtrl.touched">
+          <span class="error-msg">Subject cannot be empty!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-label class="label">Service Provider</ion-label>
+            <ion-select [(ngModel)]="contact.sp_id" name="sp_id" placeholder="Select Service Provider" required #spCtrl="ngModel">
+              <ion-select-option *ngFor="let item of sps" value="{{item?.sp_id}}">{{ item?.business_name }}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!spCtrl.valid && spCtrl.touched">
+          <span class="error-msg">Please select a service provider!</span>
+        </div>
+
+        <ion-item lines="none">
+          <ion-textarea [(ngModel)]="contact.request_reason" name="request_reason" rows="6" cols="20" placeholder="Enter your reason of change here..." required minlength="5" #msg="ngModel"></ion-textarea>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!msg.valid && msg.touched">
+          <span class="error-msg">Message cannot be less than 5 characters!</span>
+        </div>
+
+      </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="contact.name" name="name" placeholder="name" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="contact.surname" name="surname" placeholder="Surname (*)" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="contact.mobile_number" name="mobile_number" placeholder="Mobile Number (*)" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="contact.email" name="email" placeholder="Email (*)" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="contact.userID" name="userID" placeholder="User ID" type="hidden"></ion-input>
+
+        <ion-button shape="round" expand="full" color="secondary" block (click)="sendEnquiry()" [disabled]="!f.valid">SUBMIT</ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer-client *ngIf="roleID === '2'" ></app-footer-client>
+  <app-staff-footer2 *ngIf="roleID === '3'"></app-staff-footer2>
+  <app-tech-footer2 *ngIf="roleID === '4'"></app-tech-footer2>
+</footer>

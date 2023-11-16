@@ -1,0 +1,176 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+    <ion-title>BROADCAST DEVICE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- <ion-button (click)="bluetoothInit()" [disabled]="!isPlatformReady">Bluetooth init</ion-button>
+  <ion-button (click)="peripheralInit()" [disabled]="!subBluetoothInit">Peripheral init</ion-button>
+  <ion-button (click)="addService()" [disabled]="!subPeripheralInit">Add service</ion-button>
+  <ion-button (click)="advertise()" [disabled]="!subPeripheralInit">Advertise</ion-button> -->
+
+  <ion-grid fixed style="padding: 0px !important">
+    <ion-row style="padding: 0px !important">
+      <ion-col size="6" style="padding: 0px !important">
+        <ion-button expand="block" fill="solid" color="secondary" (click)="bluetoothInit()" [disabled]="!isPlatformReady">Activate Device</ion-button>
+      </ion-col>
+      <ion-col size="6" style="padding: 0px !important">
+        <ion-button expand="block" fill="solid" color="secondary" (click)="newAddService()" [disabled]="!subPeripheralInit">Broadcast Device</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid >
+    <ion-row>
+      <ion-col size="6" class="left">
+        <ion-button expand="block" fill="outline" color="primary" routerLink="/technician-menu/technician-dashboard" >Dashboard</ion-button>
+      </ion-col>
+      <ion-col size="6" class="right">
+        <ion-button expand="block" fill="outline" color="primary" (click)="stopAdvertising()">Cancel Broadcast</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="showError" class="ion-no-padding">
+    <div class="spacer-15"></div>
+    <ion-card>
+      <ion-card-content style="color: #FE0000; font-size: 14px;font-family: 'Roboto';font-weight: 500;">
+        {{ errorResult }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div>
+    <div class="spacer-15"></div>
+    <ion-grid fixed *ngIf="showResults" >
+      <ion-row>
+        <ion-col  class="heading">Results From Database</ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="resultNotice" >
+        <ion-col>{{ resultNotice }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Site Name</ion-col>
+        <ion-col size="6" class="right">{{ siteName }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Reference Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.reference_number }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Site ID</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.site_id }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Tag Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.rftag }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Device Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.addr }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Device Type</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.device_type }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Message</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.device_message }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Zone</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.zone}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Date Written</ion-col>
+        <ion-col size="6" class="right">{{ deviceResults?.date_scanned }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div>
+    <div class="spacer-15"></div>
+    <ion-grid fixed *ngIf="showScannedTag" >
+      <ion-row>
+        <ion-col class="heading">Scanned Tag Data</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="left">Reference Number</ion-col>
+        <ion-col size="6" class="right">{{ scannedTag?.referenceNumber }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="edit-form" *ngIf="deviceResults">
+      <br/>
+      <div class="heading">Update Device Data</div>
+    <form #f='ngForm' class="forms">
+      <ion-list class="list-bg-sec">
+        <ion-item lines="none1">
+          REF Number:  {{ deviceTags?.reference_number }}
+        </ion-item>
+        <ion-item lines="none1">
+          RF Tag:  {{ deviceTags?.rftag }}
+        </ion-item>
+
+        <ion-item lines="none1">
+          Address: {{ deviceTags?.addr }}
+        </ion-item>
+
+        <ion-item lines="none1">
+          Device Type: {{ deviceTags?.device_type }}
+        </ion-item>
+
+        <ion-item lines="none1">
+          Message: {{ deviceTags?.device_message }}
+        </ion-item>
+
+        <ion-item >
+          <ion-label position="floating">Cleaned</ion-label>
+          <ion-select placeholder="Select option" [(ngModel)]="deviceTags.cleaned" name="cleaned">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item >
+          <ion-label position="floating">Tested</ion-label>
+          <ion-select placeholder="Select option" [(ngModel)]="deviceTags.tested" name="tested">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item >
+          <ion-label position="floating">Correct Message</ion-label>
+          <ion-select placeholder="Select option" [(ngModel)]="deviceTags.correct_message" name="correct_message">
+            <ion-select-option value="Yes">Yes</ion-select-option>
+            <ion-select-option value="No">No</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="none1">
+          <ion-label position="floating">New Message</ion-label>
+          <ion-input [(ngModel)]="deviceTags.new_message" name="new_message" placeholder="New Message" type="text" ></ion-input>
+        </ion-item>
+
+        </ion-list>
+
+      <div padding>
+        <ion-input [(ngModel)]="deviceTags.zone" name="zone" placeholder="Zone" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="deviceTags.rftag" name="rftag" placeholder="RFTag" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="deviceTags.addr" name="addr" placeholder="Address" type="hidden" ></ion-input>
+        <ion-input [(ngModel)]="deviceTags.device_type" name="device_type" placeholder="Device Type" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="deviceTags.device_message" name="device_message" placeholder="Device Message" type="hidden" ></ion-input>
+
+        <ion-input [(ngModel)]="deviceTags.tech_id" name="tech_id" placeholder="ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="deviceTags.id" name="id" placeholder="ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="deviceTags.device_id" name="device_id" placeholder="Device ID" type="hidden"></ion-input>
+        <ion-button shape="round" expand="full" color="secondary" block (click)="updateDevice()">Submit</ion-button>
+      </div>
+    </form>
+  </div>
+
+</ion-content>

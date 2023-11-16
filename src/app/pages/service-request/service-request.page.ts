@@ -138,7 +138,7 @@ export class ServiceRequestPage implements OnInit {
   async faultConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }

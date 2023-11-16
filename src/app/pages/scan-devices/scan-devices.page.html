@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-title>SCAN DEVICES</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="devices" *ngFor="let item of devices">
+    <span style="font-weight: bold;">Device Name: {{ item.name }}</span><br/>
+      <span style="font-weight: bold;">Address: {{ item?.address }}</span>
+
+      <ion-button expand="block" fill="solid" color="secondary" (click)="connectDevice({ address: item?.address })" >CONNECT</ion-button>
+      <br/>
+      <ion-button expand="block" fill="solid" color="secondary" (click)="discoverDevice({ resp: item})" >DISCOVER</ion-button>
+      <br/>
+      <ion-button expand="block" fill="solid" color="secondary" (click)="deviceNFCReadWrite()" >NFC READ</ion-button>
+      <br/>
+      <ion-button expand="block" fill="solid" color="secondary" (click)="disconnectDevice({ resp: item})" >DISCONNECT</ion-button>
+      <br/>
+      <!-- <ion-button expand="block" fill="solid" color="secondary" (click)="reconnectDevice({ resp: item})" >RECONNECT</ion-button> -->
+  </div>
+
+  <ion-grid fixed style="padding: 0px !important">
+    <ion-row style="padding: 0px !important">
+      <ion-col size="6">
+        <ion-button expand="block" fill="solid" color="primary" (click)="scanDevices()" >Start Scan</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" fill="solid" color="primary" (click)="stopScan()"  [disabled]="!isScanning" >Stop Scan</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="spacer-30"></div>
+  <ion-button expand="block" fill="outline" color="primary" (click)="removeDevices()"  >Clear Scan</ion-button>
+
+
+
+</ion-content>

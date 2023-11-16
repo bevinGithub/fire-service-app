@@ -49,9 +49,10 @@
       <ion-input [(ngModel)]="site.site_three" name="site_three" placeholder="SiteID Three" type="hidden"></ion-input>
       <ion-input [(ngModel)]="site.site_four" name="site_four" placeholder="SiteID Four" type="hidden"></ion-input>
       <ion-input [(ngModel)]="site.site_five" name="site_five" placeholder="SiteID Five" type="hidden"></ion-input>
+      <ion-input [(ngModel)]="site.moduleID" name="moduleID" placeholder="moduleID" type="hidden"></ion-input>
       <!-- <ion-button shape="round" expand="full" color="primary" block (click)="nextStep()" [disabled]="!buttonActive">NEXT</ion-button> -->
       <!-- <p>Site Selected: {{ siteSelected }}</p> -->
-      <ion-button expand="full" shape="round" color="primary" routerLink="/fault-report/{{ siteSelected }}" [disabled]="!buttonActive">NEXT STEP</ion-button>
+      <ion-button expand="full" shape="round" color="primary" routerLink="/fault-report/{{ siteSelected }}/{{ moduleID }}" [disabled]="!buttonActive">NEXT STEP</ion-button>
     </div>
 
   </form>

@@ -13,7 +13,8 @@ export class ViewClientFaultPage implements OnInit {
   url = environment.url;
   faultID: any;
   reviews: any;
-
+  user: any;
+  site: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -21,11 +22,7 @@ export class ViewClientFaultPage implements OnInit {
   ) {
     this.faultID = this.activatedRoute.snapshot.paramMap.get('faultID');
     console.log(this.faultID);
-    this.http.get(this.url + 'get-fault-details-client.php?id=' + this.faultID).subscribe((data: any) => {
-      console.log(data);
-      this.fault = data.fault;
-      this.reviews = data.ratings;
-    });
+    this.getClientFaults(this.faultID);
   }
 
   ngOnInit() {
@@ -33,13 +30,15 @@ export class ViewClientFaultPage implements OnInit {
 
   ionViewWillEnter(){
     this.faultID = this.activatedRoute.snapshot.paramMap.get('faultID');
-    console.log(this.faultID);
-    this.http.get(this.url + 'get-fault-details-client.php?id=' + this.faultID).subscribe((data: any) => {
-      console.log(data);
-      this.fault = data.fault;
-      this.reviews = data.ratings;
-    });
+    this.getClientFaults(this.faultID);
   }
 
-
+  getClientFaults(faultID) {
+    this.http.get(this.url + 'sp-get-fault-details-client.php?id=' + faultID).subscribe((data: any) => {
+      console.log(data);
+      this.fault = data.fault;
+      this.site = data.site;
+      this.user = data.user;
+    });
+  }
 }

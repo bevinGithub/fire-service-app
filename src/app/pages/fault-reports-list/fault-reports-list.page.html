@@ -35,6 +35,7 @@
   <div class="faults"  *ngIf="faults !== 'No Record Found'">
     <ion-card *ngFor="let item of faults" routerLink="/view-fault-report/{{ item.id }}">
       <ion-card-content class="list" *ngIf="item.status !== 'Completed'">
+        <div class="title">Service Provider: {{ item.business_name }}</div>
         <div class="title">Fault Reference #{{ item.fault_reference }}</div>
         <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
         <div class="status"><img src="/assets/img/list/viewer.png" alt="">
@@ -63,6 +64,7 @@
   <div class="faults"  *ngIf="faults !== 'No Record Found'">
     <ion-card *ngFor="let item of faults" routerLink="/complete-fault-report/{{ item.id }}">
       <ion-card-content class="list" *ngIf="item.status === 'Completed'" >
+        <div class="title">Service Provider: {{ item.business_name }}</div>
         <div class="title">Fault Reference #{{ item.fault_reference }}</div>
         <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
         <div class="status"><img src="/assets/img/list/viewer.png" alt="">

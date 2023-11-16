@@ -26,10 +26,10 @@
           <ion-list class="list-bg-sec">
 
             <ion-item lines="none">
-              <ion-input [(ngModel)]="userSignIn.email" name="email" placeholder="Email" type="email" (ionFocus)="hideFooterOnEmail($event)" (ionBlur)="checkEmailStaff()" required #emailCtrl="ngModel"></ion-input>
+              <ion-input [(ngModel)]="userSignIn.email" name="email" placeholder="Email" type="email" (ionFocus)="hideFooterOnEmail($event)" required #emailCtrl="ngModel"></ion-input>
             </ion-item>
 
-            <div class="list-bg-trans" *ngIf="validEmail === false">
+            <div class="list-bg-trans" *ngIf="!emailCtrl.valid && emailCtrl.touched">
               <span class="error-msg">Invalid email address!</span>
             </div>
 
@@ -45,7 +45,7 @@
           </ion-list>
 
           <div padding>
-            <ion-button shape="round" expand="full" color="secondary" block (click)="loginUser()" [disabled]="!f.valid || !validEmail">SIGN IN</ion-button>
+            <ion-button shape="round" expand="full" color="secondary" block (click)="loginUser()" [disabled]="!f.valid">SIGN IN</ion-button>
           </div>
           <div class="forgot-pass ion-text-center" style="padding-top: 10px;" routerLink="/forgot-password" >
             <span>Forgot Password?</span>
@@ -84,6 +84,7 @@
           <div *ngIf="!mobile_number.valid && mobile_number.touched">
               <p class="error-msg">Invalid mobile number!</p>
           </div>
+
         </ion-list>
 
         <div padding>

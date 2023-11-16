@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>SCAN DEVICES</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-button (click)="startScan()" [disabled]="isScanning">Start scan</ion-button>
+  <ion-button (click)="stopScan()" [disabled]="!isScanning">Stop scan</ion-button>
+  <ion-button (click)="connect()" [disabled]="!address">Connect</ion-button>
+  <ion-button (click)="disconnect()" [disabled]="!address">Disconnect</ion-button>
+  <ion-button (click)="reconnect()" [disabled]="!address">Reconnect</ion-button>
+  <ion-button (click)="discover()" [disabled]="!address">Discover</ion-button>
+  <ion-button (click)="read()" [disabled]="!address">Read</ion-button>
+  <ion-button (click)="write()" [disabled]="!address">Write</ion-button>
+
+  <p [innerHtml]="output"></p>
+
+</ion-content>

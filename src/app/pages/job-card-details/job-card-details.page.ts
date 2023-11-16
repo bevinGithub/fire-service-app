@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 import * as moment from 'moment';
-import { ModalController, ToastController, NavParams, ActionSheetController } from '@ionic/angular';
+import { ModalController, ToastController, NavParams, ActionSheetController, AlertController } from '@ionic/angular';
 import { ClientsSignaturePage } from 'src/app/modals/clients-signature/clients-signature.page';
 import { OtherSignaturePage } from 'src/app/modals/other-signature/other-signature.page';
 
@@ -30,6 +30,7 @@ export class JobCardDetailsPage implements OnInit {
   showReturnReason: boolean;
   url = environment.url;
   photo: any;
+  photo2: any;
   afterPhoto: any;
   beforePhoto: any;
   panelPhoto: any;
@@ -40,6 +41,9 @@ export class JobCardDetailsPage implements OnInit {
   updateData: any;
   beforePhotoBlob: any;
   afterPhotoBlob: any;
+  moduleID: any;
+  viewAfterPhoto: any;
+  viewBeforePhoto: any;
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
@@ -49,22 +53,14 @@ export class JobCardDetailsPage implements OnInit {
     private toastController: ToastController,
     private actionSheetController: ActionSheetController,
     private sqlite: SQLite,
-    private networkCheckerService: NetworkCheckerService
+    private networkCheckerService: NetworkCheckerService,
+    private alertController: AlertController
   ) {
     this.minDate = moment(new Date()).format('YYYY-MM-DD');
     console.log(this.minDate);
     this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
     console.log(this.jobID);
-    this.http.get(this.url + 'get-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
-      console.log(data);
-      this.job = data?.job;
-      this.staff = data?.staff;
-      this.jobCard = this.job;
-      this.jobCard.jobID = this.job.id;
-      this.jobCard.arrival_time = this.job.arrival_time;
-      this.jobCard.techID = this.job.technician_id;
-      this.panelPhoto = this.job.control_panel_photo_2;
-    });
+    this.getJobCards(this.jobID);
     this.hidePartyBtn = false;
     this.hideClientBtn = false;
     this.showReturnReason = false;
@@ -77,16 +73,7 @@ export class JobCardDetailsPage implements OnInit {
   ionViewWillEnter(){
     this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
     console.log(this.jobID);
-    this.http.get(this.url + 'get-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
-      console.log(data);
-      this.job = data?.job;
-      this.staff = data?.staff;
-      this.jobCard = this.job;
-      this.jobCard.jobID = this.job.id;
-      this.jobCard.arrival_time = this.job.arrival_time;
-      this.jobCard.techID = this.job.technician_id;
-      this.panelPhoto = this.job.control_panel_photo_2;
-    });
+    this.getJobCards(this.jobID);
 
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
@@ -98,6 +85,27 @@ export class JobCardDetailsPage implements OnInit {
     console.log(dateCompleted);
   }
 
+  getJobCards(jobID) {
+    this.http.get(this.url + 'sp-get-job-details.php?jobID=' + jobID).subscribe((data: any) => {
+      console.log(data);
+      this.job = data?.job;
+      this.staff = data?.staff;
+      this.jobCard = this.job;
+      this.jobCard.jobID = this.job.id;
+      this.jobCard.arrival_time = this.job.arrival_time;
+      this.jobCard.techID = this.job.technician_id;
+      this.panelPhoto = this.job.control_panel_photo_2;
+      this.viewBeforePhoto = this.job.before_photo_2;
+      this.viewAfterPhoto = this.job.after_photo_2;
+      this.moduleID = this.job?.module_id;
+      if (this.jobCard.isReturn === 'Yes') {
+        this.jobCard.isReturn = 'true';
+      } else {
+        this.jobCard.isReturn = 'false';
+      }
+    });
+  }
+
   getOfflineJobCard() {
     this.sqlite.create({
       name: 'fireservices.db',
@@ -107,7 +115,7 @@ export class JobCardDetailsPage implements OnInit {
       this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
       console.log(this.jobID);
       // eslint-disable-next-line max-len
-      const query = 'SELECT * FROM fire_fault_reports JOIN fire_sites ON fire_fault_reports.site_id = fire_sites.site_id  WHERE fire_fault_reports.fault_id=?';
+      const query = 'SELECT * FROM fire_sp_fault_reports JOIN fire_sp_sites ON fire_sp_fault_reports.site_id = fire_sp_sites.site_id  WHERE fire_sp_fault_reports.fault_id=?';
       this.database.executeSql(query, [this.jobID]).then((res: any) => {
         if (res.rows.length > 0) {
           console.log('Data: ');
@@ -117,11 +125,16 @@ export class JobCardDetailsPage implements OnInit {
           this.jobCard.arrival_time = this.job.arrival_time;
           this.jobCard.techID = this.job.technician_id;
           this.panelPhoto = this.job.control_panel_photo_2;
+          if (this.jobCard.isReturn === 'Yes') {
+            this.jobCard.isReturn = 'true';
+          } else {
+            this.jobCard.isReturn = 'false';
+          }
         }
       });
 
       // eslint-disable-next-line max-len
-      const queryClient = 'SELECT * FROM fire_users WHERE fire_users.user_id=?';
+      const queryClient = 'SELECT * FROM fire_sp_users WHERE fire_sp_users.user_id=?';
       this.database.executeSql(queryClient, [this.job.client_id]).then((client: any) => {
         if (client.rows.length > 0) {
           console.log('Clients: ');
@@ -130,17 +143,67 @@ export class JobCardDetailsPage implements OnInit {
         }
       });
     }).catch(err => {
-      console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
+      // console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
     });
   }
 
-  completeAssignedJobCard() {
+  async completeAssignedJobCard() {
+    const alert = await this.alertController.create({
+      message: 'Please confirm if you want to Save or Mark as Complete',
+      buttons: [
+        {
+          text: 'Save',
+          role: 'cancel',
+          handler: () => {
+            console.log(this.jobCard);
+            this.updateJobCard(this.jobCard);
+          }
+        }, {
+          text: 'Mark as Complete',
+          handler: () => {
+            console.log('Confirm Okay');
+            if (this.jobCard.isSigned) {
+              console.log(this.jobCard);
+              this.completeJobCard(this.jobCard);
+            } else {
+              this.presentAlert();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Submission Error',
+      message: 'Client or third party signature is needed to sign off!',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  updateJobCard(data) {
+    console.log(data);
+    this.http.post(this.url + 'sp-technician-save-job.php', data).subscribe((res: any) => {
+      console.log(res);
+      if (res.status === 'success') {
+        this.systemNotifiy('Job card has been successfully saved!');
+        this.router.navigate(['/technician-menu/technician-job-cards/' + this.moduleID]); // + this.moduleID
+      } else {
+        this.systemNotifiy('Job card failed to be completed!');
+      }
+    });
+  }
+
+  completeJobCard(jobCardData) {
     console.log(this.jobCard);
-    this.http.post(this.url + 'submit-technician-job.php', this.jobCard).subscribe((res: any) => {
+    this.http.post(this.url + 'sp-submit-technician-job.php', jobCardData).subscribe((res: any) => {
       console.log(res);
       if (res.status === 'success') {
         this.systemNotifiy('Job card has been successfully completed!');
-        this.router.navigate(['/technician-menu/technician-job-cards']);
+        this.router.navigate(['/technician-menu/technician-job-cards/' + this.moduleID]); // + this.moduleID
       } else {
         this.systemNotifiy('Job card failed to be completed!');
       }
@@ -150,7 +213,7 @@ export class JobCardDetailsPage implements OnInit {
     if (this.networkStatus === 'none') {
       console.log(this.jobCard);
       const dateCompleted = moment().format('YYYY-MM-DD HH:mm:ss');
-      if (this.jobCard.isReturn && this.jobCard.isReturn !== '' ) {
+      if (this.jobCard.isReturn && this.jobCard.isReturn === 'true' ) {
         this.status = 'Return Visit Required';
         this.return = 'Yes';
       } else {
@@ -173,7 +236,7 @@ export class JobCardDetailsPage implements OnInit {
       // eslint-disable-next-line max-len
       this.updateData = [this.jobCard.arrival_time,this.status, this.jobCard.work_completed, this.jobCard.general_comments, this.return, this.jobCard.return_details, this.jobCard.clientSignature, this.jobCard.third_party_signature, this.jobCard.third_party_name, this.jobCard.third_party_surname, this.jobCard.third_party_function, this.beforePhotoBlob, this.afterPhotoBlob, this.jobCard.date_signed_off, dateCompleted, isSynced];
       // eslint-disable-next-line max-len
-      this.database.executeSql(`UPDATE fire_fault_reports SET arrival_time = ?, status = ?, work_completed=?, general_comments=?, isReturn=?, return_details=?, client_signature=?, third_party_signature=?, third_party_name=?, third_party_surname=?, third_party_function=?, before_photo_blob=?, after_photo_blob=?, date_signed_off=?, date_completed=?, isSynced=?  WHERE fault_id = ${this.jobID}`, this.updateData).then((res: any) => {
+      this.database.executeSql(`UPDATE fire_sp_fault_reports SET arrival_time = ?, status = ?, work_completed=?, general_comments=?, isReturn=?, return_details=?, client_signature=?, third_party_signature=?, third_party_name=?, third_party_surname=?, third_party_function=?, before_photo_blob=?, after_photo_blob=?, date_signed_off=?, date_completed=?, isSynced=?  WHERE fault_id = ${this.jobID}`, this.updateData).then((res: any) => {
         console.log('Updated!!' + JSON.stringify(res));
         this.systemNotifiy('Job card has been successfully completed!');
         this.router.navigate(['/technician-menu/technician-job-cards']);
@@ -198,6 +261,7 @@ export class JobCardDetailsPage implements OnInit {
         this.jobCard.date_signed_off = moment().format('YYYY-MM-DD HH:mm:ss');
         this.hideClientBtn  = true;
         this.hidePartyBtn = true;
+        this.jobCard.isSigned = 'Client';
       });
   }
 
@@ -219,6 +283,7 @@ export class JobCardDetailsPage implements OnInit {
       this.jobCard.date_signed_off = moment().format('YYYY-MM-DD HH:mm:ss');
       this.hideClientBtn  = true;
       this.hidePartyBtn = true;
+      this.jobCard.isSigned = 'Client Party';
     });
   }
 
@@ -235,7 +300,7 @@ export class JobCardDetailsPage implements OnInit {
   async systemNotifiy(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration:4000
+      duration: 10000
     });
     toast.present();
   }

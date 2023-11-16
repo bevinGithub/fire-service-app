@@ -36,11 +36,11 @@ export class TechnicianRegistrationPage implements OnInit {
     private router: Router
   ) {
     this.showBanner = true;
-    this.storage.get('userTechnician').then((staffData: any) => {
-      console.log(staffData);
-      this.staffInfo = staffData;
+    this.storage.get('userTechnician').then((techData: any) => {
+      console.log(techData);
+      this.staffInfo = techData;
       this.staff.userID = this.staffInfo.id;
-      this.http.get(this.url + 'assigned-staff-sites.php?staffID=' + staffData.id).subscribe((sites: any) => {
+      this.http.get(this.url + 'sp-assigned-staff-sites.php?staffID=' + techData.id).subscribe((sites: any) => {
       console.log(sites);
       this.assigned = sites;
       });
@@ -88,7 +88,7 @@ export class TechnicianRegistrationPage implements OnInit {
   async systemConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }
@@ -117,7 +117,7 @@ export class TechnicianRegistrationPage implements OnInit {
 
   submitClientRegistration() {
     console.log(this.staff);
-    this.http.post(this.url + 'process-technician-registration.php', this.staff).subscribe((user: any) => {
+    this.http.post(this.url + 'sp-process-technician-registration.php', this.staff).subscribe((user: any) => {
       console.log(user);
       if(user.status === 'success') {
         this.systemConfirmation('User successfully registered! Please check your email for activation code');

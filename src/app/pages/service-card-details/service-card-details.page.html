@@ -52,7 +52,7 @@
 
     <ion-row class="border-bottom">
       <ion-col size="5" class="left">Service Company</ion-col>
-      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+      <ion-col size="7" class="right">{{ serviceCompany?.business_name }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
@@ -102,7 +102,7 @@
   </ion-grid>
 <br>
   <ion-grid class="tables">
-    <ng-container style="margin-bottom: 15px;" *ngIf="site?.service_precheck_1 !== 'Disabled'">
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.service_precheck_1 !== 'Disabled'">
       <ion-row class="dark-bg">
         <ion-col size="1"  class="title-head right-border1"><b>1</b></ion-col>
         <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
@@ -153,7 +153,7 @@
       </ion-row>
     </ng-container>
     <br>
-    <ng-container style="margin-bottom: 0px;" *ngIf="site?.fire_detection_panel_3 === ''">
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.fire_detection_panel_3 === ''">
       <ion-row class="dark-bg">
         <ion-col size="1"  class="title-head right-border1"><b>3</b></ion-col>
         <ion-col size="11" class="title-head"><b>Service and pre-service check (Section 12 SANS 10139)</b></ion-col>
@@ -310,7 +310,7 @@
       </ion-row>
     </ng-container>
     <!-- 4.0 -->
-    <ng-container style="margin-bottom: 0px;" *ngIf="site?.cleaning_devices_4 !== 'Disabled'">
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.cleaning_devices_4 !== 'Disabled'">
       <ion-row class="dark-bg">
         <ion-col size="1"  class="title-head right-border1"><b>4</b></ion-col>
         <ion-col size="11" class="title-head"><b>Cleaning Devices (Section 12 SANS 10139)</b></ion-col>
@@ -467,7 +467,7 @@
       </ion-row>
     </ng-container>
     <!-- Number 5.0 -->
-    <ng-container style="margin-bottom: 0px;" *ngIf="site?.test_device_loop_5 !== 'Disabled'">
+    <ng-container style="margin-bottom: 0px;" *ngIf="cert?.test_device_loop_5 !== 'Disabled'">
       <ion-row class="dark-bg">
         <ion-col size="1"  class="title-head right-border1"><b>5</b></ion-col>
         <ion-col size="11" class="title-head"><b>Testing Devices Loop (Section 12 SANS 10139)</b></ion-col>
@@ -584,37 +584,51 @@
       </ion-row>
       </ng-container>
       <!-- Number 6.0 -->
-    <ng-container style="margin-bottom: 15px;" *ngIf="site?.other_detection_devices_6 !== 'Disabled'">
+    <ng-container style="margin-bottom: 15px;" *ngIf="cert?.other_detection_devices_6 !== 'Disabled'">
       <ion-row class="dark-bg">
         <ion-col size="1"  class="title-head right-border1"><b>6</b></ion-col>
         <ion-col size="11" class="title-head"><b>Testing of other detection devices</b></ion-col>
       </ion-row>
 
-      <ion-row class="">
-        <ion-col size="1"  class="title-head right-border1">6.1</ion-col>
-        <ion-col size="9" class="left">Beam detection</ion-col>
-        <ion-col size="2"  class="text ion-text-center">{{ cert?.beam_detection_6_1 }}</ion-col>
-      </ion-row>
-      <ion-row class="">
-        <ion-col size="1"  class="title-head right-border1">6.2</ion-col>
-        <ion-col size="9" class="left">Air sampling</ion-col>
-        <ion-col size="2"  class="text ion-text-center">{{ cert?.air_sampling_6_2 }}</ion-col>
-      </ion-row>
-      <ion-row class="">
-        <ion-col size="1"  class="title-head right-border1">6.3</ion-col>
-        <ion-col size="9" class="left">Liner Heat</ion-col>
-        <ion-col size="2"  class="text ion-text-center">{{ cert?.liner_heat_6_3 }}</ion-col>
-      </ion-row>
-      <ion-row class="">
-        <ion-col size="1"  class="title-head right-border1">6.4</ion-col>
-        <ion-col size="9" class="left">Flame Detection</ion-col>
-        <ion-col size="2"  class="text ion-text-center">{{ cert?.flame_detection_6_4 }}</ion-col>
-      </ion-row>
-      <ion-row class="">
-        <ion-col size="1"  class="title-head right-border1">6.5</ion-col>
-        <ion-col size="9" class="left">Wireless</ion-col>
-        <ion-col size="2"  class="right">{{ cert?.wireless_6_5 }}</ion-col>
-      </ion-row>
+      <ng-container *ngIf="cert?.other_beam_detection !== 'Disabled'">
+        <ion-row class="">
+          <ion-col size="1" class="title-head right-border1">6.1</ion-col>
+          <ion-col size="9" class="left">Beam detection</ion-col>
+          <ion-col size="2" class="text ion-text-center">{{ cert?.beam_detection_6_1 }}</ion-col>
+        </ion-row>
+      </ng-container>
+
+      <ng-container *ngIf="cert?.other_air_sampling !== 'Disabled'">
+        <ion-row class="">
+          <ion-col size="1" class="title-head right-border1">6.2</ion-col>
+          <ion-col size="9" class="left">Air sampling</ion-col>
+          <ion-col size="2" class="text ion-text-center">{{ cert?.air_sampling_6_2 }}</ion-col>
+        </ion-row>
+      </ng-container>
+
+      <ng-container *ngIf="cert?.other_liner_heat !== 'Disabled'">
+        <ion-row class="">
+          <ion-col size="1" class="title-head right-border1">6.3</ion-col>
+          <ion-col size="9" class="left">Liner Heat</ion-col>
+          <ion-col size="2" class="text ion-text-center">{{ cert?.liner_heat_6_3 }}</ion-col>
+        </ion-row>
+      </ng-container>
+
+      <ng-container *ngIf="cert?.other_flame_detection !== 'Disabled'">
+        <ion-row class="">
+          <ion-col size="1" class="title-head right-border1">6.4</ion-col>
+          <ion-col size="9" class="left">Flame Detection</ion-col>
+          <ion-col size="2" class="text ion-text-center">{{ cert?.flame_detection_6_4 }}</ion-col>
+        </ion-row>
+      </ng-container>
+
+      <ng-container *ngIf="cert?.other_wireless !== 'Disabled'">
+        <ion-row class="">
+          <ion-col size="1" class="title-head right-border1">6.5</ion-col>
+          <ion-col size="9" class="left">Wireless</ion-col>
+          <ion-col size="2" class="text ion-text-center">{{ cert?.wireless_6_5 }}</ion-col>
+        </ion-row>
+      </ng-container>
     </ng-container>
     <!-- 7.0 Auxiliary -->
     <ng-container style="margin-bottom: 15px;" *ngIf="cert?.auxiliary_interface_7 !== 'Disabled'">
@@ -805,15 +819,8 @@
   <ion-grid>
     <ion-row class="border-bottom">
       <ion-col size="5" class="left">Service Company</ion-col>
-      <ion-col size="7" class="right">{{ tech?.company_name }}</ion-col>
+      <ion-col size="7" class="right">{{ serviceCompany?.business_name }}</ion-col>
     </ion-row>
-
-    <!-- <ion-row class="border-bottom">
-      <ion-col size="12" class="left">
-        We, currently being a Fire Detection Company of Fire System Installations of the types identified in Section 4 of SANS 10139 of the schedule comply with the standard or Code of Practice identified in the above schedule and with all the other requirements. The completed system has been tested and inspected by the
-        ndersigned and is fully operational with the condition applicable to Section 12 of SANS 10139.
-      </ion-col>
-    </ion-row> -->
 
     <ion-row class="border-bottom">
       <ion-col size="4" class="left">SAQCC NO.</ion-col>

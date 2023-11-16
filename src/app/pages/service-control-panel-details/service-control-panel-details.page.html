@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>CONTROL PANEL {{ panel?.panel_number }}</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Certificate Number</ion-col>
+      <ion-col size="6" class="right" style="color: #11AC00;">{{ cert?.service_certificate_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Type</ion-col>
+      <ion-col size="6" class="right" >{{ cert?.service_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">{{ cert?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+      <ion-col size="12"  class="title-head right-border1">
+        Control Panel {{panel?.panel_number}} | Location {{panel?.location}} | Date Serviced {{panel?.date_serviced}} | {{panel?.panel_code}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Vents</ion-col>
+      <ion-col size="6" class="right" >No: {{ summary?.vents.ventsTotal }}
+        <!-- <ion-button shape="" expand="round" color="primary" size="small"></ion-button> -->
+    </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Fans</ion-col>
+      <ion-col size="6" class="right" >No: {{ summary?.fans.fansTotal }}
+        <!-- <ion-button shape="" expand="round" color="primary" size="small"></ion-button> -->
+    </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Actuators</ion-col>
+      <ion-col size="6" class="right" >No: {{ summary?.actuators.actuatorsTotal }}
+        <!-- <ion-button shape="" expand="round" color="primary" size="small"></ion-button> -->
+    </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Automated Curtains</ion-col>
+      <ion-col size="6" class="right" >No: {{ summary?.curtains.curtainsTotal }}
+        <!-- <ion-button shape="" expand="round" color="primary" size="small"></ion-button> -->
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">VENTS</ion-col>
+    </ion-row>
+    <ng-container *ngFor="let item of vents" >
+      <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+        <ion-col size="12"  class="title-head right-border1">
+          Vent {{item?.vent_number}} | Location {{item?.vent_location}} | Date Serviced {{item?.date_created}} | {{item?.vent_code}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">{{ item.vent_type }}</ion-col>
+        <ion-col size="6" class="right" >
+          <ion-button *ngIf="item?.vent_type === 'Fusible Link'"  shape="" expand="round" color="primary" size="small" routerLink="/vents-checklist-b/{{item?.id}}/{{panel?.cp_id}}/{{cert?.id}}"></ion-button>
+          <ion-button  *ngIf="item?.vent_type !== 'Fusible Link'" shape="" expand="round" color="primary" size="small" routerLink="/vents-checklist-a/{{item?.id}}/{{panel?.cp_id}}/{{cert?.id}}"></ion-button>
+      </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Code: {{ item.vent_code }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Model: {{ item.vent_model }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Check List: </ion-col>
+        <ion-col size="6" class="right">{{ item.isChecklist }}</ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">FANS</ion-col>
+    </ion-row>
+    <ng-container *ngFor="let item of fans" >
+      <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+        <ion-col size="12"  class="title-head right-border1">
+          Fan {{item?.fan_number}} | Location {{item?.fan_location}} | Date Serviced {{item?.fan_created}} | {{item?.fan_code}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">{{ item.fan_type }} - {{ item.fan_sub_type }}</ion-col>
+        <ion-col size="6" class="right" >
+          <ion-button shape="" expand="round" color="primary" size="small" routerLink="/fans-checklist/{{item?.id}}/{{panel?.cp_id}}/{{cert?.id}}"></ion-button>
+      </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Code: {{ item.fan_code }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Check List: </ion-col>
+        <ion-col size="6" class="right">{{ item.isChecklist }}</ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">Actuators</ion-col>
+    </ion-row>
+    <ng-container *ngFor="let item of actuators" >
+      <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+        <ion-col size="12"  class="title-head right-border1">
+          Actuator {{item?.actuator_number}} | Location {{item?.actuator_location}} | Date Serviced {{item?.actuator_created}} | {{item?.actuator_type}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">{{ item.actuator_type }} - {{ item.actuator_sub_type }}</ion-col>
+        <ion-col size="6" class="right" >
+          <ion-button shape="" expand="round" color="primary" size="small"  routerLink="/actuators-checklist/{{item?.id}}/{{panel?.cp_id}}/{{cert?.id}}"></ion-button>
+      </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Code: {{ item.actuator_code }}</ion-col>
+      </ion-row>
+
+      <!-- <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Model: {{ item.vent_model }}</ion-col>
+      </ion-row> -->
+
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Check List: </ion-col>
+        <ion-col size="6" class="right">{{ item.isChecklist }}</ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left heading">Automated Curtains</ion-col>
+    </ion-row>
+    <ng-container *ngFor="let item of curtains" >
+      <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+        <ion-col size="12"  class="title-head right-border1">
+          Automated Curtain {{item?.ac_number}} | Location {{item?.ac_location}} | Date Serviced {{item?.date_created}} | {{item?.ac_type}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">{{ item.ac_type }} </ion-col>
+        <ion-col size="6" class="right" >
+          <ion-button shape="" expand="round" color="primary" size="small" routerLink="/curtains-checklist/{{item?.id}}/{{panel?.cp_id}}/{{cert?.id}}"></ion-button>
+      </ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="left">Code: {{ item.ac_code }}</ion-col>
+      </ion-row>
+
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Check List: </ion-col>
+        <ion-col size="6" class="right">{{ item.isChecklist }}</ion-col>
+      </ion-row>
+    </ng-container>
+
+  </ion-grid>
+  <br>
+
+</ion-content>
+
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer *ngIf="role === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="role === '4'" ></app-tech-footer>
+</footer>

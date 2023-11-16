@@ -46,28 +46,71 @@ export class BuildingStructuresPage implements OnInit {
       //  this.dropTable();
       this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_building_structures  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        building_id ENTEGER,
-        service_type_id ENTEGER,
-        site_id ENTEGER,
-        service_cert_id ENTEGER,
-        admin_id ENTEGER,
-        tech_id ENTEGER,
+        building_id INTEGER,
+        sp_id INTEGER,
+        service_type_id INTEGER,
+        site_id INTEGER,
+        service_cert_id INTEGER,
+        admin_id INTEGER,
+        tech_id INTEGER,
         structure_one TEXT,
         structure_two TEXT,
         structure_three TEXT,
         structure_four TEXT,
         structure_five TEXT,
         structure_six TEXT,
+        isSync TEXT,
         structure_created TEXT)`, []).then((res: any) => {
           console.log('BUILDING STRUCTURE table Created: ' + JSON.stringify(res));
         });
+
+        this.certID = `${this.cert}`;
+        //alert(this.certID)
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        console.log('Connection Status: ' + this.networkStatus);
+        console.log('ID' + this.certID);
+        if (this.networkStatus === 'none') {
+          const buildSql = 'SELECT * FROM fire_building_structures WHERE service_cert_id=?';
+          this.database.executeSql(buildSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.building.structure_one = log?.structure_one;
+              this.building.structure_two = log?.structure_two;
+              this.building.structure_three = log?.structure_three;
+              this.building.structure_four = log?.structure_four;
+              this.building.structure_five = log?.structure_five;
+              this.building.structure_six = log?.structure_six;
+              this.building.tech_id = log?.tech_id;
+              this.building.service_type_id = log?.service_type_id;
+              this.building.service_cert_id = log?.service_cert_id;
+              this.building.site_id = log?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+          const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.building.service_type_id = log?.service_type_id;
+              this.building.site_id = log?.site_id;
+              this.building.service_cert_id = log?.cert_id;
+              this.building.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
     });
   }
 
   ngOnInit() {
-    this.certID = `${this.cert}`;
-    console.log('Cert Data' + this.certID );
-    this.building.service_cert_id = this.certID;
+
   }
 
   ionViewWillEnter(){
@@ -98,7 +141,7 @@ export class BuildingStructuresPage implements OnInit {
       }, err => {
         console.log('Cert error: ' + JSON.stringify(err));
       });
-      const certSql = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -121,44 +164,44 @@ export class BuildingStructuresPage implements OnInit {
     if (this.networkStatus === 'none') {
       console.log(this.building);
       const bsSql = 'SELECT * FROM fire_building_structures WHERE service_cert_id=?';
-      this.database.executeSql(bsSql, [this.building.service_cert_id]).then((bsRes: any) => {
+      this.database.executeSql(bsSql, [this.building?.service_cert_id]).then((bsRes: any) => {
         console.log('BS RESULT: ' + JSON.stringify(bsRes));
         if (bsRes.rows.length > 0) {
           console.log('Update Record: ');
           const bs = bsRes.rows.item(0);
           console.log('BS RECORD: ' + JSON.stringify(bs));
           if (this.building.structure_one) {
-            this.struct1 = this.building.structure_one;
+            this.struct1 = this.building?.structure_one;
           } else {
             this.struct1 = '';
           }
-          if (this.building.structure_two) {
-            this.struct2 = this.building.structure_two;
+          if (this.building?.structure_two) {
+            this.struct2 = this.building?.structure_two;
           } else {
             this.struct2 = '';
           }
-          if (this.building.structure_three) {
-            this.struct3 = this.building.structure_three;
+          if (this.building?.structure_three) {
+            this.struct3 = this.building?.structure_three;
           } else {
             this.struct3 = '';
           }
-          if (this.building.structure_four) {
-            this.struct4 = this.building.structure_four;
+          if (this.building?.structure_four) {
+            this.struct4 = this.building?.structure_four;
           } else {
             this.struct4 = '';
           }
-          if (this.building.structure_five) {
-            this.struct5 = this.building.structure_five;
+          if (this.building?.structure_five) {
+            this.struct5 = this.building?.structure_five;
           } else {
             this.struct5 = '';
           }
-          if (this.building.structure_six) {
-            this.struct6 = this.building.structure_six;
+          if (this.building?.structure_six) {
+            this.struct6 = this.building?.structure_six;
           } else {
             this.struct6 = '';
           }
           // eslint-disable-next-line max-len
-          const bsUpdateData =  [this.building.service_type_id,this.building.site_id,this.building.service_cert_id,this.building.tech_id,this.struct1,this.struct2,this.struct3,this.struct4,this.struct5,this.struct6];
+          const bsUpdateData =  [this.building?.service_type_id,this.building?.site_id,this.building?.service_cert_id,this.building?.tech_id,this.struct1,this.struct2,this.struct3,this.struct4,this.struct5,this.struct6];
           // eslint-disable-next-line max-len
           this.database.executeSql(`UPDATE fire_building_structures SET service_type_id=?,site_id=?,service_cert_id=?,tech_id=?,structure_one=?,structure_two=?,structure_three=?,structure_four=?,structure_five=?,structure_six=? WHERE id=${bs.id}`, bsUpdateData)
           .then((bsUpdate: any) => {
@@ -172,38 +215,38 @@ export class BuildingStructuresPage implements OnInit {
         } else {
           // New Record
           if (this.building.structure_one) {
-            this.struct1 = this.building.structure_one;
+            this.struct1 = this.building?.structure_one;
           } else {
             this.struct1 = '';
           }
           if (this.building.structure_two) {
-            this.struct2 = this.building.structure_two;
+            this.struct2 = this.building?.structure_two;
           } else {
             this.struct2 = '';
           }
           if (this.building.structure_three) {
-            this.struct3 = this.building.structure_three;
+            this.struct3 = this.building?.structure_three;
           } else {
             this.struct3 = '';
           }
           if (this.building.structure_four) {
-            this.struct4 = this.building.structure_four;
+            this.struct4 = this.building?.structure_four;
           } else {
             this.struct4 = '';
           }
           if (this.building.structure_five) {
-            this.struct5 = this.building.structure_five;
+            this.struct5 = this.building?.structure_five;
           } else {
             this.struct5 = '';
           }
           if (this.building.structure_six) {
-            this.struct6 = this.building.structure_six;
+            this.struct6 = this.building?.structure_six;
           } else {
             this.struct6 = '';
           }
           const isSync = 'No';
           // eslint-disable-next-line max-len
-          this.database.executeSql(`INSERT INTO fire_building_structures (service_type_id,site_id,service_cert_id,tech_id,structure_one,structure_two,structure_three,structure_four,structure_five,structure_six, structure_created) VALUES ('${this.building.service_type_id}','${this.building.site_id}','${this.building.service_cert_id}','${this.building.tech_id}','${this.struct1}','${this.struct2}','${this.struct3}','${this.struct4}','${this.struct5}','${this.struct6}', '${this.building.structure_created}')`, [])
+          this.database.executeSql(`INSERT INTO fire_building_structures (service_type_id,site_id,service_cert_id,tech_id,structure_one,structure_two,structure_three,structure_four,structure_five,structure_six, structure_created) VALUES ('${this.building?.service_type_id}','${this.building?.site_id}','${this.building?.service_cert_id}','${this.building?.tech_id}','${this.struct1}','${this.struct2}','${this.struct3}','${this.struct4}','${this.struct5}','${this.struct6}', '${this.building?.structure_created}')`, [])
           .then((bs: any) => {
             console.log('BS ADDED: ' + JSON.stringify(bs));
             this.presentToast('Building structure successfully saved!');
@@ -222,7 +265,7 @@ export class BuildingStructuresPage implements OnInit {
   async presentToast(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }

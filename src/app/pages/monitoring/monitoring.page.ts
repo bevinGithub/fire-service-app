@@ -47,7 +47,8 @@ export class MonitoringPage implements OnInit {
       this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_monitoring  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         monitor_id INTEGER,
-        service_type_id ENTEGER,
+        sp_id INTEGER,
+        service_type_id INTEGER,
         site_id INTEGER,
         service_cert_id INTEGER,
         admin_id INTEGER,
@@ -62,6 +63,49 @@ export class MonitoringPage implements OnInit {
         date_created TEXT)`, []).then((res: any) => {
           console.log('fire_monitoring table Created: ' + JSON.stringify(res));
         });
+
+        this.certID = this.cert;
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        console.log('Connection Status: ' + this.networkStatus);
+        console.log('ID' + this.certID);
+        if (this.networkStatus === 'none') { //Offline
+          const monitorSql = 'SELECT * FROM fire_monitoring WHERE service_cert_id=?';
+          this.database.executeSql(monitorSql, [this.certID]).then((monitorR: any) => {
+            console.log('Record Found: ' + JSON.stringify(monitorR));
+            if (monitorR.rows.length > 0) {
+              const monitor = monitorR.rows.item(0);
+              console.log(monitor);
+              this.monitor.escape_doors = monitor?.escape_doors;
+              this.monitor.sprinkler_switch = monitor?.sprinkler_switch;
+              this.monitor.sprinkler_pump_room = monitor?.sprinkler_pump_room;
+              this.monitor.sump_pump = monitor?.sump_pump;
+              this.monitor.generator_signals = monitor?.generator_signals;
+              this.monitor.other = monitor?.other;
+              this.monitor.tech_id = monitor?.tech_id;
+              this.monitor.service_type_id = monitor?.service_type_id;
+              this.monitor.service_cert_id = monitor?.service_cert_id;
+              this.monitor.site_id = monitor?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+
+          const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.monitor.service_type_id = log?.service_type_id;
+              this.monitor.site_id = log?.site_id;
+              this.monitor.service_cert_id = log?.cert_id;
+              this.monitor.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
     });
   }
 
@@ -69,6 +113,7 @@ export class MonitoringPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    this.monitor.date_created = moment().format('YYYY-MM-D H:mm:ss');
     this.certID = this.cert;
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
@@ -96,7 +141,7 @@ export class MonitoringPage implements OnInit {
         console.log('Cert error: ' + JSON.stringify(err));
       });
 
-      const certSql = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {

@@ -39,7 +39,7 @@ export class CompleteServiceHistoryPage implements OnInit {
   ) {
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate-history-app.php?id=' + this.certficateID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-staff-get-service-certificate-history-app.php?id=' + this.certficateID).subscribe((data: any) => {
       console.log(data);
       this.cert = data?.certificate;
       this.tech = data?.technician;
@@ -62,7 +62,7 @@ export class CompleteServiceHistoryPage implements OnInit {
   ionViewWillEnter(){
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate-history-app.php?id=' + this.certficateID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-staff-get-service-certificate-history-app.php?id=' + this.certficateID).subscribe((data: any) => {
       console.log(data);
       this.cert = data?.certificate;
       this.tech = data?.technician;

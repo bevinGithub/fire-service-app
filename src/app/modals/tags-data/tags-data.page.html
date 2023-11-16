@@ -14,7 +14,7 @@
 
 
 <ion-grid fixed>
-  <ion-row>
+  <!-- <ion-row>
     <ion-col size="6" class="left">Site ID</ion-col>
     <ion-col size="6" class="right">{{ siteID }}</ion-col>
   </ion-row>
@@ -31,12 +31,16 @@
     <ion-col size="6" class="right">{{ deviceType }}</ion-col>
   </ion-row>
   <ion-row>
-    <ion-col size="6" class="left">Message</ion-col>
-    <ion-col size="6" class="right">{{ tagMessage }}</ion-col>
+    <ion-col size="6" class="left">Zone</ion-col>
+    <ion-col size="6" class="right" *ngIf="tagZone !== 'undefined'">{{ tagZone }}</ion-col>
   </ion-row>
   <ion-row>
-    <ion-col size="6" class="left">Zone</ion-col>
-    <ion-col size="6" class="right">{{ tagZone }}</ion-col>
+    <ion-col size="6" class="left">Message</ion-col>
+    <ion-col size="6" class="right" *ngIf="tagMessage" >{{ tagMessage }}</ion-col>
+  </ion-row> -->
+  <ion-row>
+    <ion-col size="6" class="left">Reference Number</ion-col>
+    <ion-col size="6" class="right" *ngIf="referenceNumber" >{{ referenceNumber }}</ion-col>
   </ion-row>
   <ion-row>
     <ion-col size="6" class="left">Date Written</ion-col>

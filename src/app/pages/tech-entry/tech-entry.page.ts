@@ -54,14 +54,6 @@ export class TechEntryPage implements OnInit {
 
   ionViewWillEnter(){
     this.showBanner = true;
-    //   this.keyboard.onKeyboardShow().subscribe(() => {
-    //    console.log('Keyboard is out - Hide Footer Image');
-    //    this.hideFooterBanner();
-    //  });
-    //  this.keyboard.onKeyboardHide().subscribe(() => {
-    //   console.log('Keyboard is closed - show Footer Image');
-    //   this.showFooterBanner();
-    // });
   }
 
   ionViewDidEnter(){
@@ -78,7 +70,7 @@ export class TechEntryPage implements OnInit {
       this.database = db;
       //create Users table
       // eslint-disable-next-line max-len
-      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_users  (id INTEGER PRIMARY KEY, users_id int(11), role_id integer ,email VARCHAR(180), password VARCHAR(200))`,[])
+      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_sp_users  (id INTEGER PRIMARY KEY, sp_id int(11), users_id int(11), role_id integer ,email VARCHAR(180), password VARCHAR(200))`,[])
       .then((res: any) => {
         console.log(res);
       });
@@ -95,7 +87,7 @@ export class TechEntryPage implements OnInit {
 
   checkUser() {
     console.log(this.userSignUp.mobile_number);
-    this.http.post(this.url + 'check-technician-data.php', this.userSignUp).subscribe((res: any) => {
+    this.http.post(this.url + 'sp-check-technician-data.php', this.userSignUp).subscribe((res: any) => {
       console.log(res);
       if (res === 'No record Found') {
         this.noticeMessage('Invalid registration details!');
@@ -126,7 +118,7 @@ export class TechEntryPage implements OnInit {
   async noticeMessage(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }
@@ -146,10 +138,9 @@ export class TechEntryPage implements OnInit {
     this.networkStatus = this.networkCheckerService.isConnected();
     console.log('Connection Status: ' + this.networkStatus);
     if (this.networkStatus !== 'none') {
-      this.http.post(this.url + 'process-login.php', this.userSignIn).subscribe((userInfo: any) => {
+      this.http.post(this.url + 'sp-process-login.php', this.userSignIn).subscribe((userInfo: any) => {
         this.client = userInfo?.user;
         this.response = userInfo?.status;
-        console.log(this.client.role_id);
         if (this.response === 'success') {
           this.storage.set('currentUser', this.client);
           if (this.client.role_id === '2') {
@@ -171,7 +162,7 @@ export class TechEntryPage implements OnInit {
         }
       });
     } else {
-      console.log('User offlline data');
+      this.noticeMessage('You are currently offline, please turn on your data or wifi and proceed to login!');
     }
   }
 

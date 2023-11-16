@@ -112,7 +112,7 @@ export class ClientRegistrationPage implements OnInit {
 
   submitClientRegistration() {
     console.log(this.client);
-    this.http.post(this.url + 'process-client-registration.php', this.client).subscribe((user: any) => {
+    this.http.post(this.url + 'process-sp-client-registration.php', this.client).subscribe((user: any) => {
       console.log(user);
       if(user.status === 'success') {
         this.systemConfirmation('User successfully registered! Please check your email for activation code');

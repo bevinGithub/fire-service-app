@@ -24,7 +24,8 @@
 
 <ng-container style="padding: 15px;" *ngIf="jobs?.length > 0">
   <ng-container *ngFor="let item of jobs">
-    <div *ngIf="(item.status === 'Assigned' || item.status === 'Accepted') && item.job_approved !== 'Approved'"  class="border-liner list ion-padding" routerLink="/accept-job-card-details/{{ item.id }}">
+    <div *ngIf="item.status === 'Assigned' && item.job_approved !== 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/accept-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
       <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
@@ -32,7 +33,17 @@
       <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
     </div>
 
-    <div *ngIf="item.status === 'Accepted' && item.job_approved === 'Approved'"  class="border-liner list ion-padding" routerLink="/job-card-details/{{ item.id }}">
+    <div *ngIf="item?.status === 'Accepted' && item.job_approved !== 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/tech-accepted-jobs/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    <div *ngIf="item.status === 'Accepted' && item.job_approved === 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
       <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
       <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
@@ -41,6 +52,7 @@
     </div>
 
     <div *ngIf="item.status === 'Return Visit Required'"  class="border-liner list ion-padding" routerLink="/view-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
       <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
@@ -57,6 +69,7 @@
 <ng-container style="padding: 15px;" *ngIf="jobs?.length > 0">
   <ng-container *ngFor="let item of jobs">
     <div *ngIf="item.status ==='Completed'"  class="border-liner list ion-padding" routerLink="/view-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
       <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
       <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>

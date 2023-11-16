@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>SERVICE CERTIFICATE</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Service Certificate No.</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.service_certificate_number }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Status</ion-col>
+      <ion-col size="6" class="right">
+        <span *ngIf="serviceCard?.service_status === 'Assigned'" style="color: #E9A800;" >{{ serviceCard?.service_status }}</span>
+        <span *ngIf="serviceCard?.service_status === 'Accepted'" style="color: #11AC00;" >{{ serviceCard?.service_status }}</span>
+        <span *ngIf="serviceCard?.service_status === 'Completed'" style="color: #11AC00;" >{{ serviceCard?.service_status }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="heading ion-padding">Client Information</div>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Company Name</ion-col>
+      <ion-col size="6" class="right">{{ client?.company_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Site</ion-col>
+      <ion-col size="6" class="right">{{ site?.site_name }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Instructed By</ion-col>
+      <ion-col size="6" class="right">{{ client?.firstname }} {{ client?.surname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Address</ion-col>
+      <ion-col size="6" class="right">{{ site?.site_address }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date Requested</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.final_service_date | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="serviceCard?.date_assigned">
+      <ion-col size="6" class="left">Date Assigned</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="serviceCard?.date_accepted">
+      <ion-col size="6" class="left">Date Accepted</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="serviceCard?.final_service_date">
+      <ion-col size="6" class="left">Service Date</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.final_service_date | date: 'dd/MM/yyyy' }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom" *ngIf="serviceCard?.service_time">
+      <ion-col size="6" class="left">Service Time</ion-col>
+      <ion-col size="6" class="right">{{ serviceCard?.service_time }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+    <div class="heading ion-padding">Instruction</div>
+    <ion-grid>
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="instructions">Service to be done on site.</ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <br><br>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

@@ -19,10 +19,42 @@
         <ion-select [(ngModel)]="tag.serviceID" name="serviceID" (ionChange)="getCertificateData($event)" placeholder="Select Service Card" required #cert="ngModel">
           <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.service_certificate_number }}</ion-select-option>
         </ion-select>
+        <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
+          <span class="error-msg">Service certificate is needed!</span>
+        </div>
       </ion-item>
-      <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
-        <span class="error-msg">Service certificate is needed!</span>
+
+      <ion-item  lines="none" class="list-bg">
+        Date: {{ writeDate }}
+      </ion-item>
+      <div padding>
+        <ion-input [(ngModel)]="tag.certID" name="certID" type="hidden" placeholder="Cert ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.siteID" name="siteID" type="hidden" placeholder="Site ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.serviceTypeID" name="serviceTypeID" type="hidden" placeholder="Service Type ID" ></ion-input>
+        <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="hidden" placeholder="writeTime" readonly=""></ion-input>
+        <ion-button shape="round" expand="full" color="primary" block (click)="submitDeviceQuery()"  [disabled]="!f.valid">Seach Devices</ion-button>
       </div>
+    </form>
+
+
+    <!-- <form #f='ngForm' class="forms ion-padding">
+      <p class="heading">Select Service Certificate</p>
+      <ion-item *ngIf="networkStatus !== 'none'" >
+        <ion-label>Select</ion-label>
+        <ion-select [(ngModel)]="tag.serviceID" name="serviceID" (ionChange)="getCertificateData($event)" placeholder="Select Service Card" required #cert="ngModel">
+          <ion-select-option *ngFor="let item of sites" value="{{item?.id}}">{{ item?.service_certificate_number }}</ion-select-option>
+        </ion-select>
+        <div class="list-bg-trans" *ngIf="!cert.valid && cert.touched">
+          <span class="error-msg">Service certificate is needed!</span>
+        </div>
+      </ion-item>
+
+      <ion-item *ngIf="networkStatus === 'none'" >
+        <ion-label>Select</ion-label>
+        <ion-select [(ngModel)]="tag.serviceID" name="serviceID" (ionChange)="getCertificateData($event)" placeholder="Select Service Card">
+          <ion-select-option *ngFor="let item of sites" value="{{item?.cert_id}}">{{ item?.service_certificate_number }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
       <ion-item  lines="none" class="list-bg">
         <ion-input [(ngModel)]="tag.tagNumber" name="tagNumber" type="text" autocapitalize="characters" placeholder="Tag Number" required #tagNumber="ngModel"></ion-input>
@@ -64,8 +96,7 @@
         <ion-input [(ngModel)]="tag.writeTime" name="writeTime" type="hidden" placeholder="writeTime" readonly=""></ion-input>
         <ion-button shape="round" expand="full" color="primary" block (click)="writeTag()"  [disabled]="!f.valid">SUBMIT</ion-button>
       </div>
-
-    </form>
+    </form> -->
   </div>
 
   <div class="read-data"  *ngIf="deviceData === 'No Record Found'" >
@@ -81,6 +112,10 @@
     <ion-grid fixed>
       <ion-row class="border-bottom">
         <ion-col size="12" class="heading">Tag Data From Database</ion-col>
+      </ion-row>
+      <ion-row class="border-bottom">
+        <ion-col size="6" class="left">Ref Number</ion-col>
+        <ion-col size="6" class="right">{{ deviceData?.reference_number }}</ion-col>
       </ion-row>
       <ion-row class="border-bottom">
         <ion-col size="6" class="left">Tag Number</ion-col>
@@ -108,7 +143,5 @@
       </ion-row>
     </ion-grid>
   </div>
-
-  <!-- <ion-button color="primary" (click)="playTones()" > Play Sound </ion-button> -->
 
 </ion-content>

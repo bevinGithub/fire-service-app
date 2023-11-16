@@ -20,11 +20,7 @@ export class SiteDetailsPage implements OnInit {
     private toastController: ToastController
   ) {
     this.siteID = this.activatedRoute.snapshot.paramMap.get('siteID');
-    console.log(this.siteID);
-    this.http.get(this.url + 'get-site.php?siteID=' + this.siteID).subscribe((data: any) => {
-      console.log(data);
-      this.site = data;
-    });
+    this.getSiteData(this.siteID);
   }
 
   ngOnInit() {
@@ -60,7 +56,11 @@ export class SiteDetailsPage implements OnInit {
   ionViewWillEnter() {
     this.siteID = this.activatedRoute.snapshot.paramMap.get('siteID');
     console.log(this.siteID);
-    this.http.get(this.url + 'get-site.php?siteID=' + this.siteID).subscribe((data: any) => {
+    this.getSiteData(this.siteID);
+  }
+
+  getSiteData(siteID) {
+    this.http.get(this.url + 'sp-get-site.php?siteID=' + siteID).subscribe((data: any) => {
       console.log(data);
       this.site = data;
     });

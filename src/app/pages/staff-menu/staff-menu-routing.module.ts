@@ -21,11 +21,11 @@ const routes: Routes = [
         loadChildren: () => import('../fire-alarms/fire-alarms.module').then( m => m.FireAlarmsPageModule)
       },
       {
-        path: 'alarms-fault-reports',
+        path: 'alarms-fault-reports/:moduleID',
         loadChildren: () => import('../alarms-fault-reports/alarms-fault-reports.module').then( m => m.AlarmsFaultReportsPageModule)
       },
       {
-        path: 'alarms-services',
+        path: 'alarms-services/:moduleID',
         loadChildren: () => import('../alarms-services/alarms-services.module').then( m => m.AlarmsServicesPageModule)
       },
       {
@@ -55,6 +55,11 @@ const routes: Routes = [
       {
         path: 'fault-reports-list',
         loadChildren: () => import('../fault-reports-list/fault-reports-list.module').then( m => m.FaultReportsListPageModule)
+      },
+      {
+        path: 'complete-staff-service-smoke/:certificateID',
+        // eslint-disable-next-line max-len
+        loadChildren: () => import('../complete-staff-service-smoke/complete-staff-service-smoke.module').then( m => m.CompleteStaffServiceSmokePageModule)
       },
     ],
   },

@@ -53,10 +53,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/client-menu/client-menu.module').then( m => m.ClientMenuPageModule)
   },
   {
-    path: 'add-staff',
-    loadChildren: () => import('./pages/add-staff/add-staff.module').then( m => m.AddStaffPageModule)
-  },
-  {
     path: 'request-site',
     loadChildren: () => import('./pages/request-site/request-site.module').then( m => m.RequestSitePageModule)
   },
@@ -105,7 +101,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/staff-dashboard/staff-dashboard.module').then( m => m.StaffDashboardPageModule)
   },
   {
-    path: 'fault-report/:siteID',
+    path: 'fault-report/:siteID/:moduleID',
     loadChildren: () => import('./pages/fault-report/fault-report.module').then( m => m.FaultReportPageModule)
   },
   {
@@ -121,7 +117,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/alarms-services/alarms-services.module').then( m => m.AlarmsServicesPageModule)
   },
   {
-    path: 'add-fault-report',
+    path: 'add-fault-report/:moduleID',
     loadChildren: () => import('./pages/add-fault-report/add-fault-report.module').then( m => m.AddFaultReportPageModule)
   },
   {
@@ -165,15 +161,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/technician-menu/technician-menu.module').then( m => m.TechnicianMenuPageModule)
   },
   {
-    path: 'job-card-details/:jobID',
-    loadChildren: () => import('./pages/job-card-details/job-card-details.module').then( m => m.JobCardDetailsPageModule)
-  },
-  {
-    path: 'accept-job-card-details/:jobID',
-    // eslint-disable-next-line max-len
-    loadChildren: () => import('./pages/accept-job-card-details/accept-job-card-details.module').then( m => m.AcceptJobCardDetailsPageModule)
-  },
-  {
     path: 'other-signature',
     loadChildren: () => import('./modals/other-signature/other-signature.module').then( m => m.OtherSignaturePageModule)
   },
@@ -192,10 +179,6 @@ const routes: Routes = [
   {
     path: 'reviews/:technicianID',
     loadChildren: () => import('./pages/reviews/reviews.module').then( m => m.ReviewsPageModule)
-  },
-  {
-    path: 'service-card-details/:certificateID',
-    loadChildren: () => import('./pages/service-card-details/service-card-details.module').then( m => m.ServiceCardDetailsPageModule)
   },
   {
     path: 'service-client-signature',
@@ -225,7 +208,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/complete-service-history/complete-service-history.module').then( m => m.CompleteServiceHistoryPageModule)
   },
   {
-    path: 'client-fault-report',
+    path: 'client-fault-report/:moduleID',
     loadChildren: () => import('./pages/client-fault-report/client-fault-report.module').then( m => m.ClientFaultReportPageModule)
   },
   {
@@ -469,6 +452,144 @@ const routes: Routes = [
   {
     path: 'write-master',
     loadChildren: () => import('./pages/write-master/write-master.module').then( m => m.WriteMasterPageModule)
+  },
+  {
+    path: 'tabs',
+    loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+  {
+    path: 'tab1',
+    loadChildren: () => import('./pages/tab1/tab1.module').then( m => m.Tab1PageModule)
+  },
+  {
+    path: 'tab2',
+    loadChildren: () => import('./pages/tab2/tab2.module').then( m => m.Tab2PageModule)
+  },
+  {
+    path: 'selected-module/:moduleID',
+    loadChildren: () => import('./pages/selected-module/selected-module.module').then( m => m.SelectedModulePageModule)
+  },
+  {
+    path: 'staff-selected-module/:moduleID',
+    loadChildren: () => import('./pages/staff-selected-module/staff-selected-module.module').then( m => m.StaffSelectedModulePageModule)
+  },
+  {
+    path: 'view-staff-fault/:faultID',
+    loadChildren: () => import('./pages/view-staff-fault/view-staff-fault.module').then( m => m.ViewStaffFaultPageModule)
+  },
+  {
+    path: 'view-staff-smoke-details/:certificateID',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/view-staff-smoke-details/view-staff-smoke-details.module').then( m => m.ViewStaffSmokeDetailsPageModule)
+  },
+  {
+    path: 'tech-selected-modules/:moduleID',
+    loadChildren: () => import('./pages/tech-selected-modules/tech-selected-modules.module').then( m => m.TechSelectedModulesPageModule)
+  },
+  {
+    path: 'service-control-panel-details/:certificateID/:controlPanelID',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/service-control-panel-details/service-control-panel-details.module').then( m => m.ServiceControlPanelDetailsPageModule)
+  },
+  {
+    path: 'vents-checklist-a/:ventID/:panelID/:certID',
+    loadChildren: () => import('./pages/vents-checklist-a/vents-checklist-a.module').then( m => m.VentsChecklistAPageModule)
+  },
+  {
+    path: 'vents-checklist-b/:ventID/:panelID/:certID',
+    loadChildren: () => import('./pages/vents-checklist-b/vents-checklist-b.module').then( m => m.VentsChecklistBPageModule)
+  },
+  {
+    path: 'fans-checklist/:fanID/:panelID/:certID',
+    loadChildren: () => import('./pages/fans-checklist/fans-checklist.module').then( m => m.FansChecklistPageModule)
+  },
+  {
+    path: 'actuators-checklist/:actuatorID/:panelID/:certID',
+    loadChildren: () => import('./pages/actuators-checklist/actuators-checklist.module').then( m => m.ActuatorsChecklistPageModule)
+  },
+  {
+    path: 'curtains-checklist/:curtainID/:panelID/:certID',
+    loadChildren: () => import('./pages/curtains-checklist/curtains-checklist.module').then( m => m.CurtainsChecklistPageModule)
+  },
+  {
+    path: 'view-client-certificates/:certificateID',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/view-client-certificates/view-client-certificates.module').then( m => m.ViewClientCertificatesPageModule)
+  },
+  {
+    path: 'view-client-certificates-smoke/:certificateID',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/view-client-certificates-smoke/view-client-certificates-smoke.module').then( m => m.ViewClientCertificatesSmokePageModule)
+  },
+  {
+    path: 'terms-conditions',
+    loadChildren: () => import('./pages/terms-conditions/terms-conditions.module').then( m => m.TermsConditionsPageModule)
+  },
+  {
+    path: 'smoke-panel',
+    loadChildren: () => import('./pages/smoke-panel/smoke-panel.module').then( m => m.SmokePanelPageModule)
+  },
+  {
+    path: 'smoke-read-write-panel/:state',
+    loadChildren: () => import('./pages/smoke-read-write-panel/smoke-read-write-panel.module').then( m => m.SmokeReadWritePanelPageModule)
+  },
+  {
+    path: 'smoke-read-write-vent/:state',
+    loadChildren: () => import('./pages/smoke-read-write-vent/smoke-read-write-vent.module').then( m => m.SmokeReadWriteVentPageModule)
+  },
+  {
+    path: 'smoke-read-write-fan/:state',
+    loadChildren: () => import('./pages/smoke-read-write-fan/smoke-read-write-fan.module').then( m => m.SmokeReadWriteFanPageModule)
+  },
+  {
+    path: 'smoke-read-write-actuator/:state',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/smoke-read-write-actuator/smoke-read-write-actuator.module').then( m => m.SmokeReadWriteActuatorPageModule)
+  },
+  {
+    path: 'smoke-read-write-curtain/:state',
+    // eslint-disable-next-line max-len
+    loadChildren: () => import('./pages/smoke-read-write-curtain/smoke-read-write-curtain.module').then( m => m.SmokeReadWriteCurtainPageModule)
+  },
+  {
+    path: 'tags-vent-data',
+    loadChildren: () => import('./modals/tags-vent-data/tags-vent-data.module').then( m => m.TagsVentDataPageModule)
+  },
+  {
+    path: 'tags-fan-data',
+    loadChildren: () => import('./modals/tags-fan-data/tags-fan-data.module').then( m => m.TagsFanDataPageModule)
+  },
+  {
+    path: 'tags-actuator-data',
+    loadChildren: () => import('./modals/tags-actuator-data/tags-actuator-data.module').then( m => m.TagsActuatorDataPageModule)
+  },
+  {
+    path: 'tags-curtain-data',
+    loadChildren: () => import('./modals/tags-curtain-data/tags-curtain-data.module').then( m => m.TagsCurtainDataPageModule)
+  },
+  {
+    path: 'tags-panel-data',
+    loadChildren: () => import('./modals/tags-panel-data/tags-panel-data.module').then( m => m.TagsPanelDataPageModule)
+  },
+  {
+    path: 'tag-scan-data',
+    loadChildren: () => import('./modals/tag-scan-data/tag-scan-data.module').then( m => m.TagScanDataPageModule)
+  },
+  {
+    path: 'service-devices',
+    loadChildren: () => import('./pages/service-devices/service-devices.module').then( m => m.ServiceDevicesPageModule)
+  },
+  {
+    path: 'smoke-write-panel',
+    loadChildren: () => import('./pages/smoke-write-panel/smoke-write-panel.module').then( m => m.SmokeWritePanelPageModule)
+  },
+  {
+    path: 'smoke-write-vent',
+    loadChildren: () => import('./pages/smoke-write-vent/smoke-write-vent.module').then( m => m.SmokeWriteVentPageModule)
+  },
+  {
+    path: 'auto-sync-sc',
+    loadChildren: () => import('./pages/auto-sync-sc/auto-sync-sc.module').then( m => m.AutoSyncSCPageModule)
   },
 ];
 

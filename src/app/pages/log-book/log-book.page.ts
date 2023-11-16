@@ -36,24 +36,62 @@ export class LogBookPage implements OnInit {
     this.sqlite.create({
       name: 'fireservices.db',
       location: 'default',
-     }).then((db: SQLiteObject) => {
-       this.database = db;
-      //  this.dropTable();
+    }).then((db: SQLiteObject) => {
+      this.database = db;
       // eslint-disable-next-line max-len
-      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_logbook  (id INTEGER PRIMARY KEY AUTOINCREMENT, log_id ENTEGER,  service_type_id ENTEGER, site_id ENTEGER, service_cert_id ENTEGER, tech_id ENTERGER, admin_id ENTEGER, log_comments TEXT, isSync TEXT, date_log TEXT)`,[])
+      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_logbook  (id INTEGER PRIMARY KEY AUTOINCREMENT, log_id INTEGER,sp_id INTEGER,  service_type_id INTEGER, site_id INTEGER, service_cert_id INTEGER, tech_id ENTERGER, admin_id INTEGER, log_comments TEXT, isSync TEXT, date_log TEXT)`, [])
       .then((res: any) => {
         console.log('LogBook table Created: ' + JSON.stringify(res));
       });
-     });
+
+      this.certID = `${this.cert}`;
+      this.logBook.service_cert_id = this.cert;
+      console.log('Will Enter: ' + this.cert);
+      this.networkCheckerService.checkNetworkChange();
+      this.networkStatus = this.networkCheckerService.connectionType();
+      console.log('Connection Status: ' + this.networkStatus);
+      if (this.networkStatus === 'none') {
+        const certSql = 'SELECT * FROM fire_logbook WHERE service_cert_id=?';
+        this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+          console.log('Record Found: ' + JSON.stringify(logR));
+          if (logR.rows.length > 0) {
+            const log = logR.rows.item(0);
+            console.log(log);
+            this.logBook.log_comments = log?.log_comments;
+            this.logBook.tech_id = log?.tech_id;
+            this.logBook.service_type_id = log?.service_type_id;
+            this.logBook.service_cert_id = log?.service_cert_id;
+            this.logBook.site_id = log?.site_id;
+          } else {
+            console.log('No records in logs');
+          }
+        }, err => {
+          console.log('Cert error: ' + JSON.stringify(err));
+        });
+        const certSql2 = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+        this.database.executeSql(certSql2, [this.certID]).then((logR: any) => {
+          console.log('Record Found: ' + JSON.stringify(logR));
+          if (logR.rows.length > 0) {
+            const log = logR.rows.item(0);
+            console.log(log);
+            this.logBook.service_type_id = log?.service_type_id;
+            this.logBook.site_id = log?.site_id;
+            this.logBook.service_cert_id = log?.cert_id;
+            this.logBook.tech_id = log?.service_technician_id;
+          }
+        }, err => {
+          console.log('Cert error: ' + JSON.stringify(err));
+        });
+      }
+    });
   }
 
   ngOnInit() {
-    this.certID = this.cert;
-    console.log('Cert Data' + this.certID);
+
   }
 
   ionViewWillEnter(){
-    this.certID = this.cert;
+    this.certID = `${this.cert}`;
     this.logBook.service_cert_id = this.cert;
     console.log('Will Enter: ' + this.cert);
     this.networkCheckerService.checkNetworkChange();
@@ -77,7 +115,7 @@ export class LogBookPage implements OnInit {
       }, err => {
         console.log('Cert error: ' + JSON.stringify(err));
       });
-      const certSql2 = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql2 = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql2, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -118,7 +156,7 @@ export class LogBookPage implements OnInit {
           // UPDATE RECORD
           const data = logRes.rows.item(0);
           // eslint-disable-next-line max-len
-          const updateData = [this.logBook.service_type_id, this.logBook.site_id, this.logBook.service_cert_id, this.logBook.tech_id, this.logBook.log_comments];
+          const updateData = [this.logBook?.service_type_id, this.logBook?.site_id, this.logBook?.service_cert_id, this.logBook?.tech_id, this.logBook?.log_comments];
           // eslint-disable-next-line max-len
           this.database.executeSql(`UPDATE fire_logbook SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, log_comments=? WHERE id=${data.id}`, updateData)
           .then((log: any) => {
@@ -131,7 +169,7 @@ export class LogBookPage implements OnInit {
         } else {
           const isSync = 'No';
           // eslint-disable-next-line max-len
-          this.database.executeSql(`INSERT INTO fire_logbook (service_type_id, site_id, service_cert_id, tech_id, log_comments,  isSync, date_log) VALUES ('${this.logBook.service_type_id}', '${this.logBook.site_id}', '${this.logBook.service_cert_id}', '${this.logBook.tech_id}', '${this.logBook.log_comments}', '${isSync}', '${this.logBook.date_log}')`,[])
+          this.database.executeSql(`INSERT INTO fire_logbook (service_type_id, site_id, service_cert_id, tech_id, log_comments,  isSync, date_log) VALUES ('${this.logBook?.service_type_id}', '${this.logBook?.site_id}', '${this.logBook?.service_cert_id}', '${this.logBook?.tech_id}', '${this.logBook?.log_comments}', '${isSync}', '${this.logBook?.date_log}')`,[])
           .then((log: any) => {
             console.log('Query Result: ' + JSON.stringify(log));
             this.presentToast('Log book successfully saved!');

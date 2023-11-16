@@ -32,6 +32,10 @@ export class ClientMenuPage implements OnInit {
       url: 'client-profile'
     },
     {
+      title: 'CHANGE SP',
+      url: 'request-service-provider'
+    },
+    {
       title: 'LOGOUT',
       url: 'logout'
     },

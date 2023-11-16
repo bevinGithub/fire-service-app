@@ -60,7 +60,7 @@
 
       <div padding>
         <ion-input [(ngModel)]="user.id" name="id" placeholder="ClientID" type="hidden"></ion-input>
-        <ion-button shape="round" expand="full" color="primary" block (click)="updateUserProfile()" [disabled]="!f.valid || !validEmail">UPDATE USER PROFILE</ion-button>
+        <ion-button shape="round" expand="full" color="primary" block (click)="updateUserProfile()" [disabled]="!f.valid">UPDATE USER PROFILE</ion-button>
       </div>
 
     </form>
@@ -72,5 +72,8 @@
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-footer></app-footer>
+  <!-- <app-footer></app-footer> -->
+  <app-footer *ngIf="roleID === '2'" ></app-footer>
+  <app-staff-footer *ngIf="roleID === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="roleID === '4'" ></app-tech-footer>
 </footer>

@@ -28,7 +28,7 @@ export class TechnicianActivationPage implements OnInit {
   }
 
   activateAccount() {
-    this.http.post(this.url + 'activateAccount.php', this.user).subscribe((res: any) => {
+    this.http.post(this.url + 'sp-activateAccount.php', this.user).subscribe((res: any) => {
       console.log(res);
       if (res.status === 'success') {
         this.systemNotification('Technician has successfully activated account!');
@@ -42,7 +42,7 @@ export class TechnicianActivationPage implements OnInit {
   async systemNotification(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }

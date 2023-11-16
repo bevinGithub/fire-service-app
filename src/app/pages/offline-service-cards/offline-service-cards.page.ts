@@ -37,21 +37,6 @@ export class OfflineServiceCardsPage implements OnInit {
   panelD8: any;
   panelD9: any;
   panelD10: any;
-  panelD11: any;
-  panelD12: any;
-  panelD13: any;
-  panelD14: any;
-  panelD15: any;
-  panelD16: any;
-  panelD17: any;
-  panelD18: any;
-  panelD19: any;
-  panelD20: any;
-  panelD21: any;
-  panelD22: any;
-  panelD23: any;
-  panelD24: any;
-  panelD25: any;
 
   cleanDevice1: any;
   cleanDevice2: any;
@@ -63,21 +48,6 @@ export class OfflineServiceCardsPage implements OnInit {
   cleanDevice8: any;
   cleanDevice9: any;
   cleanDevice10: any;
-  cleanDevice11: any;
-  cleanDevice12: any;
-  cleanDevice13: any;
-  cleanDevice14: any;
-  cleanDevice15: any;
-  cleanDevice16: any;
-  cleanDevice17: any;
-  cleanDevice18: any;
-  cleanDevice19: any;
-  cleanDevice20: any;
-  cleanDevice21: any;
-  cleanDevice22: any;
-  cleanDevice23: any;
-  cleanDevice24: any;
-  cleanDevice25: any;
 
   testSingleKnock1: any;
   testSingleKnock2: any;
@@ -135,7 +105,7 @@ export class OfflineServiceCardsPage implements OnInit {
     const isSync = 'No';
     const status = 'Completed';
     // eslint-disable-next-line max-len
-    const querySC = 'SELECT *, fire_service_certificates.cert_id as id FROM fire_service_certificates JOIN fire_sites ON fire_service_certificates.site_id = fire_sites.site_id  WHERE fire_service_certificates.service_technician_id=? AND fire_service_certificates.isSync=?';
+    const querySC = 'SELECT *, fire_sp_service_certificates.cert_id as id FROM fire_sp_service_certificates JOIN fire_sp_sites ON fire_sp_service_certificates.site_id = fire_sp_sites.site_id  WHERE fire_sp_service_certificates.service_technician_id=? AND fire_sp_service_certificates.isSync=?';
     this.database.executeSql(querySC,[techID, isSync]).then((rec: any) => {
       console.log('SC: ' + JSON.stringify(rec));
       console.log('Record Found: ' + rec.rows.length);
@@ -191,7 +161,7 @@ export class OfflineServiceCardsPage implements OnInit {
     loading.dismiss();
   }
 
-  async processSync(data) {
+  async processSync(data: any) {
     const loading = await this.loadingController.create({
       message: 'Please wait...'
     });
@@ -205,14 +175,15 @@ export class OfflineServiceCardsPage implements OnInit {
         this.database = db;
         const cert = data.card;
         console.log(cert);
+
         //LOGBOOK
         const logSql = 'SELECT * FROM fire_logbook WHERE service_cert_id=?';
-        this.database.executeSql(logSql, [cert.id]).then((logBook: any) => {
+        this.database.executeSql(logSql, [cert?.id]).then((logBook: any) => {
           console.log('LogBook' + logBook);
           if (logBook.rows.length > 0) {
             const logData = logBook.rows.item(0);
             const isSync = 'Yes';
-             this.database.executeSql(`UPDATE fire_logbook SET isSync=?, tech_id=? WHERE id = ${logData.id}`, [isSync, user.id])
+             this.database.executeSql(`UPDATE fire_logbook SET isSync=?, tech_id=? WHERE id = ${logData?.id}`, [isSync, user?.id])
             .then((update: any) => {
               console.log('Updated: ' + JSON.stringify(update));
               // POST ONLINE
@@ -229,24 +200,24 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 2.1 CALL POINTS
         const callSql = 'SELECT * FROM fire_manual_call_points WHERE service_cert_id=?';
-        this.database.executeSql(callSql, [cert.id]).then((callPoint: any) => {
+        this.database.executeSql(callSql, [cert?.id]).then((callPoint: any) => {
           if (callPoint.rows.length > 0) {
             const callData = callPoint.rows.item(0);
             this.http.post(this.url + 'sync-callpoint.php', callData).subscribe((callSync: any) => {
               console.log('Call Point Sync Status: ' + JSON.stringify(callSync));
             });
-            // const isSync = 'Yes';
+            const isSync = 'Yes';
             // eslint-disable-next-line max-len
-            //  this.database.executeSql(`UPDATE fire_manual_call_points SET isSync=?, tech_id=? WHERE id = ${callData.id}`, [isSync, user.id])
-            // .then((update: any) => {
-            //   console.log('Updated: ' + JSON.stringify(update));
-            //   // POST ONLINE
-            //   this.http.post(this.url + 'sync-callpoint.php', callData).subscribe((callSync: any) => {
-            //     console.log('Call Point Sync Status: ' + JSON.stringify(callSync));
-            //   });
-            // }, err => {
-            //   console.log('Query Update error: ' + JSON.stringify(err));
-            // });
+             this.database.executeSql(`UPDATE fire_manual_call_points SET isSync=?, tech_id=? WHERE id=${callData?.id}`, [isSync, user?.id])
+            .then((update: any) => {
+              console.log('Updated: ' + JSON.stringify(update));
+              // POST ONLINE
+              this.http.post(this.url + 'sync-callpoint.php', callData).subscribe((callSync: any) => {
+                console.log('Call Point Sync Status: ' + JSON.stringify(callSync));
+              });
+            }, err => {
+              console.log('Query Update error: ' + JSON.stringify(err));
+            });
           }
         }, err => {
           console.log('2.1 Error: ' + JSON.stringify(err));
@@ -254,24 +225,21 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 2.2 BUILDING STRUCTURES
         const structSql = 'SELECT * FROM fire_building_structures WHERE service_cert_id=?';
-        this.database.executeSql(structSql, [cert.id]).then((structData: any) => {
+        this.database.executeSql(structSql, [cert?.id]).then((structData: any) => {
           if (structData.rows.length > 0) {
             const structureData = structData.rows.item(0);
-            this.http.post(this.url + 'sync-building-structure.php', structureData).subscribe((structSync: any) => {
-              console.log('Building Structure Sync Status: ' + JSON.stringify(structSync));
-            });
-            // const isSync = 'Yes';
+            const isSync = 'Yes';
             // eslint-disable-next-line max-len
-            // this.database.executeSql(`UPDATE fire_building_structures SET isSync=?, tech_id=? WHERE id=${structureData.id}`, [isSync, user.id])
-            // .then((updateStruct: any) => {
-            //   console.log('Updated: ' + JSON.stringify(updateStruct));
-            //   // POST ONLINE
-            //   this.http.post(this.url + 'sync-building-structure.php', structureData).subscribe((structSync: any) => {
-            //     console.log('Building Structure Sync Status: ' + JSON.stringify(structSync));
-            //   });
-            // }, err => {
-            //   console.log('Building Structure Update error: ' + JSON.stringify(err));
-            // });
+            this.database.executeSql(`UPDATE fire_building_structures SET isSync=?, tech_id=? WHERE id=${structureData?.id}`, [isSync, user?.id])
+            .then((updateStruct: any) => {
+              console.log('Updated: ' + JSON.stringify(updateStruct));
+              // POST ONLINE
+              this.http.post(this.url + 'sync-building-structure.php', structureData).subscribe((structSync: any) => {
+                console.log('Building Structure Sync Status: ' + JSON.stringify(structSync));
+              });
+            }, err => {
+              console.log('Building Structure Update error: ' + JSON.stringify(err));
+            });
           }
         }, err => {
             console.log('2.2 Error: ' + JSON.stringify(err));
@@ -279,11 +247,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 6.1 BEAM DETECTION
         const beamSql = 'SELECT * FROM fire_beam_detection_template WHERE service_cert_id=?';
-        this.database.executeSql(beamSql, [cert.id]).then((resBeam: any) => {
+        this.database.executeSql(beamSql, [cert?.id]).then((resBeam: any) => {
           if(resBeam.rows.length > 0) {
             const beamData = resBeam.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_beam_detection_template SET isSync=? AND tech_id=?`, [isSync, user.id])
+            // eslint-disable-next-line max-len
+            this.database.executeSql(`UPDATE fire_beam_detection_template SET isSync=? AND tech_id=? WHERE id=${beamData?.id}`, [isSync, user?.id])
             .then((beamSync: any) => {
               console.log('Updated: ' + JSON.stringify(beamSync));
               // POST ONLINE
@@ -296,11 +265,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 6.2 AIR SAMPLING
         const airSql = 'SELECT * FROM fire_air_sampling_template WHERE service_cert_id=?';
-        this.database.executeSql(airSql, [cert.id]).then((resAir: any) => {
+        this.database.executeSql(airSql, [cert?.id]).then((resAir: any) => {
           if(resAir.rows.length > 0) {
             const airData = resAir.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_air_sampling_template SET isSync=? AND tech_id=?`, [isSync, user.id])
+            // eslint-disable-next-line max-len
+            this.database.executeSql(`UPDATE fire_air_sampling_template SET isSync=? AND tech_id=? WHERE id=${airData?.id}`, [isSync, user?.id])
             .then((airSync: any) => {
               console.log('Updated: ' + JSON.stringify(airSync));
               // POST ONLINE
@@ -313,11 +283,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 6.3 LINER HEAT
         const linerSql = 'SELECT * FROM fire_liner_heat WHERE service_cert_id=?';
-        this.database.executeSql(linerSql, [cert.id]).then((resLiner: any) => {
+        this.database.executeSql(linerSql, [cert?.id]).then((resLiner: any) => {
           if(resLiner.rows.length > 0) {
             const linerData = resLiner.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_liner_heat SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_liner_heat SET isSync=? AND tech_id=? WHERE id=${linerData?.id}`, [isSync, user?.id])
             .then((linerSync: any) => {
               console.log('Updated: ' + JSON.stringify(linerSync));
               // POST ONLINE
@@ -330,11 +300,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 6.4 FLAME DETECTION
         const flameSql = 'SELECT * FROM fire_flame_detection WHERE service_cert_id=?';
-        this.database.executeSql(flameSql, [cert.id]).then((resFlame: any) => {
+        this.database.executeSql(flameSql, [cert?.id]).then((resFlame: any) => {
           if(resFlame.rows.length > 0) {
             const flameData = resFlame.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_flame_detection SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_flame_detection SET isSync=? AND tech_id=? WHERE id=${flameData?.id}`, [isSync, user?.id])
             .then((linerSync: any) => {
               console.log('Updated: ' + JSON.stringify(linerSync));
               // POST ONLINE
@@ -347,7 +317,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 6.5 WIRELESS
         // eslint-disable-next-line max-len
-        this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_wireless WHERE service_type_id=? AND site_id=?`, [cert.id, cert.site_id])
+        this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_wireless WHERE service_type_id=? AND site_id=?`, [cert?.service_type_id, cert?.site_id])
         .then((res: any) => {
           console.log('Result: ' + JSON.stringify(res));
           if (res.rows.length > 0) {
@@ -358,13 +328,13 @@ export class OfflineServiceCardsPage implements OnInit {
             this.wireless = devices;
             // eslint-disable-next-line @typescript-eslint/prefer-for-of
             for(let i=0; i < this.wireless.length; i++) {
-              const id = this.wireless[i].id;
+              const id = this.wireless[i]?.id;
               const isSync = 'Yes';
               // eslint-disable-next-line max-len
               const updateValues = [isSync];
               console.log(updateValues);
               // eslint-disable-next-line max-len
-              this.database.executeSql(`UPDATE fire_template_device_loops_table_wireless SET isSync=? WHERE id=${id}`, updateValues).then((updateWireless: any) => {
+              this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_wireless SET isSync=? WHERE id=${id}`, updateValues).then((updateWireless: any) => {
                 console.log(updateWireless);
                 // update online
                 this.http.post(this.url + 'sync-wireless.php', this.wireless[i]).subscribe((resWireless: any) => {
@@ -381,12 +351,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 8.0 MONITORING
         const monSql = 'SELECT * FROM fire_monitoring WHERE service_cert_id=?';
-        this.database.executeSql(monSql, [cert.id]).then((resMonitor: any) => {
+        this.database.executeSql(monSql, [cert?.id]).then((resMonitor: any) => {
           if(resMonitor.rows.length > 0) {
             const monitorData = resMonitor.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_monitoring SET isSync=? AND tech_id=?`, [isSync, user.id])
-            .then((monSync: any) => {
+            // eslint-disable-next-line max-len
+            this.database.executeSql(`UPDATE fire_monitoring SET isSync=? AND tech_id=? WHERE id=${monitorData?.id}`, [isSync, user?.id]).then((monSync: any) => {
               console.log('Updated: ' + JSON.stringify(monSync));
               // POST ONLINE
               this.http.post(this.url + 'sync-monitoring.php', monitorData).subscribe((monSyncRes: any) => {
@@ -398,11 +368,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.1 SINGLE KNOCK
         const singleKnockSql = 'SELECT * FROM fire_single_knock WHERE service_cert_id=?';
-        this.database.executeSql(singleKnockSql, [cert.id]).then((resSingle: any) => {
+        this.database.executeSql(singleKnockSql, [cert?.id]).then((resSingle: any) => {
           if(resSingle.rows.length > 0) {
             const singleData = resSingle.rows.item(0);
+            const id = singleData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_single_knock SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_single_knock SET isSync=? AND tech_id=? WHERE id=${id}`, [isSync, user?.id])
             .then((singleSync: any) => {
               console.log('Updated: ' + JSON.stringify(singleSync));
               // POST ONLINE
@@ -415,11 +386,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.2 DOUBLE KNOCK
         const doubleKnockSql = 'SELECT * FROM fire_double_knock WHERE service_cert_id=?';
-        this.database.executeSql(doubleKnockSql, [cert.id]).then((resDouble: any) => {
+        this.database.executeSql(doubleKnockSql, [cert?.id]).then((resDouble: any) => {
           if(resDouble.rows.length > 0) {
             const doubleData = resDouble.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_double_knock SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_double_knock SET isSync=? AND tech_id=? WHERE id=${doubleData?.id}`, [isSync, user?.id])
             .then((doubleSync: any) => {
               console.log('Updated: ' + JSON.stringify(doubleSync));
               // POST ONLINE
@@ -432,11 +403,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.3 FIRE BELLS
         const bellsSql = 'SELECT * FROM fire_bells WHERE service_cert_id=?';
-        this.database.executeSql(bellsSql, [cert.id]).then((resBells: any) => {
+        this.database.executeSql(bellsSql, [cert?.id]).then((resBells: any) => {
           if(resBells.rows.length > 0) {
             const bellsData = resBells.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_bells SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_bells SET isSync=? AND tech_id=? WHERE id=${bellsData?.id}`, [isSync, user?.id])
             .then((bellsSync: any) => {
               console.log('Updated: ' + JSON.stringify(bellsSync));
               // POST ONLINE
@@ -449,11 +420,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.4 SOUNDERS FUNCTIONAL
         const sounderSql = 'SELECT * FROM fire_sounders_functional WHERE service_cert_id=?';
-        this.database.executeSql(sounderSql, [cert.id]).then((resSounders: any) => {
+        this.database.executeSql(sounderSql, [cert?.id]).then((resSounders: any) => {
           if(resSounders.rows.length > 0) {
             const soundersData = resSounders.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_sounders_functional SET isSync=? AND tech_id=?`, [isSync, user.id])
+            // eslint-disable-next-line max-len
+            this.database.executeSql(`UPDATE fire_sounders_functional SET isSync=? AND tech_id=? WHERE id=${soundersData?.id}`, [isSync, user?.id])
             .then((bellsSync: any) => {
               console.log('Updated: ' + JSON.stringify(bellsSync));
               // POST ONLINE
@@ -466,11 +438,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.5 STROBES FUNCTIONAL
         const strobeSql = 'SELECT * FROM fire_strobes_functional WHERE service_cert_id=?';
-        this.database.executeSql(strobeSql, [cert.id]).then((resStrobes: any) => {
+        this.database.executeSql(strobeSql, [cert?.id]).then((resStrobes: any) => {
           if(resStrobes.rows.length > 0) {
             const strobesData = resStrobes.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_strobes_functional SET isSync=? AND tech_id=?`, [isSync, user.id])
+            // eslint-disable-next-line max-len
+            this.database.executeSql(`UPDATE fire_strobes_functional SET isSync=? AND tech_id=? WHERE id=${strobesData?.id}`, [isSync, user?.id])
             .then((strobesSync: any) => {
               console.log('Updated: ' + JSON.stringify(strobesSync));
               // POST ONLINE
@@ -483,11 +456,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.6 SUPPRESSION DETONATORS
         const supDetoSql = 'SELECT * FROM fire_suppression_detonators WHERE service_cert_id=?';
-        this.database.executeSql(supDetoSql, [cert.id]).then((resDetonators: any) => {
+        this.database.executeSql(supDetoSql, [cert?.id]).then((resDetonators: any) => {
           if(resDetonators.rows.length > 0) {
             const detonatorsData = resDetonators.rows.item(0);
+            const id = detonatorsData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_suppression_detonators SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_suppression_detonators SET isSync=? AND tech_id=? WHERE id=${id}`, [isSync, user?.id])
             .then((detonatorsSync: any) => {
               console.log('Updated: ' + JSON.stringify(detonatorsSync));
               // POST ONLINE
@@ -500,11 +474,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.7 DOOR MONITORS
         const doorMonSql = 'SELECT * FROM fire_door_monitor_functional WHERE service_cert_id=?';
-        this.database.executeSql(doorMonSql, [cert.id]).then((resDoorMon: any) => {
+        this.database.executeSql(doorMonSql, [cert?.id]).then((resDoorMon: any) => {
           if(resDoorMon.rows.length > 0) {
             const doorMonData = resDoorMon.rows.item(0);
+            const iD = doorMonData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_door_monitor_functional SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_door_monitor_functional SET isSync=? AND tech_id=? WHERE id=${iD}`, [isSync, user?.id])
             .then((doorMonSync: any) => {
               console.log('Updated: ' + JSON.stringify(doorMonSync));
               // POST ONLINE
@@ -517,11 +492,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.8 SUPPRESSION CYLINDERS
         const cyliderSql = 'SELECT * FROM fire_suppression_cylinder WHERE service_cert_id=?';
-        this.database.executeSql(cyliderSql, [cert.id]).then((resCylinder: any) => {
+        this.database.executeSql(cyliderSql, [cert?.id]).then((resCylinder: any) => {
           if(resCylinder.rows.length > 0) {
             const cylinderData = resCylinder.rows.item(0);
+            const iD = cylinderData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_suppression_cylinder SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_suppression_cylinder SET isSync=? AND tech_id=? WHERE id=${iD}`, [isSync, user?.id])
             .then((cylinderSync: any) => {
               console.log('Updated: ' + JSON.stringify(cylinderSync));
               // POST ONLINE
@@ -534,11 +510,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 9.9 AUTO MANUAL SWITCH
         const autoManualSql = 'SELECT * FROM fire_suppression_cylinder WHERE service_cert_id=?';
-        this.database.executeSql(autoManualSql, [cert.id]).then((resAutoManual: any) => {
+        this.database.executeSql(autoManualSql, [cert?.id]).then((resAutoManual: any) => {
           if(resAutoManual.rows.length > 0) {
             const autoManualData = resAutoManual.rows.item(0);
+            const autoId = autoManualData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_suppression_cylinder SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_suppression_cylinder SET isSync=? AND tech_id=? WHERE id=${autoId}`, [isSync, user?.id])
             .then((autoSync: any) => {
               console.log('Updated: ' + JSON.stringify(autoSync));
               // POST ONLINE
@@ -551,11 +528,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.1 STAIR PRESSURE FANS
         const stairFansSql = 'SELECT * FROM fire_stair_pressure_fans WHERE service_cert_id=?';
-        this.database.executeSql(stairFansSql, [cert.id]).then((resStairFans: any) => {
+        this.database.executeSql(stairFansSql, [cert?.id]).then((resStairFans: any) => {
           if(resStairFans.rows.length > 0) {
             const fansData = resStairFans.rows.item(0);
+            const fanID = fansData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_stair_pressure_fans SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_stair_pressure_fans SET isSync=? AND tech_id=? WHERE id=${fanID}`, [isSync, user?.id])
             .then((fansSync: any) => {
               console.log('Updated: ' + JSON.stringify(fansSync));
               // POST ONLINE
@@ -568,11 +546,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.2 Lift PRESSURE FANS * update database from here
         const liftFansSql = 'SELECT * FROM fire_lift_pressure_fans WHERE service_cert_id=?';
-        this.database.executeSql(liftFansSql, [cert.id]).then((resLiftFans: any) => {
+        this.database.executeSql(liftFansSql, [cert?.id]).then((resLiftFans: any) => {
           if(resLiftFans.rows.length > 0) {
             const liftFansData = resLiftFans.rows.item(0);
+            const liftId = liftFansData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_lift_pressure_fans SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_lift_pressure_fans SET isSync=? AND tech_id=? WHERE id=${liftId}`, [isSync, user?.id])
             .then((liftFansSync: any) => {
               console.log('Updated: ' + JSON.stringify(liftFansSync));
               // POST ONLINE
@@ -585,11 +564,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.3 SMOKE EXTRATCTION
         const smokeExtSql = 'SELECT * FROM fire_smoke_extraction_fans WHERE service_cert_id=?';
-        this.database.executeSql(smokeExtSql, [cert.id]).then((resSmoke: any) => {
+        this.database.executeSql(smokeExtSql, [cert?.id]).then((resSmoke: any) => {
           if(resSmoke.rows.length > 0) {
             const smokeExtractionData = resSmoke.rows.item(0);
+            const smokeId = smokeExtractionData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_smoke_extraction_fans SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_smoke_extraction_fans SET isSync=? AND tech_id=? WHERE id=${smokeId}`, [isSync, user?.id])
             .then((smokeSync: any) => {
               console.log('Updated: ' + JSON.stringify(smokeSync));
               // POST ONLINE
@@ -602,11 +582,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.4 SMOKE VENILTION
         const smokeVentSql = 'SELECT * FROM fire_smoke_ventilation_louvers WHERE service_cert_id=?';
-        this.database.executeSql(smokeVentSql, [cert.id]).then((resSmokeVent: any) => {
+        this.database.executeSql(smokeVentSql, [cert?.id]).then((resSmokeVent: any) => {
           if(resSmokeVent.rows.length > 0) {
             const smokeVentData = resSmokeVent.rows.item(0);
+            const sId = smokeVentData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_smoke_ventilation_louvers SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_smoke_ventilation_louvers SET isSync=? AND tech_id=? WHERE id=${sId}`, [isSync, user?.id])
             .then((ventSync: any) => {
               console.log('Updated: ' + JSON.stringify(ventSync));
               // POST ONLINE
@@ -619,11 +600,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.5 ROLLER SHUTTER
         const rollerShutterSql = 'SELECT * FROM fire_roller_shutter_doors WHERE service_cert_id=?';
-        this.database.executeSql(rollerShutterSql, [cert.id]).then((resShutter: any) => {
+        this.database.executeSql(rollerShutterSql, [cert?.id]).then((resShutter: any) => {
           if(resShutter.rows.length > 0) {
             const rollerShutterData = resShutter.rows.item(0);
+            const rId = rollerShutterData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_roller_shutter_doors SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_roller_shutter_doors SET isSync=? AND tech_id=? WHERE id=${rId}`, [isSync, user?.id])
             .then((shutterSync: any) => {
               console.log('Updated: ' + JSON.stringify(shutterSync));
               // POST ONLINE
@@ -636,11 +618,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.6 DOOR HOLDS DEVICES
         const doorHoldSql = 'SELECT * FROM fire_door_hold_devices WHERE service_cert_id=?';
-        this.database.executeSql(doorHoldSql, [cert.id]).then((resHold: any) => {
+        this.database.executeSql(doorHoldSql, [cert?.id]).then((resHold: any) => {
           if(resHold.rows.length > 0) {
             const doorHoldData = resHold.rows.item(0);
+            const dId = doorHoldData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_door_hold_devices SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_door_hold_devices SET isSync=? AND tech_id=? WHERE id=${dId}`, [isSync, user?.id])
             .then((doorSync: any) => {
               console.log('Updated: ' + JSON.stringify(doorSync));
               // POST ONLINE
@@ -653,11 +636,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.7 ESCAPE DOOR RELEASE
         const escapeDoorSql = 'SELECT * FROM fire_escape_doors_release WHERE service_cert_id=?';
-        this.database.executeSql(escapeDoorSql, [cert.id]).then((resEscape: any) => {
+        this.database.executeSql(escapeDoorSql, [cert?.id]).then((resEscape: any) => {
           if(resEscape.rows.length > 0) {
             const escapeDoorsData = resEscape.rows.item(0);
+            const eId = escapeDoorsData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_escape_doors_release SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_escape_doors_release SET isSync=? AND tech_id=? WHERE id=${eId} `, [isSync, user?.id])
             .then((doorsSync: any) => {
               console.log('Updated: ' + JSON.stringify(doorsSync));
               // POST ONLINE
@@ -670,11 +654,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.8 AUTO EVACUATION
         const autoEvacSql = 'SELECT * FROM fire_auto_evacuation WHERE service_cert_id=?';
-        this.database.executeSql(autoEvacSql, [cert.id]).then((resEvac: any) => {
+        this.database.executeSql(autoEvacSql, [cert?.id]).then((resEvac: any) => {
           if(resEvac.rows.length > 0) {
             const evacuationData = resEvac.rows.item(0);
+            const evacId = evacuationData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_auto_evacuation SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_auto_evacuation SET isSync=? AND tech_id=? WHERE id=${evacId}`, [isSync, user?.id])
             .then((evacSync: any) => {
               console.log('Updated: ' + JSON.stringify(evacSync));
               // POST ONLINE
@@ -687,11 +672,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.9 REMOTE SIGNAL
         const signalSql = 'SELECT * FROM fire_auto_remote_signal WHERE service_cert_id=?';
-        this.database.executeSql(signalSql, [cert.id]).then((resSignal: any) => {
+        this.database.executeSql(signalSql, [cert?.id]).then((resSignal: any) => {
           if(resSignal.rows.length > 0) {
             const remoteSignalData = resSignal.rows.item(0);
+            const remId = remoteSignalData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_auto_remote_signal SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_auto_remote_signal SET isSync=? AND tech_id=? WHERE id=${remId}`, [isSync, user?.id])
             .then((signalSync: any) => {
               console.log('Updated: ' + JSON.stringify(signalSync));
               // POST ONLINE
@@ -704,11 +690,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.10 GAS SHUT VALVES
         const gasSql = 'SELECT * FROM fire_gas_shut_valves WHERE service_cert_id=?';
-        this.database.executeSql(gasSql, [cert.id]).then((resGas: any) => {
+        this.database.executeSql(gasSql, [cert?.id]).then((resGas: any) => {
           if(resGas.rows.length > 0) {
             const gasData = resGas.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_gas_shut_valves SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_gas_shut_valves SET isSync=? AND tech_id=? WHERE id=${gasData?.id}`, [isSync, user?.id])
             .then((signalSync: any) => {
               console.log('Updated: ' + JSON.stringify(signalSync));
               // POST ONLINE
@@ -721,11 +707,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.11 COOKER HEAD
         const cookerSql = 'SELECT * FROM fire_cooker_head_suppression WHERE service_cert_id=?';
-        this.database.executeSql(cookerSql, [cert.id]).then((resCooker: any) => {
+        this.database.executeSql(cookerSql, [cert?.id]).then((resCooker: any) => {
           if(resCooker.rows.length > 0) {
             const cookerData = resCooker.rows.item(0);
+            const cId = cookerData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_cooker_head_suppression SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_cooker_head_suppression SET isSync=? AND tech_id=? WHERE id=${cId}`, [isSync, user?.id])
             .then((cookerSync: any) => {
               console.log('Updated: ' + JSON.stringify(cookerSync));
               // POST ONLINE
@@ -738,11 +725,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.12 LIFT HOMING
         const liftSql = 'SELECT * FROM fire_lift_homing WHERE service_cert_id=?';
-        this.database.executeSql(liftSql, [cert.id]).then((resLift: any) => {
+        this.database.executeSql(liftSql, [cert?.id]).then((resLift: any) => {
           if(resLift.rows.length > 0) {
             const liftData = resLift.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_lift_homing SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_lift_homing SET isSync=? AND tech_id=? WHERE id=${liftData?.id}`, [isSync, user?.id])
             .then((liftSync: any) => {
               console.log('Updated: ' + JSON.stringify(liftSync));
               // POST ONLINE
@@ -755,11 +742,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.13 AC SHUTDWON
         const acSql = 'SELECT * FROM fire_ac_shutdown WHERE service_cert_id=?';
-        this.database.executeSql(acSql, [cert.id]).then((resAC: any) => {
+        this.database.executeSql(acSql, [cert?.id]).then((resAC: any) => {
           if(resAC.rows.length > 0) {
             const acData = resAC.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_ac_shutdown SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_ac_shutdown SET isSync=? AND tech_id=? WHERE id=${acData?.id}`, [isSync, user?.id])
             .then((acSync: any) => {
               console.log('Updated: ' + JSON.stringify(acSync));
               // POST ONLINE
@@ -772,11 +759,12 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.14 FRESH AIR SHUTDWON
         const freshAirSql = 'SELECT * FROM fire_fresh_air_shutdown WHERE service_cert_id=?';
-        this.database.executeSql(freshAirSql, [cert.id]).then((resAir: any) => {
+        this.database.executeSql(freshAirSql, [cert?.id]).then((resAir: any) => {
           if(resAir.rows.length > 0) {
             const freshAirData = resAir.rows.item(0);
+            const fID = freshAirData?.id;
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_fresh_air_shutdown SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_fresh_air_shutdown SET isSync=? AND tech_id=? WHERE id=${fID}`, [isSync, user?.id])
             .then((freshSync: any) => {
               console.log('Updated: ' + JSON.stringify(freshSync));
               // POST ONLINE
@@ -789,11 +777,11 @@ export class OfflineServiceCardsPage implements OnInit {
 
         // POINT 7.15 OTHER
         const otherSql = 'SELECT * FROM fire_other_15 WHERE service_cert_id=?';
-        this.database.executeSql(otherSql, [cert.id]).then((resOther: any) => {
+        this.database.executeSql(otherSql, [cert?.id]).then((resOther: any) => {
           if(resOther.rows.length > 0) {
             const otherData = resOther.rows.item(0);
             const isSync = 'Yes';
-            this.database.executeSql(`UPDATE fire_other_15 SET isSync=? AND tech_id=?`, [isSync, user.id])
+            this.database.executeSql(`UPDATE fire_other_15 SET isSync=? AND tech_id=? WHERE id=${otherData?.id}`, [isSync, user?.id])
             .then((otherSync: any) => {
               console.log('Updated: ' + JSON.stringify(otherSync));
               // POST ONLINE
@@ -805,8 +793,8 @@ export class OfflineServiceCardsPage implements OnInit {
         });
 
         // GET PANELS NUMBER ON CERTIFICATE
-        const panelsSql = 'SELECT * FROM fire_template_panels WHERE service_type_id=? AND site_id=?';
-        this.database.executeSql(panelsSql, [cert.service_type_id, cert.site_id]).then((panelsData: any) => {
+        const panelsSql = 'SELECT * FROM fire_sp_template_panels WHERE service_type_id=? AND site_id=?';
+        this.database.executeSql(panelsSql, [cert.service_type_id, cert?.site_id]).then((panelsData: any) => {
           if (panelsData.rows.length > 0) {
             const panelsList = [];
             for (let i = 0; i < panelsData.rows.length; i++) {
@@ -814,17 +802,16 @@ export class OfflineServiceCardsPage implements OnInit {
             }
             this.panels = panelsList;
           }
-          if (this.panels[0] && this.panels[0] !== undefined) {
-            console.log('Panel 1 -----' + JSON.stringify(this.panels[0]));
+          if (this.panels[0] !== undefined) {
             // point 3.1
-            const panel1Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=?';
-            this.database.executeSql(panel1Sql, [cert.id]).then((panel1Data: any) => {
+            const panel1Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=?';
+            this.database.executeSql(panel1Sql, [cert?.id]).then((panel1Data: any) => {
               if (panel1Data.rows.length > 0) {
                 const panel1Res = panel1Data.rows.item(0);
                 console.log('Panel Data: ' + panel1Res);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel1Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel1Res?.id}`, [isSync, user?.id])
                 .then((updatePanel1: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel1));
                   // POST ONLINE
@@ -844,7 +831,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.1
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[0]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -856,20 +843,18 @@ export class OfflineServiceCardsPage implements OnInit {
                 console.log('Devices List: ' + JSON.stringify(this.cleanDevice1));
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice1.length; i++) {
-                  const id = this.cleanDevice1[i].id;
+                  const id = this.cleanDevice1[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
-                  console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((updatePanel1: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((updatePanel1: any) => {
                     console.log(updatePanel1);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice1[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                    console.log('firesp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                   });
                 }
               } else {
@@ -881,7 +866,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.1 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[0]?.id])
             .then((res2: any) => {
               console.log('Result: ' + JSON.stringify(res2));
               if (res2.rows.length > 0) {
@@ -892,20 +877,18 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.testSingleKnock1 = devicesSingle;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.testSingleKnock1.length; i++) {
-                  const id = this.testSingleKnock1[i].id;
+                  const id = this.testSingleKnock1[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
-                  console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                     console.log(updateDevice);
                     // update online
                     this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock1[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -915,7 +898,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.1 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[0]?.id])
             .then((res3: any) => {
               console.log('Result: ' + JSON.stringify(res3));
               if (res3.rows.length > 0) {
@@ -926,13 +909,13 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.testSounderKnock1 = devicesSounder;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.testSounderKnock1.length; i++) {
-                  const id = this.testSounderKnock1[i].id;
+                  const id = this.testSounderKnock1[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                     console.log(updateSounder);
                     // update online
                     // eslint-disable-next-line max-len
@@ -940,7 +923,7 @@ export class OfflineServiceCardsPage implements OnInit {
                       console.log(resSounder);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -950,16 +933,16 @@ export class OfflineServiceCardsPage implements OnInit {
 
           } // END PANEL 1
 
-          // END PANEL 1 START PANEL 2
+          //START PANEL 2
           if (this.panels[1] !== undefined) {
             console.log('Panel 2 -----');
-            const panel2Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel2Sql, [cert.id, this.panels[1].id]).then((panel2Data: any) => {
+            const panel2Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel2Sql, [cert?.id, this.panels[1]?.id]).then((panel2Data: any) => {
               if (panel2Data.rows.length > 0) {
                 const panel2Res = panel2Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel2Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel2Res?.id}`, [isSync, user?.id])
                 .then((updatePanel2: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel2));
                   // POST ONLINE
@@ -977,7 +960,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.2
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[1].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[1]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -988,20 +971,20 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice2 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice2.length; i++) {
-                  const id = this.cleanDevice2[i].id;
+                  const id = this.cleanDevice2[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((updatePanel2: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((updatePanel2: any) => {
                     console.log(updatePanel2);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice2[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1011,7 +994,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.2 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[1]?.id])
             .then((res2: any) => {
               console.log('Result: ' + JSON.stringify(res2));
               if (res2.rows.length > 0) {
@@ -1022,20 +1005,20 @@ export class OfflineServiceCardsPage implements OnInit {
               this.testSingleKnock2 = devicesSingle;
               // eslint-disable-next-line @typescript-eslint/prefer-for-of
               for(let i=0; i < this.testSingleKnock2.length; i++) {
-                const id = this.testSingleKnock2[i].id;
+                const id = this.testSingleKnock2[i]?.id;
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
                 const updateValues = [isSync];
                 console.log(updateValues);
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                 console.log(updateDevice);
                 // update online
                 this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock2[i]).subscribe((resCleanD: any) => {
                   console.log(resCleanD);
                 });
                 }, err => {
-                console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                 });
               }
               }
@@ -1045,7 +1028,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.2 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[1]?.id])
             .then((res3: any) => {
               console.log('Result: ' + JSON.stringify(res3));
               if (res3.rows.length > 0) {
@@ -1056,13 +1039,12 @@ export class OfflineServiceCardsPage implements OnInit {
               this.testSounderKnock2 = devicesSounder;
               // eslint-disable-next-line @typescript-eslint/prefer-for-of
               for(let i=0; i < this.testSounderKnock2.length; i++) {
-                const id = this.testSounderKnock2[i].id;
+                const id = this.testSounderKnock2[i]?.id;
                 const isSync = 'Yes';
-                // eslint-disable-next-line max-len
                 const updateValues = [isSync];
                 console.log(updateValues);
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                 console.log(updateSounder);
                 // update online
                 // eslint-disable-next-line max-len
@@ -1070,7 +1052,7 @@ export class OfflineServiceCardsPage implements OnInit {
                   console.log(resSounder);
                 });
                 }, err => {
-                console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                 });
               }
               }
@@ -1080,15 +1062,15 @@ export class OfflineServiceCardsPage implements OnInit {
 
           }
 
-          // END PANEL 2 START PANEL 3
+          // START PANEL 3
           if (this.panels[2] !== undefined) {
-            const panel3Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel3Sql, [cert.id, this.panels[2].id]).then((panel3Data: any) => {
+            const panel3Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel3Sql, [cert?.id, this.panels[2]?.id]).then((panel3Data: any) => {
               if (panel3Data.rows.length > 0) {
                 const panel3Res = panel3Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel3Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel3Res?.id}`, [isSync, user?.id])
                 .then((updatePanel3: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel3));
                   // POST ONLINE
@@ -1106,7 +1088,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.3
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[2].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[2]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1117,20 +1099,20 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice3 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice3.length; i++) {
-                  const id = this.cleanDevice3[i].id;
+                  const id = this.cleanDevice3[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice3[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1140,7 +1122,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.3 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[2]?.id])
             .then((res2: any) => {
               console.log('Result: ' + JSON.stringify(res2));
               if (res2.rows.length > 0) {
@@ -1157,14 +1139,14 @@ export class OfflineServiceCardsPage implements OnInit {
                 const updateValues = [isSync];
                 console.log(updateValues);
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                 console.log(updateDevice);
                 // update online
                 this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock3[i]).subscribe((resCleanD: any) => {
                   console.log(resCleanD);
                 });
                 }, err => {
-                console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                 });
               }
               }
@@ -1174,7 +1156,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.3 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[2].id])
             .then((res3: any) => {
               console.log('Result: ' + JSON.stringify(res3));
               if (res3.rows.length > 0) {
@@ -1191,7 +1173,7 @@ export class OfflineServiceCardsPage implements OnInit {
                 const updateValues = [isSync];
                 console.log(updateValues);
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                 console.log(updateSounder);
                 // update online
                 // eslint-disable-next-line max-len
@@ -1199,7 +1181,7 @@ export class OfflineServiceCardsPage implements OnInit {
                   console.log(resSounder);
                 });
                 }, err => {
-                console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                 });
               }
               }
@@ -1211,13 +1193,13 @@ export class OfflineServiceCardsPage implements OnInit {
 
           // END PANEL 3 START PANEL 4
           if (this.panels[3] !== undefined) {
-            const panel4Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel4Sql, [cert.id, this.panels[3].id]).then((panel4Data: any) => {
+            const panel4Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel4Sql, [cert?.id, this.panels[3]?.id]).then((panel4Data: any) => {
               if (panel4Data.rows.length > 0) {
                 const panel4Res = panel4Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel4Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel4Res?.id}`, [isSync, user?.id])
                 .then((updatePanel4: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel4));
                   // POST ONLINE
@@ -1235,7 +1217,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.4
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[3].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[3].id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1246,20 +1228,18 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice4 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice4.length; i++) {
-                  const id = this.cleanDevice4[i].id;
+                  const id = this.cleanDevice4[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
-                  console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice4[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1267,9 +1247,9 @@ export class OfflineServiceCardsPage implements OnInit {
               console.log('Select Error: ' + JSON.stringify(err));
             });
 
-            //POINT 5.3 Single Knock
+            //POINT 5.4 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[3]?.id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -1280,20 +1260,20 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock4 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock4.length; i++) {
-                    const id = this.testSingleKnock4[i].id;
+                    const id = this.testSingleKnock4[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock4[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1301,9 +1281,9 @@ export class OfflineServiceCardsPage implements OnInit {
                 console.log('Select Error: ' + JSON.stringify(err));
               });
 
-            //POINT 5.3 Sounders Knock
+            //POINT 5.4 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[3]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1314,13 +1294,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock4 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock4.length; i++) {
-                    const id = this.testSounderKnock4[i].id;
+                    const id = this.testSounderKnock4[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -1328,7 +1308,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1340,23 +1320,23 @@ export class OfflineServiceCardsPage implements OnInit {
 
           // END PANEL 4 START PANEL 5
           if (this.panels[4] !== undefined) {
-            const panel5Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel5Sql, [cert.id, this.panels[4].id]).then((panel5Data: any) => {
+            const panel5Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel5Sql, [cert?.id, this.panels[4]?.id]).then((panel5Data: any) => {
               if (panel5Data.rows.length > 0) {
                 const panel5Res = panel5Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel5Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel5Res?.id}`, [isSync, user?.id])
                 .then((updatePanel5: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel5));
                   // POST ONLINE
                   this.http.post(this.url + 'sync-preservice-check.php', panel5Res).subscribe((panel5Sync: any) => {
-                    console.log('Preservice Check Panel 4 Sync Status: ' + JSON.stringify(panel5Sync));
+                    console.log('Preservice Check Panel 5 Sync Status: ' + JSON.stringify(panel5Sync));
                   }, err => {
-                    console.log('3.1 Post Error Panel 4: ' + JSON.stringify(err));
+                    console.log('3.5 Post Error Panel 5: ' + JSON.stringify(err));
                   });
                 }, err => {
-                  console.log('3.1 Update Error Panel 4: ' + JSON.stringify(err));
+                  console.log('3.5 Update Error Panel 5: ' + JSON.stringify(err));
                 });
               }
             }, err => {
@@ -1364,7 +1344,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.5
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[4].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[4]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1375,20 +1355,20 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice5 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice5.length; i++) {
-                  const id = this.cleanDevice5[i].id;
+                  const id = this.cleanDevice5[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice5[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1398,9 +1378,8 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.5 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[4]?.id])
               .then((res2: any) => {
-                console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
                   const devicesSingle = [];
                   for (let i = 0; i < res2.rows.length; i++) {
@@ -1409,20 +1388,20 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock5 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock5.length; i++) {
-                    const id = this.testSingleKnock5[i].id;
+                    const id = this.testSingleKnock5[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock5[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1432,7 +1411,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.5 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[4]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1443,13 +1422,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock5 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock5.length; i++) {
-                    const id = this.testSounderKnock5[i].id;
+                    const id = this.testSounderKnock5[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -1457,7 +1436,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1467,15 +1446,15 @@ export class OfflineServiceCardsPage implements OnInit {
 
           }
 
-          // END PANEL 5 START PANEL 6
+          // START PANEL 6
           if (this.panels[5] !== undefined) {
-            const panel6Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel6Sql, [cert.id, this.panels[5].id]).then((panel6Data: any) => {
+            const panel6Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel6Sql, [cert?.id, this.panels[5]?.id]).then((panel6Data: any) => {
               if (panel6Data.rows.length > 0) {
                 const panel6Res = panel6Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel6Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel6Res?.id}`, [isSync, user?.id])
                 .then((updatePanel6: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel6));
                   // POST ONLINE
@@ -1493,7 +1472,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.6
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[5].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[5]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1504,20 +1483,20 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice6 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice6.length; i++) {
-                  const id = this.cleanDevice6[i].id;
+                  const id = this.cleanDevice6[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice6[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1527,7 +1506,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.6 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[5]?.id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -1538,20 +1517,20 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock6 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock6.length; i++) {
-                    const id = this.testSingleKnock6[i].id;
+                    const id = this.testSingleKnock6[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock6[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1561,7 +1540,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.6 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[5]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1572,13 +1551,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock6 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock6.length; i++) {
-                    const id = this.testSounderKnock6[i].id;
+                    const id = this.testSounderKnock6[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -1586,7 +1565,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1596,15 +1575,15 @@ export class OfflineServiceCardsPage implements OnInit {
 
           }
 
-          // END PANEL 6 START PANEL 7
+          // START PANEL 7
           if (this.panels[6] !== undefined) {
-            const panel7Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel7Sql, [cert.id, this.panels[6].id]).then((panel7Data: any) => {
+            const panel7Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel7Sql, [cert?.id, this.panels[6]?.id]).then((panel7Data: any) => {
               if (panel7Data.rows.length > 0) {
                 const panel7Res = panel7Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel7Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel7Res?.id}`, [isSync, user?.id])
                 .then((updatePanel7: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel7));
                   // POST ONLINE
@@ -1622,7 +1601,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.7
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[6].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[6]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1633,20 +1612,20 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice7 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice7.length; i++) {
-                  const id = this.cleanDevice7[i].id;
+                  const id = this.cleanDevice7[i]?.id;
                   const isSync = 'Yes';
                   // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice7[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1656,7 +1635,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.7 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[6]?.id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -1667,20 +1646,20 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock7 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock7.length; i++) {
-                    const id = this.testSingleKnock7[i].id;
+                    const id = this.testSingleKnock7[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock7[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1690,7 +1669,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.7 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[6]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1701,13 +1680,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock7 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock7.length; i++) {
-                    const id = this.testSounderKnock7[i].id;
+                    const id = this.testSounderKnock7[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -1715,7 +1694,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1725,15 +1704,15 @@ export class OfflineServiceCardsPage implements OnInit {
 
           }
 
-          // END PANEL 7 START PANEL 8
+          //START PANEL 8
           if (this.panels[7] !== undefined) {
-            const panel8Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel8Sql, [cert.id, this.panels[7].id]).then((panel8Data: any) => {
+            const panel8Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel8Sql, [cert?.id, this.panels[7]?.id]).then((panel8Data: any) => {
               if (panel8Data.rows.length > 0) {
                 const panel8Res = panel8Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel8Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel8Res?.id}`, [isSync, user?.id])
                 .then((updatePanel8: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel8));
                   // POST ONLINE
@@ -1751,7 +1730,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.8
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[7].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[7]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1762,20 +1741,18 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice8 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice8.length; i++) {
-                  const id = this.cleanDevice8[i].id;
+                  const id = this.cleanDevice8[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
-                  console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice8[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1784,7 +1761,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 5.8 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[7].id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -1795,20 +1772,20 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock8 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock8.length; i++) {
-                    const id = this.testSingleKnock8[i].id;
+                    const id = this.testSingleKnock8[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock8[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1818,7 +1795,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.8 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[7]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1829,21 +1806,19 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock8 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock8.length; i++) {
-                    const id = this.testSounderKnock8[i].id;
+                    const id = this.testSounderKnock8[i]?.id;
                     const isSync = 'Yes';
-                    // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
-                      // update online
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-sounder-device.php', this.testSounderKnock8[i]).subscribe((resSounder: any) => {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1853,15 +1828,15 @@ export class OfflineServiceCardsPage implements OnInit {
 
           }
 
-          // END PANEL 8 START PANEL 9
+          //START PANEL 9
           if (this.panels[8] !== undefined) {
-            const panel9Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel9Sql, [cert.id, this.panels[8].id]).then((panel9Data: any) => {
+            const panel9Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel9Sql, [cert?.id, this.panels[8]?.id]).then((panel9Data: any) => {
               if (panel9Data.rows.length > 0) {
                 const panel9Res = panel9Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel9Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel9Res?.id}`, [isSync, user?.id])
                 .then((updatePanel9: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel9));
                   // POST ONLINE
@@ -1879,7 +1854,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.9
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[8].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[8]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -1890,20 +1865,18 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice9 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice9.length; i++) {
-                  const id = this.cleanDevice9[i].id;
+                  const id = this.cleanDevice9[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
-                  console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice9[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('fire_sp_template_device_loops_table ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -1912,7 +1885,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 5.9 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[8]?.id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -1923,20 +1896,18 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock9 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock9.length; i++) {
-                    const id = this.testSingleKnock9[i].id;
+                    const id = this.testSingleKnock9[i]?.id;
                     const isSync = 'Yes';
-                    // eslint-disable-next-line max-len
                     const updateValues = [isSync];
-                    console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock9[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1946,7 +1917,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.9 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[8]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -1957,13 +1928,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock9 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock9.length; i++) {
-                    const id = this.testSounderKnock9[i].id;
+                    const id = this.testSounderKnock9[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -1971,7 +1942,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -1983,13 +1954,13 @@ export class OfflineServiceCardsPage implements OnInit {
 
           // END PANEL 9 START PANEL 10
           if (this.panels[9] !== undefined) {
-            const panel10Sql = 'SELECT * FROM fire_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
-            this.database.executeSql(panel10Sql, [cert.id, this.panels[9].id]).then((panel10Data: any) => {
+            const panel10Sql = 'SELECT * FROM fire_sp_template_panels_post_data WHERE service_cert_id=? AND panel_id=?';
+            this.database.executeSql(panel10Sql, [cert?.id, this.panels[9]?.id]).then((panel10Data: any) => {
               if (panel10Data.rows.length > 0) {
                 const panel10Res = panel10Data.rows.item(0);
                 const isSync = 'Yes';
                 // eslint-disable-next-line max-len
-                this.database.executeSql(`UPDATE fire_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel10Res.id}`, [isSync, user.id])
+                this.database.executeSql(`UPDATE fire_sp_template_panels_post_data SET isSync=?, tech_id=? WHERE id=${panel10Res?.id}`, [isSync, user?.id])
                 .then((updatePanel10: any) => {
                   console.log('Updated: ' + JSON.stringify(updatePanel10));
                   // POST ONLINE
@@ -2007,7 +1978,7 @@ export class OfflineServiceCardsPage implements OnInit {
             });
             //POINT 4.10
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[9].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[9]?.id])
             .then((res: any) => {
               console.log('Result: ' + JSON.stringify(res));
               if (res.rows.length > 0) {
@@ -2018,20 +1989,19 @@ export class OfflineServiceCardsPage implements OnInit {
                 this.cleanDevice10 = devices;
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for(let i=0; i < this.cleanDevice10.length; i++) {
-                  const id = this.cleanDevice10[i].id;
+                  const id = this.cleanDevice10[i]?.id;
                   const isSync = 'Yes';
-                  // eslint-disable-next-line max-len
                   const updateValues = [isSync];
                   console.log(updateValues);
                   // eslint-disable-next-line max-len
-                  this.database.executeSql(`UPDATE fire_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
+                  this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET isSync=? WHERE id=${id}`, updateValues).then((resUpdate: any) => {
                     console.log(resUpdate);
                     // update online
                     this.http.post(this.url + 'sync-clean-device.php', this.cleanDevice10[i]).subscribe((resCleanD: any) => {
                       console.log(resCleanD);
                     });
                   }, err => {
-                    console.log('fire_template_device_loops_table ERROR: ' + JSON.stringify(err));
+                    console.log('ERROR: ' + JSON.stringify(err));
                   });
                 }
               }
@@ -2041,7 +2011,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.10 Single Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_device_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[9]?.id])
               .then((res2: any) => {
                 console.log('Result: ' + JSON.stringify(res2));
                 if (res2.rows.length > 0) {
@@ -2052,20 +2022,18 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSingleKnock10 = devicesSingle;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSingleKnock10.length; i++) {
-                    const id = this.testSingleKnock10[i].id;
+                    const id = this.testSingleKnock10[i]?.id;
                     const isSync = 'Yes';
-                    // eslint-disable-next-line max-len
                     const updateValues = [isSync];
-                    console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_device_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateDevice: any) => {
                       console.log(updateDevice);
                       // eslint-disable-next-line max-len
                       this.http.post(this.url + 'sync-test-single-knock-device.php', this.testSingleKnock10[i]).subscribe((resCleanD: any) => {
                         console.log(resCleanD);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_device_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -2075,7 +2043,7 @@ export class OfflineServiceCardsPage implements OnInit {
 
             //POINT 5.10 Sounders Knock
             // eslint-disable-next-line max-len
-            this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert.id, cert.site_id, this.panels[0].id])
+            this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table_sounder_knock WHERE service_type_id=? AND site_id=? AND panel_id=?`, [cert?.service_type_id, cert?.site_id, this.panels[9]?.id])
               .then((res3: any) => {
                 console.log('Result: ' + JSON.stringify(res3));
                 if (res3.rows.length > 0) {
@@ -2086,13 +2054,13 @@ export class OfflineServiceCardsPage implements OnInit {
                   this.testSounderKnock10 = devicesSounder;
                   // eslint-disable-next-line @typescript-eslint/prefer-for-of
                   for (let i = 0; i < this.testSounderKnock10.length; i++) {
-                    const id = this.testSounderKnock10[i].id;
+                    const id = this.testSounderKnock10[i]?.id;
                     const isSync = 'Yes';
                     // eslint-disable-next-line max-len
                     const updateValues = [isSync];
                     console.log(updateValues);
                     // eslint-disable-next-line max-len
-                    this.database.executeSql(`UPDATE fire_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
+                    this.database.executeSql(`UPDATE fire_sp_template_device_loops_table_sounder_knock SET isSync=? WHERE id=${id}`, updateValues).then((updateSounder: any) => {
                       console.log(updateSounder);
                       // update online
                       // eslint-disable-next-line max-len
@@ -2100,7 +2068,7 @@ export class OfflineServiceCardsPage implements OnInit {
                         console.log(resSounder);
                       });
                     }, err => {
-                      console.log('fire_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
+                      console.log('fire_sp_template_device_loops_table_sounder_knock ERROR: ' + JSON.stringify(err));
                     });
                   }
                 }
@@ -2115,8 +2083,8 @@ export class OfflineServiceCardsPage implements OnInit {
         });
 
         const sync = 'Yes';
-        console.log(cert.cert_id);
-        this.database.executeSql(`UPDATE fire_service_certificates SET isSync=? WHERE cert_id=${cert.cert_id}`,[sync])
+        console.log(cert?.cert_id);
+        this.database.executeSql(`UPDATE fire_sp_service_certificates SET isSync=? WHERE cert_id=${cert?.cert_id}`,[sync])
         .then((certRes: any) => {
           console.log('Sync Result: ' + JSON.stringify(certRes));
         });
@@ -2125,12 +2093,8 @@ export class OfflineServiceCardsPage implements OnInit {
           console.log('Synced.....');
           this.getOfflineCards(user.id);
         });
-
       }); //Close DB
     }); // Close Storage
     loading.dismiss();
-  }
-
-
-
+  } //end sync process
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActionSheetController, ToastController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { Camera, PictureSourceType, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
@@ -20,6 +20,7 @@ export class ClientFaultReportPage implements OnInit {
   staff: any;
   fault: any = {};
   photo: any;
+  moduleID: any;
 
   constructor(
     private http: HttpClient,
@@ -28,20 +29,25 @@ export class ClientFaultReportPage implements OnInit {
     private toastController: ToastController,
     private activatedRoute: ActivatedRoute,
     private camera: Camera,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private loadingController: LoadingController
   ) {
+    this.moduleID = this.activatedRoute.snapshot.paramMap.get('moduleID');
     this.storage.get('currentUser').then((user: any) => {
       console.log(user);
+      this.staff = user;
       this.fault.clientID = user.id;
-      console.log(this.siteID);
-      this.http.get(this.url + 'get-client-sites-client.php?clientID=' + user.id).subscribe((siteResp: any) => {
+      this.fault.spID = user.sp_id;
+      this.fault.moduleID = this.moduleID;
+      console.log('SP ID: ' + user.sp_id);
+      this.http.get(this.url + 'sp-get-client-sites-client.php?clientID=' +  user.id).subscribe((siteResp: any) => {
         console.log(siteResp);
         this.siteData = siteResp;
       });
     });
 
 
-    this.http.get(this.url + 'get-booking-reference.php').subscribe((faultRef: any) => {
+    this.http.get(this.url + 'sp-get-booking-reference.php').subscribe((faultRef: any) => {
       console.log(faultRef);
       this.faultReference = faultRef.fault_reference;
       this.refDate = faultRef.refDate;
@@ -56,25 +62,32 @@ export class ClientFaultReportPage implements OnInit {
   ionViewWillEnter(){
     this.storage.get('currentUser').then((user: any) => {
       console.log(user);
-      console.log(this.siteID);
-      this.http.get(this.url + 'get-client-sites-client.php?clientID=' + user.id).subscribe((siteResp: any) => {
+      this.fault.clientID = user.id;
+      console.log('SP ID: ' + user.sp_id);
+      this.http.get(this.url + 'sp-get-client-sites-client.php?spID=' +  user.sp_id).subscribe((siteResp: any) => {
         console.log(siteResp);
         this.siteData = siteResp;
-        this.fault.siteID = siteResp.id;
       });
     });
   }
 
-  submitFaultReport() {
+  async submitFaultReport() {
+    const loading = await this.loadingController.create({ message: 'Please wait...' });
+    loading.present();
     console.log(this.fault);
-    this.http.post(this.url + 'post-fault-request-client.php', this.fault).subscribe((data: any) => {
+    this.http.post(this.url + 'sp-post-fault-request-client.php', this.fault).subscribe((data: any) => {
       console.log(data);
       if (data.status === 'success') {
+        loading.dismiss();
         this.faultConfirmation('Fault report has been submitted successfully!');
-        this.router.navigate(['/client-menu/client-fault-reports']);
+        this.router.navigate(['/client-menu/client-module-faults/' + this.fault.moduleID]);
       } else {
+        loading.dismiss();
         this.faultConfirmation('Fault report could not be submitted successfully!');
       }
+    }, err => {
+      loading.dismiss();
+      console.log(err);
     });
   }
 

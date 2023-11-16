@@ -95,7 +95,7 @@
         <ion-input [(ngModel)]="jobCard.arrivalTime" name="arrivalTime" placeholder="Estimated Arrival Time" value="{{ time | date: 'yyyy-MM-dd HH:mm' }}" required #arrivalTime="ngModel" id="date" class="ion-text-end" ></ion-input>
         <ion-popover trigger="date" size="cover">
           <ng-template>
-            <ion-datetime presentation="date-time"  [(ngModel)]="time" hour-cycle="h23" displayFormat="yyyy-MM-dd HH:mm" name="time"></ion-datetime>
+            <ion-datetime presentation="date-time"  [(ngModel)]="time" hour-cycle="h23" min="{{minDate}}" displayFormat="yyyy-MM-dd HH:mm" name="time"></ion-datetime>
           </ng-template>
         </ion-popover>
       </ion-item>

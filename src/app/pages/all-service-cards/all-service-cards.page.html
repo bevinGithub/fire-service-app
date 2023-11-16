@@ -1,0 +1,180 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="this.networkStatus === 'none'"  (click)="setOnline()" >
+      <ion-button>
+        <ion-icon style="font-size: 25px;" color="primary" slot="end" name="wifi"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>SERVICE CERTIFICATES</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="fire-protection">
+    <div class="ion-text-center heading-text" style="margin-bottom: 10px;">
+      OPEN SERVICE CERTIFICATES
+    </div>
+    <ng-container *ngIf="fireProtection?.length === 0">
+      <ion-card>
+        <ion-card-content class="ion-tect-center">
+          There are no service certificates at the moment!
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-container style="padding: 15px;" *ngIf="fireProtection?.length > 0">
+      <ng-container *ngFor="let item of fireProtection">
+        <ng-container *ngIf="networkStatus !== 'none'"  >
+          <div *ngIf="(item.cert_status === 'Assigned' || item.cert_status === 'Available') && item.job_approve !== 'Approved'"
+          class="border-liner list ion-padding" routerLink="/technician-menu/accept-service-card-details/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve !== 'Approved'"
+            class="border-liner list ion-padding" routerLink="/technician-menu/tech-accepted-cards/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve === 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/service-card-details/{{ item.id }}">
+            <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="networkStatus === 'none'">
+          <!-- OFFLINE NETWORK -->
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve === 'Approved'"  class="border-liner list ion-padding" routerLink="/service-summary/{{ item.id }}">
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="item.cert_status === 'Rejected' && item.job_approve !== 'Approved'"  class="border-liner list ion-padding" routerLink="/view-rejected-service-certificate/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+          <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+          <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+          <div class="site" style="color: #FE0000;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+          <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- SMOKE CONTROL NEW -->
+    <ng-container style="padding: 15px;" *ngIf="smokeControl?.length > 0">
+      <ng-container *ngFor="let item of smokeControl">
+        <ng-container *ngIf="networkStatus !== 'none'"  >
+          <div *ngIf="(item.cert_status === 'Assigned' || item.cert_status === 'Available') && item.job_approve !== 'Approved'"
+          class="border-liner list ion-padding" routerLink="/technician-menu/accept-service-card-details-smoke/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve !== 'Approved'"
+            class="border-liner list ion-padding" routerLink="/technician-menu/tech-accepted-cards-smoke/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve === 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/service-card-details-smoke/{{ item.id }}">
+            <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="networkStatus === 'none'">
+          <!-- OFFLINE NETWORK -->
+          <div *ngIf="item.cert_status === 'Accepted' && item.job_approve === 'Approved'"  class="border-liner list ion-padding" routerLink="/service-summary/{{ item.id }}">
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+
+        <!-- <div *ngIf="item.cert_status === 'Rejected' && item.job_approve !== 'Approved'"  class="border-liner list ion-padding" routerLink="/view-rejected-service-certificate/{{ item.id }}">
+          <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+          <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+          <div class="site" style="color: #FE0000;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+          <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </div> -->
+      </ng-container>
+
+    </ng-container>
+
+    <div class="ion-text-center heading-text" style="margin-bottom: 10px;">
+      COMPLETED SERVICE CERTIFICATES
+    </div>
+
+    <ng-container style="padding: 15px;" *ngIf="fireProtection?.length > 0">
+      <ng-container *ngFor="let item of fireProtection">
+        <ng-container  *ngIf="networkStatus !== 'none'">
+          <div *ngIf="item.service_status === 'Completed'" class="border-liner list ion-padding" routerLink="/view-service-card-details/{{ item.id }}">
+            <div class="title">Service Provider: {{ item?.business_name }}</div>
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.service_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="networkStatus === 'none'">
+          <!-- OFFLINE NETWORK -->
+          <div *ngIf="item.cert_status === 'Completed'"  class="border-liner list ion-padding" routerLink="/service-summary/{{ item.id }}">
+            <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+            <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+            <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
+            <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <!-- SMOKE CONTROL -->
+    <ng-container style="padding: 15px;" *ngIf="smokeControl?.length > 0">
+      <ng-container *ngFor="let item of smokeControl">
+        <div *ngIf="item.service_status === 'Completed'" class="border-liner list ion-padding" routerLink="/technician-menu/view-service-card-details-smoke/{{ item.id }}">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+          <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
+          <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+          <div class="site" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.service_status }}</div>
+          <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center  logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

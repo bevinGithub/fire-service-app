@@ -25,11 +25,13 @@ export class StaffMenuPage implements OnInit {
     },
     {
       title: 'FAULT REPORTS',
-      url: 'alarms-fault-reports'
+      // url: 'alarms-fault-reports'
+      url: 'staff-dashboard'
     },
     {
       title: 'SERVICES',
-      url: 'alarms-services'
+      // url: 'alarms-services'
+      url: 'staff-dashboard'
     },
     {
       title: 'SPRINKLERS',

@@ -4,11 +4,12 @@ import OneSignal from 'onesignal-cordova-plugin';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { NFC, Ndef } from '@awesome-cordova-plugins/nfc/ngx';
 import { NetworkCheckerService } from 'src/app/services/network-checker.service';
 import { FormGroup } from '@angular/forms';
 import { OpenNativeSettings } from '@awesome-cordova-plugins/open-native-settings/ngx';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 @Component({
   selector: 'app-technician-dashboard',
@@ -35,6 +36,11 @@ export class TechnicianDashboardPage implements OnInit {
   wireless: any;
   cards: any;
   form: FormGroup;
+  showBuetoothBtn: boolean;
+  modules: any;
+  deviceTags: any = {};
+
+  devicesArray: any[]=[];
   constructor(
     private storage: Storage,
     private http: HttpClient,
@@ -45,26 +51,29 @@ export class TechnicianDashboardPage implements OnInit {
     private networkCheckerService: NetworkCheckerService,
     private sqlite: SQLite,
     private nativeSettings: OpenNativeSettings,
+    private modalController: ModalController,
+    private device: Device,
+    private loadingController: LoadingController
   ) {
     this.storage.get('currentUser').then((user: any) => {
       this.platform.ready().then(() => {
       OneSignal.getDeviceState((stateChanges: any) => {
-        //console.log('Device State: ' + JSON.stringify(stateChanges));
         const userID = user?.id;
         const playerID = stateChanges.userId;
         const posttData = {
           userId: userID,
           playerId: playerID
         };
-        console.log(posttData);
-        this.http.post(this.url + 'update-onesignal-data.php', posttData).subscribe((res: any) => {
-          // console.log(res);
+        //alert(JSON.stringify(posttData));
+        this.http.post(this.url + 'sp-update-onesignal-data.php', posttData).subscribe((res: any) => {
+          console.log(res);
         });
       });
 
     });
-
+      this.getActiveModules(user?.id);
     });
+    this.showBuetoothBtn = false;
    }
 
   ngOnInit() {
@@ -72,26 +81,66 @@ export class TechnicianDashboardPage implements OnInit {
   }
 
   openSettings() {
-    this.nativeSettings.open('airplane_mode').then((res: any) => {
+    //airplane_mode
+    this.nativeSettings.open('wifi').then((res: any) => {
+      console.log('Output: ' + res);
+    });
+  }
+  openMobileDataSettings() {
+    this.nativeSettings.open('accessibility').then((res: any) => {
       console.log('Output: ' + res);
     });
   }
 
+  async openSettings2() {
+    const alert = await this.alertController.create({
+      message: 'Switch Off Wifi & Mobile Data',
+      buttons: [
+        {
+          text: 'Wifi',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            // this.openWifiSettings();
+          }
+        }, {
+          text: 'Mobile Data',
+          handler: () => {
+            this.openMobileDataSettings();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   ionViewWillEnter(){
+    this.storage.get('currentUser').then((user: any) => {
+      this.getActiveModules(user?.id);
+    });
+    this.networkStatus = this.networkCheckerService.isConnected();
+    console.log('Connection Status: ' + this.networkStatus);
+    if (this.networkStatus === 'none' || this.networkStatus === 'undefined' || this.networkStatus === 'unknown') {
+      this.showBuetoothBtn = true;
+    } else {
+      this.showBuetoothBtn = false;
+    }
+
     this.sqlite.create({
       name: 'fireservices.db',
       location: 'default',
      }).then((db: SQLiteObject) => {
        this.database = db;
-      //  this.dropTable();
-      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_template_device_loops_table (
+      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_sp_template_device_loops_table (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         device_id INTEGER,
+        sp_id INTEGER,
         admin_id INTEGER,
         tech_id INTEGER,
         service_type_id INTEGER,
         site_id INTEGER,
         panel_id INTEGER,
+        reference_number TEXT,
         panel_line TEXT,
         rftag TEXT,
         addr TEXT,
@@ -106,289 +155,158 @@ export class TechnicianDashboardPage implements OnInit {
         date_scanned TEXT,
         isSync TEXT,
         date_created TEXT )`, []).then((res: any) => {
-          console.log('fire_template_device_loops_table table Created: ' + JSON.stringify(res));
         });
 
-        this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_template_device_loops_table_device_knock (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          device_id INTEGER,
-          admin_id INTEGER,
-          tech_id INTEGER,
-          service_type_id INTEGER,
-          site_id INTEGER,
-          panel_id INTEGER,
-          panel_line TEXT,
-          rftag TEXT,
-          addr TEXT,
-          zone TEXT,
-          device_type TEXT,
-          device_message TEXT,
-          cleaned TEXT,
-          tested TEXT,
-          correct_message TEXT,
-          new_message TEXT,
-          na TEXT,
-          date_scanned TEXT,
-          isSync TEXT,
-          date_created TEXT )`, []).then((res: any) => {
-            console.log('fire_template_device_loops_table_device_knock table Created: ' + JSON.stringify(res));
-          });
-
-          this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_template_device_loops_table_sounder_knock (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            device_id INTEGER,
-            admin_id INTEGER,
-            tech_id INTEGER,
-            service_type_id INTEGER,
-            site_id INTEGER,
-            panel_id INTEGER,
-            panel_line TEXT,
-            rftag TEXT,
-            addr TEXT,
-            zone TEXT,
-            device_type TEXT,
-            device_message TEXT,
-            cleaned TEXT,
-            tested TEXT,
-            correct_message TEXT,
-            new_message TEXT,
-            na TEXT,
-            date_scanned TEXT,
-            isSync TEXT,
-            date_created TEXT )`, []).then((res: any) => {
-              console.log('fire_template_device_loops_table_sounder_knock table Created: ' + JSON.stringify(res));
-            });
-
-            this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_template_device_loops_table_wireless (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              device_id INTEGER,
-              admin_id INTEGER,
-              tech_id INTEGER,
-              service_type_id INTEGER,
-              site_id INTEGER,
-              panel_id INTEGER,
-              panel_line TEXT,
-              rftag TEXT,
-              addr TEXT,
-              zone TEXT,
-              device_type TEXT,
-              device_message TEXT,
-              cleaned TEXT,
-              tested TEXT,
-              correct_message TEXT,
-              new_message TEXT,
-              na TEXT,
-              date_scanned TEXT,
-              isSync TEXT,
-              date_created TEXT )`, []).then((res: any) => {
-                console.log('fire_template_device_loops_table_wireless table Created: ' + JSON.stringify(res));
-              });
+        this.loadDevices();
      });
-     this.loadDevices();
+     //
   }
 
   ionViewDidEnter(){
-    this.networkCheckerService.checkNetworkChange();
-    this.networkStatus = this.networkCheckerService.connectionType();
+    this.networkStatus = this.networkCheckerService.isConnected();
     console.log('Connection Status: ' + this.networkStatus);
+    if (this.networkStatus === 'none' || this.networkStatus === 'unknown') {
+      this.showBuetoothBtn = true;
+    } else {
+      this.showBuetoothBtn = false;
+    }
+    this.checkAndroidVersion();
+  }
+
+  checkAndroidVersion() {
+    if (this.platform.is('android')) {
+        console.log('True Android');
+        const deviceVersion = this.device.version;
+    }
+  }
+
+    //GET ACTIVE MODULES
+    getActiveModules(techID) {
+      this.http.get(this.url + 'sp-get-tech-active-modules.php?techID=' + techID).subscribe((mod: any) => {
+        console.log(mod);
+        this.modules = mod;
+      });
+    }
+
+  getDevices() {
+    const deviceSql = 'SELECT * FROM fire_sp_template_device_loops_table';
+    this.database.executeSql(deviceSql, []).then((resA: any) => {
+        console.log('Devices Found: ' + JSON.stringify(resA));
+        if (resA.rows.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
+          for (let i = 0; i < resA.rows.length; i++) {
+            console.log(resA.rows.item(i));
+          }
+        }
+      }, err => {
+        console.log('Error Devices Not Found: ' + JSON.stringify(err));
+      });
   }
 
   dropTable() {
-    this.database.executeSql(`DROP table fire_fault_reports `,[])
-    .then((resAdd: any) => {
-      console.log('TABLE fire_fault_reports DELETED: ' + JSON.stringify(resAdd));
-    });
-  }
-
-  testWrite(){
-    this.nfc.addNdefListener((res: any) => {
-      console.log('Bevin: ' + res);
-    }, (error) => {
-      console.log(error);
-    }).subscribe(() => {
-      console.log('Ready for Writing');
-      const message = this.ndef.textRecord('test');
-      this.nfc.write([message]).then(success => {
-        console.log('Writing Complete: ' + success);
-        //this.nfcReadData();
-      }).catch(error => {
-          console.log(error);
-        });
-    });
-    const msg = ['Test message device found'];
-    this.nfc.share(msg).then((res: any) => {
-      console.log(res);
-    });
-  }
-
-  onNfc() {
-    console.log('We here');
-    const message = [this.ndef.textRecord('Hello Bevin', '101')];
-    this.nfc.write(message).then((res: any) => {
-      console.log('Wrote to tage');
-      console.log(JSON.stringify(res));
-    });
-  }
-
-  nfcReadData() {
-    console.log('Reader Initializing');
-    // eslint-disable-next-line no-bitwise
-    this.flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
-    this.readerMode = this.nfc.readerMode(this.flags).subscribe((tag: any) => {
-      console.log(JSON.stringify(tag));
-      this.presentAlert(JSON.stringify(tag));
-      console.log('received ndef message. the tag contains: ', tag);
-      console.log('decoded tag id', this.nfc.bytesToHexString(tag.id));
-    }, err => {
-      console.log(err);
-    });
-  }
-
-  async presentAlert(msg) {
-    const alert = await this.alertController.create({
-      header: 'RFID RESPONSE',
-      message: msg,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
-
-
-  writeData() {
-    this.platform.ready().then(() => {
-      this.nfc.addNdefListener(() => {
-        console.log('successfully attached ndef listener');
-      }).subscribe((event) => {
-        const message = [
-          this.ndef.textRecord('hello, world'),
-          this.ndef.uriRecord('http://github.com/chariotsolutions/phonegap-nfc')
-          ];
-          this.nfc.write(message).then((res: any) => {
-            console.log(res);
-          });
-        });
+    this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table`)
+      .then((resA: any) => {
+        console.log('Service Cards Found: ' + JSON.stringify(resA));
+        if (resA.rows.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
+          for (let i = 0; i < resA.rows.length; i++) {
+            console.log(resA);
+          }
+        } else {
+          console.log('New Record!!!');
+          const isSync = 'No';
+        }
+      }, err => {
+        console.log('Error Service Cards Found: ' + JSON.stringify(err));
       });
   }
 
-  test2() {
-    this.nfc.addNdefListener(() => {
-      console.log('successfully attached ndef listener');
-    }, (err) => {
-      console.log('error attaching ndef listener', err);
-    }).subscribe((event) => {
-      console.log('received ndef message. the tag contains: ', event.tag);
-      console.log('decoded tag id', this.nfc.bytesToHexString(event.tag.id));
-      // console.log(JSON.stringify(event));
-      // this.msg = this.ndef.textRecord('Hello world');
-      // this.nfc.share([this.msg]).then((res: any) => {
-      //   console.log(res);
-      //   console.log('Yes it runs');
-      // }).catch((err: any) => {
-      //   console.log(err);
-      // });
-    });
-  }
-
-  loadDevices() {
+  async loadDevices() {
     this.storage.get('currentUser').then((user: any) => {
       console.log(user);
-      this.http.get(this.url + 'get-service-cards-assigned-6.php?techID=' + user.id).subscribe((data: any) => {
+      this.http.get(this.url + 'sp-get-service-cards-assigned-6.php?techID=' + user.id).subscribe((data: any) => {
         this.cards = data;
         console.log(this.cards);
-        // eslint-disable-next-line guard-for-in, @typescript-eslint/prefer-for-of
-        for (let i = 0; i < this.cards.length; i++) {
-          console.log(this.cards[i].service_type_id + '-----SITEID: ' + this.cards[i].site_id);
-          // eslint-disable-next-line max-len
-          this.http.get(this.url + 'get-devices-new.php?serviceTypeID=' + this.cards[i].service_type_id + '&siteID=' +  this.cards[i].site_id).subscribe((res: any) => {
-            // console.log(res);
-            this.devices = res.devices;
-            this.deviceKnocks = res.deviceKnocks;
-            this.sounderKnocks = res.sounderKnock;
-            this.wireless = res.wireless;
-            // console.log(res);
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for(let a = 0; a < this.devices.length; a++) {
-              this.database.executeSql(`SELECT * FROM fire_template_device_loops_table WHERE device_id=?`,[this.devices[a].id])
-              .then((resA: any) => {
-                //console.log('Devices Found: ' + JSON.stringify(resD));
-                if (resA.rows.length > 0) {
-                  console.log('Update Devices Clean');
-                } else {
-                  console.log('New Record!!!');
-                  const isSync = 'No';
-                  // eslint-disable-next-line max-len
-                  this.database.executeSql(`INSERT INTO fire_template_device_loops_table (device_id, tech_id, service_type_id, site_id, panel_id, panel_line, rftag, addr, zone, device_type, device_message, cleaned, tested, correct_message, new_message, na, isSync, date_created ) VALUES ('${this.devices[a].id}', '${this.devices[a].tech_id}', '${this.devices[a].service_type_id}', '${this.devices[a].site_id}', '${this.devices[a].panel_id}', '${this.devices[a].panel_line}', '${this.devices[a].rftag}', '${this.devices[a].addr}','${this.devices[a].zone}', '${this.devices[a].device_type}', '${this.devices[a].device_message}', '${this.devices[a].cleaned}', '${this.devices[a].tested}', '${this.devices[a].correct_message}', '${this.devices[a].new_message}', '${this.devices[a].na}', '${isSync}', '${this.devices[a].date_created}')`, [])
-                  .then((dRes: any) => {
-                    console.log('Devices Added: ' + JSON.stringify(dRes));
-                  });
+        if (this.cards !== 'No record Found') {
+          // eslint-disable-next-line guard-for-in, @typescript-eslint/prefer-for-of
+          for (let i = 0; i < this.cards.length; i++) {
+            // eslint-disable-next-line max-len
+            console.log('Service Type ID: ' + this.cards[i].service_type_id + '- SITEID: ' + this.cards[i].site_id + ' CertID: ' + this.cards[i].id );
+            // eslint-disable-next-line max-len
+            this.http.get(this.url + 'sp-get-devices-new.php?serviceTypeID=' + this.cards[i].service_type_id + '&siteID=' +  this.cards[i].site_id).subscribe((res: any) => {
+              this.devices = res.devices;
+              console.log(this.devices);
+
+              // eslint-disable-next-line @typescript-eslint/prefer-for-of
+              for(let a = 0; a < this.devices.length; a++) {
+                console.log('Device ID: ' + Number(this.devices[a]?.id));
+                if(!this.devicesArray.includes(Number(this.devices[a]?.reference_number))) {
+                  this.devicesArray.push(this.devices[a]);
                 }
-              });
-            }
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for(let b = 0; b < this.deviceKnocks.length; b++) {
-              // NUMBER 2
-              // eslint-disable-next-line max-len
-              this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_device_knock WHERE device_id=?`,[this.deviceKnocks[b].id])
-              .then((resB: any) => {
-                console.log('Devices Found: ' + JSON.stringify(resB));
-                if (resB.rows.length > 0) {
-                  console.log('Update Single Device Knock');
-                } else {
-                  console.log('New Record!!!');
-                  const isSync = 'No';
-                  //Add
-                  // eslint-disable-next-line max-len
-                  this.database.executeSql(`INSERT INTO fire_template_device_loops_table_device_knock (device_id, tech_id, service_type_id, site_id, panel_id, panel_line, rftag, addr, zone, device_type, device_message, cleaned, tested, correct_message, new_message, na, isSync, date_created ) VALUES ('${this.deviceKnocks[b].id}', '${this.deviceKnocks[b].tech_id}', '${this.deviceKnocks[b].service_type_id}', '${this.deviceKnocks[b].site_id}', '${this.deviceKnocks[b].panel_id}', '${this.deviceKnocks[b].panel_line}', '${this.deviceKnocks[b].rftag}', '${this.deviceKnocks[b].addr}','${this.deviceKnocks[b].zone}', '${this.deviceKnocks[b].device_type}', '${this.deviceKnocks[b].device_message}', '${this.deviceKnocks[b].cleaned}', '${this.deviceKnocks[b].tested}', '${this.deviceKnocks[b].correct_message}', '${this.deviceKnocks[b].new_message}', '${this.deviceKnocks[b].na}', '${isSync}', '${this.deviceKnocks[b].date_created}')`, [])
-                  .then((dRes: any) => {
-                    console.log('Single KnockDevices Added: ' + JSON.stringify(dRes));
-                  });
-                }
-              });
-            }
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for(let c = 0; c < this.sounderKnocks.length; c++) {
-              // NUMBER 3
-              // eslint-disable-next-line max-len
-              this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_sounder_knock WHERE device_id=?`,[this.sounderKnocks[c].id])
-              .then((resC: any) => {
-                //console.log('Devices Sounder Found: ' + JSON.stringify(resD));
-                if (resC.rows.length > 0) {
-                  console.log('Update Sounder Knock Devices');
-                } else {
-                  console.log('New Record!!!');
-                  const isSync = 'No';
-                  // eslint-disable-next-line max-len
-                  this.database.executeSql(`INSERT INTO fire_template_device_loops_table_sounder_knock (device_id, tech_id, service_type_id, site_id, panel_id, panel_line, rftag, addr, zone, device_type, device_message, cleaned, tested, correct_message, new_message, na, isSync, date_created ) VALUES ('${this.sounderKnocks[c].id}', '${this.sounderKnocks[c].tech_id}', '${this.sounderKnocks[c].service_type_id}', '${this.sounderKnocks[c].site_id}', '${this.sounderKnocks[c].panel_id}', '${this.sounderKnocks[c].panel_line}', '${this.sounderKnocks[c].rftag}', '${this.sounderKnocks[c].addr}','${this.sounderKnocks[c].zone}', '${this.sounderKnocks[c].device_type}', '${this.sounderKnocks[c].device_message}', '${this.sounderKnocks[c].cleaned}', '${this.sounderKnocks[c].tested}', '${this.sounderKnocks[c].correct_message}', '${this.sounderKnocks[c].new_message}', '${this.sounderKnocks[c].na}', '${isSync}', '${this.sounderKnocks[c].date_created}')`, [])
-                  .then((dRes: any) => {
-                    console.log('Devices Sounder Added: ' + JSON.stringify(dRes));
-                  });
-                }
-              });
-            }
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for(let w = 0; w < this.wireless.length; w++) {
-              // NUMBER 4
-              this.database.executeSql(`SELECT * FROM fire_template_device_loops_table_wireless WHERE device_id=?`,[this.wireless[w].id])
-              .then((resW: any) => {
-                //console.log('Devices Wireless Found: ' + JSON.stringify(resD));
-                if (resW.rows.length > 0) {
-                  console.log('Update Wireless Devices');
-                } else {
-                  console.log('New Record!!!');
-                  const isSync = 'No';
-                  // eslint-disable-next-line max-len
-                  this.database.executeSql(`INSERT INTO fire_template_device_loops_table_wireless (device_id, tech_id, service_type_id, site_id, panel_id, panel_line, rftag, addr, zone, device_type, device_message, cleaned, tested, correct_message, new_message, na, isSync, date_created ) VALUES ('${this.wireless[w].id}', '${this.wireless[w].tech_id}', '${this.wireless[w].service_type_id}', '${this.wireless[w].site_id}', '${this.wireless[w].panel_id}', '${this.wireless[w].panel_line}', '${this.wireless[w].rftag}', '${this.wireless[w].addr}','${this.wireless[w].zone}', '${this.wireless[w].device_type}', '${this.wireless[w].device_message}', '${this.wireless[w].cleaned}', '${this.wireless[w].tested}', '${this.wireless[w].correct_message}', '${this.wireless[w].new_message}', '${this.wireless[w].na}', '${isSync}', '${this.wireless[w].date_created}')`, [])
-                  .then((dRes: any) => {
-                    console.log('Devices Wireless Added: ' + JSON.stringify(dRes));
-                  });
-                }
-              });
-            }
-          });
+              }
+            });
+          }
         }
+      }, err => {
+        console.log(err);
       });
     });
+
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for(let j = 0; j < this.devicesArray.length; j++) {
+      // eslint-disable-next-line max-len
+      this.database.executeSql(`SELECT * FROM fire_sp_template_device_loops_table WHERE device_id=? LIMIT 1`,[Number(this.devicesArray[j]?.id)])
+      .then((resA: any) => {
+        console.log('Devices Returned: ' + resA.rows.length);
+        if (resA.rows.length > 0) {
+          console.log(resA.rows.item(0));
+          const deviceId = resA.rows.item(0)?.device_id;
+          const id = Number(resA.rows.item(0)?.id);
+          console.log(id);
+          const spId = this.devicesArray[j]?.sp_id;
+          const techId = this.devicesArray[j]?.tech_id;
+          const serviceTypeId = this.devicesArray[j]?.service_type_id;
+          const siteId = this.devicesArray[j]?.site_id;
+          const panelId = this.devicesArray[j]?.panel_id;
+          const refNumber = this.devicesArray[j]?.reference_number;
+          const panelLine = this.devicesArray[j]?.panel_line;
+          const rftag = this.devicesArray[j]?.rftag;
+          const addr = this.devicesArray[j]?.addr;
+          const zone = this.devicesArray[j]?.zone;
+          const deviceType = this.devicesArray[j]?.device_type;
+          const deviceMessage = this.devicesArray[j]?.device_message;
+          const cleaned = this.devicesArray[j]?.cleaned;
+          const tested = this.devicesArray[j]?.tested;
+          const correctMessage = this.devicesArray[j]?.correct_message;
+          const newMessage = this.devicesArray[j]?.new_message;
+          const dateCreated = this.devicesArray[j]?.date_created;
+          const dateScanned = this.devicesArray[j]?.date_scanned;
+          const na = this.devicesArray[j]?.na;
+          console.log(deviceId + '--' + spId + '--' + refNumber);
+          // eslint-disable-next-line max-len
+          const updateDevices = [spId, techId, serviceTypeId, siteId, panelId, refNumber,panelLine,rftag, addr, zone,deviceType, deviceMessage, cleaned,tested,correctMessage,newMessage,na,dateScanned,dateCreated];
+          // eslint-disable-next-line max-len
+          this.database.executeSql(`UPDATE fire_sp_template_device_loops_table SET sp_id=?,tech_id=?, service_type_id=?, site_id=?, panel_id=?, reference_number=?, panel_line=?, rftag=?, addr=?, zone=?, device_type=?, device_message=?, cleaned=?, tested=?, correct_message=?, new_message=?, na=?, date_scanned=?, date_created=?  WHERE id = ${id}`, updateDevices)
+          .then((update: any) => {
+          console.log('Updated: ' + JSON.stringify(update));
+          }, err => {
+          console.log('Query Update error: ' + JSON.stringify(err));
+          });
+        } else {
+          console.log('New Record');
+          console.log(this.devicesArray[j]);
+            if (Number(this.devicesArray[j]?.id)) {
+              console.log('New Devices Added: ' + JSON.stringify(this.devicesArray[j]));
+                const isSync = 'No';
+                // eslint-disable-next-line max-len
+                this.database.executeSql(`INSERT INTO fire_sp_template_device_loops_table (device_id, sp_id, tech_id, service_type_id, site_id, panel_id, reference_number, panel_line, rftag, addr, zone, device_type, device_message, cleaned, tested, correct_message, new_message, na, isSync, date_created ) VALUES ('${this.devicesArray[j]?.id}', '${this.devicesArray[j]?.sp_id}', '${this.devicesArray[j]?.tech_id}', '${this.devicesArray[j]?.service_type_id}', '${this.devicesArray[j]?.site_id}', '${this.devicesArray[j]?.panel_id}', '${this.devicesArray[j]?.reference_number}', '${this.devicesArray[j]?.panel_line}', '${this.devicesArray[j]?.rftag}', '${this.devicesArray[j]?.addr}','${this.devicesArray[j]?.zone}', '${this.devicesArray[j]?.device_type}', '${this.devicesArray[j]?.device_message}', '${this.devicesArray[j]?.cleaned}', '${this.devicesArray[j]?.tested}', '${this.devicesArray[j]?.correct_message}', '${this.devicesArray[j]?.new_message}', '${this.devicesArray[j]?.na}', '${isSync}', '${this.devicesArray[j]?.date_created}')`, [])
+                .then((dRes: any) => {
+
+                });
+            }
+        }
+      });
+    }
   }
 
 }

@@ -46,6 +46,7 @@
         <ion-input [(ngModel)]="contact.mobile_number" name="mobile_number" placeholder="Mobile Number (*)" type="hidden"></ion-input>
         <ion-input [(ngModel)]="contact.email" name="email" placeholder="Email (*)" type="hidden"></ion-input>
         <ion-input [(ngModel)]="contact.userID" name="userID" placeholder="User ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="contact.spID" name="spID" placeholder="SP ID" type="hidden"></ion-input>
 
         <ion-button shape="round" expand="full" color="secondary" block (click)="sendEnquiry()" [disabled]="!f.valid">SUBMIT</ion-button>
       </div>
@@ -65,7 +66,7 @@
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-footer *ngIf="roleID === '2'" ></app-footer>
-  <app-staff-footer *ngIf="roleID === '3'"></app-staff-footer>
-  <app-tech-footer *ngIf="roleID === '4'"></app-tech-footer>
+  <app-footer-client *ngIf="roleID === '2'" ></app-footer-client>
+  <app-staff-footer2 *ngIf="roleID === '3'"></app-staff-footer2>
+  <app-tech-footer2 *ngIf="roleID === '4'"></app-tech-footer2>
 </footer>

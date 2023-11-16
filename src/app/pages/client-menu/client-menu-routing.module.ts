@@ -52,6 +52,24 @@ const routes: Routes = [
         path: 'client-profile',
         loadChildren: () => import('../client-profile/client-profile.module').then( m => m.ClientProfilePageModule)
       },
+      {
+        path: 'client-module-faults/:moduleID',
+        loadChildren: () => import('../client-module-faults/client-module-faults.module').then( m => m.ClientModuleFaultsPageModule)
+      },
+      {
+        path: 'client-module-certificates/:moduleID',
+        // eslint-disable-next-line max-len
+        loadChildren: () => import('../client-module-certificates/client-module-certificates.module').then( m => m.ClientModuleCertificatesPageModule)
+      },
+      {
+        path: 'add-staff',
+        loadChildren: () => import('../add-staff/add-staff.module').then( m => m.AddStaffPageModule)
+      },
+      {
+        path: 'request-service-provider',
+        // eslint-disable-next-line max-len
+        loadChildren: () => import('../request-service-provider/request-service-provider.module').then( m => m.RequestServiceProviderPageModule)
+      },
     ],
   },
   {

@@ -10,14 +10,22 @@
       <span class="counter">{{ total }}</span>
     </ion-buttons>
 
-    <ion-title>WELCOME</ion-title>
+    <ion-title>STAFF MODULES</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
   <ion-grid>
+    <ion-row  >
+      <ion-col *ngFor="let item of modules" size="6" class="padding-10" routerLink="/staff-selected-module/{{ item?.id }}">
+        <img src="/assets/img/{{ item?.module_icon }}" alt="">
+        <div class="ion-text-center">{{ item?.business_name }}</div>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
 
+  <!-- <ion-grid>
     <ion-row>
       <ion-col size="5" class="padding-10">
         <img src="/assets/img/alarms.png" alt="">
@@ -47,15 +55,13 @@
         <img class="services" src="/assets/img/servics.png" alt="">
       </ion-col>
     </ion-row>
-
-  </ion-grid>
-  <!-- <ion-button routerLink="/staff-menu/fault-reports-list">View</ion-button> -->
+  </ion-grid> -->
 
 </ion-content>
 <footer class="footer">
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-staff-footer></app-staff-footer>
+  <app-staff-footer2></app-staff-footer2>
 </footer>
 

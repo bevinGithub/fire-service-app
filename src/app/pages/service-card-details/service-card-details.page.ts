@@ -33,6 +33,9 @@ export class ServiceCardDetailsPage implements OnInit {
   networkStatus: any;
   isConnected: any;
   database: SQLiteObject;
+
+  moduleID: any;
+  serviceCompany: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -45,18 +48,7 @@ export class ServiceCardDetailsPage implements OnInit {
   ) {
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
-      console.log(data);
-      this.cert = data?.certificate;
-      this.tech = data?.technician;
-      this.staff = data?.staff;
-      this.service.id = this.cert?.id;
-      this.service.service_certificate_number = this?.cert.service_certificate_number;
-      this.service.service_request_id = this?.cert.service_request_id;
-      this.service.technician_id = this?.cert.service_technician_id;
-      this.panels = data?.panels;
-      this.site = data?.site;
-    });
+    this.getServiceCardData(this.certficateID);
     this.hideClientBtn  = false;
     this.hideRepBtn = false;
     this.dateClientSigned = moment(new Date()).format('YYYY-MM-DD');
@@ -71,10 +63,14 @@ export class ServiceCardDetailsPage implements OnInit {
   ionViewWillEnter(){
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
+  }
+
+  getServiceCardData(certficateID) {
+    this.http.get(this.url + 'sp-get-service-certificate.php?id=' + certficateID).subscribe((data: any) => {
       console.log(data);
       this.cert = data?.certificate;
       this.tech = data?.technician;
+      this.serviceCompany = data?.serviceCompany;
       this.staff = data?.staff;
       this.service.id = this.cert?.id;
       this.service.service_certificate_number = this?.cert.service_certificate_number;
@@ -82,14 +78,8 @@ export class ServiceCardDetailsPage implements OnInit {
       this.service.technician_id = this?.cert.service_technician_id;
       this.panels = data?.panels;
       this.site = data?.site;
+      this.moduleID = this.cert?.module_id;
     });
-
-    // this.sqlite.create({
-    //   name: 'fireservices.db',
-    //   location: 'default',
-    //  }).then((db: SQLiteObject) => {
-    //    this.database = db;
-    //  });
   }
 
   ionViewDidEnter(){
@@ -109,20 +99,16 @@ export class ServiceCardDetailsPage implements OnInit {
   }
 
   getOfflineSC(scID) {
-    console.log(scID);
     const offData = [];
     // eslint-disable-next-line max-len
-    const querySC = 'SELECT * FROM fire_service_certificates JOIN fire_sites ON fire_service_certificates.site_id = fire_sites.site_id  WHERE fire_service_certificates.cert_id=?';
+    const querySC = 'SELECT * FROM fire_sp_service_certificates JOIN fire_sp_sites ON fire_sp_service_certificates.site_id = fire_sp_sites.site_id  WHERE fire_sp_service_certificates.cert_id=?';
     this.database.executeSql(querySC,[scID]).then((rec: any) => {
-      console.log('SC: ' + JSON.stringify(rec));
-      console.log('Record Found: ' + rec.rows.length);
       if (rec.rows.length > 0) {
        this.cert = rec.rows.item(0);
        console.log(this.cert);
        //#GET TECH DATA
-       const query = 'SELECT * FROM fire_users WHERE user_id=?';
+       const query = 'SELECT * FROM fire_sp_users WHERE user_id=?';
        this.database.executeSql(query, [this.cert?.service_technician_id]).then((res2: any) => {
-          console.log('TECH DATA: ' + JSON.stringify(res2));
           if (res2.rows.length > 0) {
             this.tech = res2.rows.item(0);
           }
@@ -173,11 +159,11 @@ export class ServiceCardDetailsPage implements OnInit {
   }
 
   processServiceCard() {
-    this.http.post(this.url + 'process-service-certificate-app.php', this.service).subscribe((res: any) => {
+    this.http.post(this.url + 'sp-process-service-certificate-app.php', this.service).subscribe((res: any) => {
       console.log(res);
       if (res.status === 'success') {
         this.systemNotification('Service certificate has been successfully processed!');
-        this.router.navigate(['/technician-menu/technician-service-cards']);
+        this.router.navigate(['/technician-menu/technician-service-cards/' + this.moduleID]);
       } else {
         this.systemNotification('Service certificte failed to be processed!');
       }
@@ -187,7 +173,7 @@ export class ServiceCardDetailsPage implements OnInit {
 async systemNotification(msg) {
   const toast = await this.toastController.create({
     message: msg,
-    duration: 3000
+    duration: 10000
   });
   toast.present();
 }

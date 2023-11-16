@@ -49,7 +49,7 @@
         Instucted By
       </ion-col>
       <ion-col size="6" class="right">
-         {{ fault?.firstname}} {{ fault?.surname }}
+         {{ user?.firstname}} {{ fault?.surname }}
       </ion-col>
     </ion-row>
 
@@ -58,7 +58,7 @@
         Company Name
       </ion-col>
       <ion-col size="6" class="right">
-         {{ fault?.company_name}}
+         {{ user?.company_name}}
       </ion-col>
     </ion-row>
 
@@ -67,7 +67,7 @@
         Site
       </ion-col>
       <ion-col size="6" class="right">
-         {{ fault?.site_name}}
+         {{ site?.site_name}}
       </ion-col>
     </ion-row>
 
@@ -76,11 +76,12 @@
         Status
       </ion-col>
       <ion-col size="6" class="right">
-        <span *ngIf="fault?.fault_status === 'In Progress'" style="color: #E9A800">{{ fault?.fault_status}}</span>
-        <span *ngIf="fault?.fault_status === 'Service Pending'" style="color: #E9A800">{{ fault?.fault_status}}</span>
-        <span *ngIf="fault?.fault_status === 'Accepted'" style="color: #11AC00">Assigned</span>
-        <span *ngIf="fault?.fault_status === 'Completed'" style="color: #11AC00">{{ fault?.fault_status}}</span>
-        <span *ngIf="fault?.fault_status === 'Return Visit Required'" style="color: #E9A800">{{ fault?.fault_status}}</span>
+        <span *ngIf="fault?.status === 'In Progress'" style="color: #E9A800">{{ fault?.status}}</span>
+        <span *ngIf="fault?.status === 'Assigned'" style="color: #E9A800">In Progress</span>
+        <span *ngIf="fault?.status === 'Accepted' && fault?.job_approved === ''" style="color: #E9A800">In Progress</span>
+        <span *ngIf="fault?.status === 'Accepted' && fault?.job_approved === 'Approved'" style="color: #11AC00">Assigned</span>
+        <span *ngIf="fault?.status === 'Completed'" style="color: #11AC00">{{ fault?.status}}</span>
+        <span *ngIf="fault?.status === 'Return Visit Required'" style="color: #E9A800">{{ fault?.status}}</span>
       </ion-col>
     </ion-row>
 
@@ -105,11 +106,11 @@
   </div>
 
   <div class="rating ion-padding">
-    <ion-button class="btn-space" expand="block" color="primary" shape="round" routerLink="/staff-menu/alarms-fault-reports">VIEW FAULT REQUESTS</ion-button>
+    <ion-button class="btn-space" expand="block" color="primary" shape="round" routerLink="/client-menu/client-dashboard">VIEW FAULT REQUESTS</ion-button>
 
-    <ion-button *ngIf="fault?.fault_status === 'Completed'"  class="btn-space" expand="block" color="secondary" shape="round" routerLink="/rate-technician/{{  fault?.id }}">RATE THE TECHNICIAN</ion-button>
+    <ion-button *ngIf="fault?.status === 'Completed'"  class="btn-space" expand="block" color="secondary" shape="round" routerLink="/rate-technician/{{  fault?.id }}">RATE THE TECHNICIAN</ion-button>
 
-    <ion-button *ngIf="reviews?.length > 0 && fault?.fault_status === 'Completed'" class="btn-space" expand="block" color="secondary" shape="round" routerLink="/reviews/{{  fault?.technician_id }}">VIEW RATINGS</ion-button>
+    <ion-button *ngIf="reviews?.length > 0 && fault?.status === 'Completed'" class="btn-space" expand="block" color="secondary" shape="round" routerLink="/reviews/{{  fault?.technician_id }}">VIEW RATINGS</ion-button>
   </div>
 
 
@@ -119,5 +120,5 @@
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-staff-footer></app-staff-footer>
+  <app-footer></app-footer>
 </footer>

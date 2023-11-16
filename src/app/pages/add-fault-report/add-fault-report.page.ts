@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 
@@ -17,17 +17,22 @@ export class AddFaultReportPage implements OnInit {
   buttonActive: boolean;
   siteSelected: any;
   total: any;
+  moduleID: any;
   constructor(
     private storage: Storage,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
+      this.moduleID = this.activatedRoute.snapshot.paramMap.get('moduleID');
+      this.site.moduleID = this.moduleID;
+      console.log('Module ID: ' + this.moduleID);
       this.buttonActive = false;
       this.storage.ready().then(() => {
         this.storage.get('currentUser').then((user: any) => {
           this.staffID = user.id;
           console.log(user);
-          this.http.get(this.url + 'sites-selection.php?staffID=' + this.staffID).subscribe((data: any) => {
+          this.http.get(this.url + 'sp-sites-selection.php?staffID=' + this.staffID).subscribe((data: any) => {
             console.log(data);
             this.sites = data;
           });
@@ -40,6 +45,12 @@ export class AddFaultReportPage implements OnInit {
    }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
+    this.moduleID = this.activatedRoute.snapshot.paramMap.get('moduleID');
+    this.site.moduleID = this.moduleID;
+    console.log('Module ID: ' + this.moduleID);
   }
 
   nextStep() {

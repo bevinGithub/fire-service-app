@@ -23,7 +23,7 @@ export class FaultReportsListPage implements OnInit {
         this.storage.get('currentUser').then((user: any) => {
           this.staffID = user.id;
           console.log(user);
-          this.http.get(this.url + 'get-client-fault-requests.php?staffID=' + this.staffID).subscribe((data: any) => {
+          this.http.get(this.url + 'sp-get-client-fault-requests-3.php?staffID=' + this.staffID).subscribe((data: any) => {
             console.log(data);
             this.faults = data;
           });

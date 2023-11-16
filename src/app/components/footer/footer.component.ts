@@ -27,16 +27,11 @@ export class FooterComponent implements OnInit {
     this.router.navigate(['/client-menu/client-staff']);
   }
 
-  contactUs() {
-    this.router.navigate(['/client-menu/contact-loggedin']);
+  home() {
+    this.router.navigate(['/client-menu/client-dashboard']);
   }
+
   logOut() {
-    // this.storage.get('currentUser').then((data: any) => {
-    //   const logData = { userID: data.id };
-    //   this.http.post(this.url + 'last-login.php', logData).subscribe((resp: any) => {
-    //     console.log(resp);
-    //   });
-    // });
     this.storage.clear();
     console.log('User loggedout!');
     this.router.navigate(['/welcome']);

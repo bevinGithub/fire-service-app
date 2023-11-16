@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <!-- <ion-menu-button class="menu-btn" color="primary"></ion-menu-button> -->
+    </ion-buttons>
+
+    <ion-title>{{ moduleName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" class="padding-10" routerLink="/client-menu/client-module-faults/{{ module?.id }}">
+        <img src="/assets/img/sp-faults.png" alt="faults">
+      </ion-col>
+      <ion-col size="6" class="padding-10">
+        <img src="/assets/img/sp-cards.png" alt="cards" routerLink="/client-menu/client-module-certificates/{{ module?.id }}">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-footer></app-footer>
+</footer>
+

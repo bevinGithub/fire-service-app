@@ -20,10 +20,7 @@ export class ClientStaffPage implements OnInit {
   ) {
     this.storage.get('currentUser').then((client: any) => {
       this.clientID = client.id;
-      this.http.get(this.url + 'get-client-staff.php?clientID=' + this.clientID).subscribe((staffRes: any) => {
-        console.log(staffRes);
-        this.staff = staffRes;
-      });
+      this.getStaff(this.clientID);
     });
   }
 
@@ -39,7 +36,7 @@ export class ClientStaffPage implements OnInit {
 
   getStaff(clientID) {
     console.log('Refreshed!');
-    this.http.get(this.url + 'get-client-staff.php?clientID=' + clientID).subscribe((staffRes: any) => {
+    this.http.get(this.url + 'sp-get-client-staff.php?clientID=' + clientID).subscribe((staffRes: any) => {
       console.log(staffRes);
       this.staff = staffRes;
     });

@@ -40,6 +40,17 @@
           <span class="error-msg">Site name cannot be empty!</span>
         </div>
 
+        <ion-item lines="none">
+          <ion-label class="label">Discipline</ion-label>
+            <ion-select [(ngModel)]="site.discipline" name="discipline" placeholder="Select site discipline" required #spCtrl="ngModel">
+              <ion-select-option *ngFor="let item of disciplines" value="{{item?.module_name}}">{{ item?.module_name }}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <div class="list-bg-trans" *ngIf="!spCtrl.valid && spCtrl.touched">
+          <span class="error-msg">Please select a site discipline!</span>
+        </div>
+
       </ion-list>
 
       <div padding>

@@ -72,6 +72,17 @@
 
       <ion-row>
         <ion-col size="12" class="left-padding">
+          <ion-menu-toggle>
+            <div (click)="loadPage({page: pages[5].url})">
+              <img src="assets/img/side-menu/staff-icon.png" alt="" style="margin-right: 10px">
+              <ion-label class="menu-text">{{pages[5].title}}</ion-label>
+            </div>
+          </ion-menu-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="left-padding">
           <div (click)="logOut()" >
             <img src="assets/img/side-menu/logout-icon.png" alt="" style="margin-right: 10px">
             <ion-label class="menu-text">LOGOUT</ion-label>

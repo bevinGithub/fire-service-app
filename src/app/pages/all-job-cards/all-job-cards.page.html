@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>JOB CARDS</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-text-center heading-text" style="margin-bottom: 10px;">
+    OPEN JOB CARDS
+  </div>
+ <ng-container *ngIf="jobs?.length === 0">
+   <ion-card>
+     <ion-card-content class="ion-tect-center">
+       There are no job cards at the moment!
+     </ion-card-content>
+   </ion-card>
+ </ng-container>
+
+<ng-container style="padding: 15px;" *ngIf="jobs?.length > 0">
+  <ng-container *ngFor="let item of jobs">
+    <div *ngIf="item.status === 'Assigned' && item.job_approved !== 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/accept-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    <div *ngIf="item?.status === 'Accepted' && item.job_approved !== 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/tech-accepted-jobs/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    <div *ngIf="item.status === 'Accepted' && item.job_approved === 'Approved'"  class="border-liner list ion-padding" routerLink="/technician-menu/job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    <div *ngIf="item.status === 'Return Visit Required'"  class="border-liner list ion-padding" routerLink="/view-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_requested | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<div class="ion-text-center heading-text" style="margin-bottom: 10px;">
+  COMPLETED JOB CARDS
+</div>
+
+<ng-container style="padding: 15px;" *ngIf="jobs?.length > 0">
+  <ng-container *ngFor="let item of jobs">
+    <div *ngIf="item.status ==='Completed'"  class="border-liner list ion-padding" routerLink="/view-job-card-details/{{ item.id }}">
+      <div class="title">Service Provider: {{ item?.business_name }}</div>
+      <div class="title">Job Card No. #{{ item?.fault_reference }}</div>
+      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
+      <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.status }}</div>
+      <div class="job"><img src="/assets/img/list/services.png" alt="">{{ item?.function }}</div>
+      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center  logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

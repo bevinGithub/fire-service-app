@@ -29,32 +29,28 @@ export class ViewJobCardDetailsPage implements OnInit {
   ) {
     this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
     console.log(this.jobID);
-    this.http.get(this.url + 'get-completed-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
-      console.log(data);
-      this.job = data.job;
-      this.staff = data.staff;
-      this.tech = data.tech;
-    });
+    this.getOnlineCompletedJobs(this.jobID);
    }
 
   ngOnInit() {
   }
 
   ionViewWillEnter() {
-    this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
-    console.log(this.jobID);
-    this.http.get(this.url + 'get-completed-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
-      console.log(data);
-      this.job = data.job;
-      this.staff = data.staff;
-      this.tech = data.tech;
-    });
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
     console.log('Job Cards Connection Status: ' + this.networkStatus);
     if (this.networkStatus === 'none') {
       this.getOfflineJobCard();
     }
+  }
+
+  getOnlineCompletedJobs(jobID) {
+    this.http.get(this.url + 'sp-get-completed-job-details.php?jobID=' + jobID).subscribe((data: any) => {
+      console.log(data);
+      this.job = data.job;
+      this.staff = data.staff;
+      this.tech = data.tech;
+    });
   }
 
   getOfflineJobCard() {
@@ -66,26 +62,22 @@ export class ViewJobCardDetailsPage implements OnInit {
       this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
       console.log(this.jobID);
       // eslint-disable-next-line max-len
-      const query = 'SELECT * FROM fire_fault_reports JOIN fire_sites ON fire_fault_reports.site_id = fire_sites.site_id  WHERE fire_fault_reports.fault_id=?';
+      const query = 'SELECT * FROM fire_sp_fault_reports JOIN fire_sp_sites ON fire_sp_fault_reports.site_id = fire_sp_sites.site_id  WHERE fire_sp_fault_reports.fault_id=?';
       this.database.executeSql(query, [this.jobID]).then((res: any) => {
         if (res.rows.length > 0) {
-          console.log('Data: ');
-          console.log(res.rows.item(0));
           this.job = res.rows.item(0);
         }
       });
 
       // eslint-disable-next-line max-len
-      const queryClient = 'SELECT * FROM fire_users WHERE fire_users.user_id=?';
+      const queryClient = 'SELECT * FROM fire_sp_users WHERE fire_users.user_id=?';
       this.database.executeSql(queryClient, [this.job.client_id]).then((client: any) => {
         if (client.rows.length > 0) {
-          console.log('Clients: ');
-          console.log(client.rows.item(0));
           this.staff = client.rows.item(0);
         }
       });
     }).catch(err => {
-      console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
+      // console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
     });
   }
 

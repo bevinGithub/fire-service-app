@@ -55,18 +55,32 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="12" class="left">
+      <!-- <ion-col size="12" class="left">
         <ion-item>
           <ion-label>Select Site</ion-label>
-          <ion-select [(ngModel)]="fault.siteID" name="siteID">
+          <ion-select [(ngModel)]="fault.siteID" name="siteID" required>
             <ion-select-option *ngFor="let item of siteData"  value="{{ item.id }}" >{{ item.site_name }}</ion-select-option>
 
           </ion-select>
         </ion-item>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
 
     </ion-grid>
+
+    <form #f='ngForm' class="forms ion-padding">
+      <!-- <ion-col size="12" class="left"> -->
+        <ion-item>
+          <ion-label>Select Site</ion-label>
+          <ion-select [(ngModel)]="fault.siteID" name="siteID" required #sites="ngModel">
+            <ion-select-option *ngFor="let item of siteData"  value="{{ item.id }}" >{{ item.site_name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      <!-- </ion-col> -->
+
+      <div class="list-bg-trans" *ngIf="!sites.valid && sites.touched">
+        <span class="error-msg">Please select a site!</span>
+      </div>
 
     <div class="ion-text-center heading-text">
       ADD A PHOTO
@@ -94,7 +108,7 @@
       FAULT DETAILS
     </div>
 
-    <form #f='ngForm' class="forms ion-padding">
+    <!-- <form #f='ngForm' class="forms ion-padding"> -->
 
       <ion-item  lines="none" class="list-bg">
         <ion-textarea [(ngModel)]="fault.faultDetails" name="faultDetails" rows="6" cols="20" placeholder="General comment here..." autocapitalize="on" required minlength="5" #faultDetails="ngModel"></ion-textarea>
@@ -108,6 +122,8 @@
         <ion-input [(ngModel)]="fault.faultReference" name="faultReference" placeholder="Fault Reference" type="hidden"></ion-input>
         <ion-input [(ngModel)]="fault.referenceDate" name="referenceDate" placeholder="Ref Date" type="hidden"></ion-input>
         <ion-input [(ngModel)]="fault.clientID" name="clientID" placeholder="Client ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.spID" name="spID" placeholder="SP ID" type="hidden"></ion-input>
+        <ion-input [(ngModel)]="fault.moduleID" name="moduleID" placeholder="Module ID" type="hidden"></ion-input>
         <ion-input [(ngModel)]="fault.controlPanelPhoto2" name="controlPanelPhoto2" placeholder="Control panel photo" type="hidden"></ion-input>
         <ion-button shape="round" expand="full" color="primary" block (click)="submitFaultReport()" [disabled]="!f.valid">SUBMIT FAULT REPORT</ion-button>
       </div>

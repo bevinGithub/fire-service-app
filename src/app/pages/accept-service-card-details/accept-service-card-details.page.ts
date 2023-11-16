@@ -21,6 +21,7 @@ export class AcceptServiceCardDetailsPage implements OnInit {
   certificate: any = {};
   url = environment.url;
   rejectOption: boolean;
+  moduleID: any;
 
   networkStatus: any;
   constructor(
@@ -36,13 +37,14 @@ export class AcceptServiceCardDetailsPage implements OnInit {
     console.log(this.minDate);
     this.serviceID = this.activatedRoute.snapshot.paramMap.get('serviceID');
     console.log(this.serviceID);
-    this.http.get(this.url + 'get-accept-service-details.php?serviceID=' + this.serviceID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-get-accept-service-details.php?serviceID=' + this.serviceID).subscribe((data: any) => {
       console.log(data);
       this.serviceCard = data?.service;
       this.client = data?.client;
       this.site = data?.site;
       this.certificate.id = this.serviceCard.id;
       this.certificate.arrivalTime = this.serviceCard.final_service_date + ' ' + this.serviceCard.service_time;
+      this.moduleID = this.serviceCard.module_id;
     });
    }
 
@@ -71,11 +73,11 @@ export class AcceptServiceCardDetailsPage implements OnInit {
         rejectionReason: this.certificate.rejectionReason,
       };
       console.log(postData);
-      this.http.post(this.url + 'update-service-card-acceptance-2.php', postData).subscribe((data: any) => {
+      this.http.post(this.url + 'sp-update-service-card-acceptance-2.php', postData).subscribe((data: any) => {
         console.log(data);
         if (data?.status === 'success') {
           this.systemNotification('Service certificate was accepted successfully!');
-          this.router.navigate(['/technician-menu/technician-service-cards']);
+          this.router.navigate(['/technician-menu/technician-service-cards/' + this.moduleID]);
         } else {
           this.systemNotification('Service certificate could not be accepted successfully!');
         }
@@ -86,7 +88,7 @@ export class AcceptServiceCardDetailsPage implements OnInit {
   async systemNotification(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }

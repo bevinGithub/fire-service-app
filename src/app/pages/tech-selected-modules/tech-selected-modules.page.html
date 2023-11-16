@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <!-- <ion-menu-button class="menu-btn" color="primary"></ion-menu-button> -->
+    </ion-buttons>
+
+    <ion-title>{{ moduleName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" class="padding-10" routerLink="/technician-menu/technician-job-cards/{{ module?.id }}">
+        <img src="/assets/img/sp-faults.png" alt="faults">
+      </ion-col>
+      <ion-col size="6" class="padding-10">
+        <img src="/assets/img/sp-cards.png" alt="cards" routerLink="/technician-menu/technician-service-cards/{{ module?.id }}">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="module?.module_name === 'Smoke Control'" >
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-panel/read" expand="block">PANEL READ RFID</ion-button>
+        </ion-col>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-panel/write" expand="block">PANEL WRITE RFID</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-vent/read" expand="block">VENT READ RFID</ion-button>
+        </ion-col>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-vent/write" expand="block">VENT WRITE RFID</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-fan/read" expand="block">FAN READ RFID</ion-button>
+        </ion-col>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-fan/write" expand="block">FAN WRITE RFID</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-actuator/read" expand="block">ACTUATOR READ RFID</ion-button>
+        </ion-col>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-actuator/write" expand="block">ACTUATOR WRITE RFID</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-curtain/read" expand="block">CURTAIN READ RFID</ion-button>
+        </ion-col>
+        <ion-col size="6" class="padding-101">
+          <ion-button routerLink="/smoke-read-write-curtain/write" expand="block">CURTAIN WRITE RFID</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>
+

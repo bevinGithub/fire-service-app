@@ -73,7 +73,7 @@ export class EntryPage implements OnInit {
     }).then((db: SQLiteObject) => {
       this.database = db;
       // eslint-disable-next-line max-len
-      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_users  (id  INTEGER PRIMARY KEY AUTOINCREMENT, user_id ENTEGER,  client_id ENTEGER, role_id ENTEGER, firstname VARCHAR(30), surname VARCHAR(30), email VARCHAR(180), email_notification VARCHAR(180), mobile_number VARCHAR(20), phone_number VARCHAR(20), company_name VARCHAR(100), saqcc_number VARCHAR(60), company_registration VARCHAR(60), job_function VARCHAR(60), site_one VARCHAR(30),  site_two VARCHAR(30), site_three VARCHAR(30), status VARCHAR(15), password VARCHAR(200), player_id VARCHAR(180), profile_photo VARCHAR(80), isMain VARCHAR(10), date_created TEXT)`,[])
+      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_sp_users  (id  INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, sp_id INTEGER,  client_id INTEGER, role_id INTEGER, firstname VARCHAR(30), surname VARCHAR(30), email VARCHAR(180), email_notification VARCHAR(180), mobile_number VARCHAR(20), phone_number VARCHAR(20), company_name VARCHAR(100), saqcc_number VARCHAR(60), company_registration VARCHAR(60), job_function VARCHAR(60), site_one VARCHAR(30),  site_two VARCHAR(30), site_three VARCHAR(30), status VARCHAR(15), password VARCHAR(200), player_id VARCHAR(180), profile_photo VARCHAR(80), isMain VARCHAR(10), date_created TEXT)`,[])
       .then((res: any) => {
         console.log(res);
       });
@@ -90,7 +90,7 @@ export class EntryPage implements OnInit {
 
   checkUser() {
     console.log(this.userSignUp.company_registration_number);
-    this.http.post(this.url + 'get-client-data.php', this.userSignUp).subscribe((res: any) => {
+    this.http.post(this.url + 'get-sp-client-data.php', this.userSignUp).subscribe((res: any) => {
       console.log(res);
       if (res === 'No record Found') {
         this.noticeMessage('Invalid Company Registration Number!');
@@ -120,7 +120,7 @@ export class EntryPage implements OnInit {
   async noticeMessage(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }
@@ -129,7 +129,7 @@ export class EntryPage implements OnInit {
     this.networkStatus = this.networkCheckerService.isConnected();
     console.log('Connection Status: ' + this.networkStatus);
     if (this.networkStatus !== 'none') {
-      this.http.post(this.url + 'process-login.php', this.userSignIn).subscribe((userInfo: any) => {
+      this.http.post(this.url + 'sp-process-login.php', this.userSignIn).subscribe((userInfo: any) => {
         console.log(userInfo);
         this.client = userInfo?.user;
         this.response = userInfo?.status;
@@ -145,20 +145,18 @@ export class EntryPage implements OnInit {
           }
           if (this.client.role_id === '4') {
             // CHECK IF USER EXISTS
-            const query = 'SELECT * FROM fire_users  WHERE email=?';
+            const query = 'SELECT * FROM fire_sp_users  WHERE email=?';
             this.database.executeSql(query, [this.userSignIn.email]).then((res: any) => {
-              console.log('RESULT: '+ JSON.stringify(res.rows.item(0)));
+              console.log('RESULT: ' + JSON.stringify(res.rows.item(0)));
               if (res.rows.length > 0) {
                 console.log('User exists....');
               } else {
-              // eslint-disable-next-line max-len
-             //this.database.executeSql(`INSERT INTO fire_users (users_id, role_id, firstname, surname, email, password) VALUES ('${this.client.id}', '${this.client.role_id}', '${this.client.firstname}', '${this.client.surname}', '${this.client.email}', '${this.userSignIn.password}') `,[])
-             const user = userInfo?.user;
-             // eslint-disable-next-line max-len
-             this.database.executeSql(`INSERT INTO fire_users (user_id, client_id, role_id, firstname, surname, email, mobile_number, phone_number, company_name, saqcc_number, company_registration, job_function, site_one, site_two, site_three, status, password, player_id, profile_photo, isMain, date_created) VALUES ('${user.id}', '${user.client_id}', '${user.role_id}', '${user.firstname}', '${user.surname}', '${user.email}', '${user.mobile_number}', '${user.phone_number}', '${user.company_name}', '${user.saqcc_number}', '${user.company_registration}', '${user.job_function}', '${user.site_one}', '${user.site_two}', '${user.site_three}', '${user.status}', '${this.userSignIn.password}', '${user.player_id}', '${user.profile_photo}', '${user.isMain}', '${user.date_created}') `,[])
-              .then((resAdd: any) => {
-                console.log('Query Result: ' + JSON.stringify(resAdd));
-              });
+                const user = userInfo?.user;
+                // eslint-disable-next-line max-len
+                this.database.executeSql(`INSERT INTO fire_sp_users (user_id, sp_id, client_id, role_id, firstname, surname, email, mobile_number, phone_number, company_name, saqcc_number, company_registration, job_function, site_one, site_two, site_three, status, password, player_id, profile_photo, isMain, date_created) VALUES ('${user.id}','${user.sp_id}', '${user.client_id}', '${user.role_id}', '${user.firstname}', '${user.surname}', '${user.email}', '${user.mobile_number}', '${user.phone_number}', '${user.company_name}', '${user.saqcc_number}', '${user.company_registration}', '${user.job_function}', '${user.site_one}', '${user.site_two}', '${user.site_three}', '${user.status}', '${this.userSignIn.password}', '${user.player_id}', '${user.profile_photo}', '${user.isMain}', '${user.date_created}') `, [])
+                  .then((resAdd: any) => {
+                    console.log('Query Result: ' + JSON.stringify(resAdd));
+                  });
               }
             }, err => {
               console.log(err);
@@ -172,22 +170,23 @@ export class EntryPage implements OnInit {
         }
       });
     } else {
-      console.log('Use Local Database' + this.networkType);
-      const email = this.userSignIn.email;
-      const password  = this.userSignIn.password;
-      const query = 'SELECT * FROM fire_users  WHERE email=? AND password=?';
-      this.database.executeSql(query, [email, password]).then((res: any) => {
-        console.log('RESULT: '+ JSON.stringify(res.rows.item(0)));
-        this.offRes = res.rows.item(0);
-        if (res.rows.length > 0) {
-          this.storage.set('currentOfflineUser', this.offRes);
-          this.router.navigate(['/technician-menu/technician-dashboard']);
-        } else {
-          this.noticeMessage('Invalid email address or password!');
-        }
-      }, err => {
-        console.log(err);
-      });
+      // console.log('Use Local Database' + this.networkType);
+      // const email = this.userSignIn.email;
+      // const password  = this.userSignIn.password;
+      // const query = 'SELECT * FROM fire_sp_users  WHERE email=?';
+      // this.database.executeSql(query, [email]).then((res: any) => {
+      //   console.log('RESULT: '+ JSON.stringify(res.rows.item(0)));
+      //   this.offRes = res.rows.item(0);
+      //   if (res.rows.length > 0) {
+      //     this.storage.set('currentOfflineUser', this.offRes);
+      //     this.router.navigate(['/technician-menu/technician-dashboard']);
+      //   } else {
+      //     this.noticeMessage('Invalid email address or password!');
+      //   }
+      // }, err => {
+      //   console.log(err);
+      // });
+      this.noticeMessage('You are currently offline, please turn on your data or wifi and proceed to login!');
     }
   }
 

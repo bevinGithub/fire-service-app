@@ -15,7 +15,7 @@
   <ion-grid>
     <ion-row class="border-bottom">
       <ion-col size="6" class="left">Job Card No.</ion-col>
-      <ion-col size="6" class="right">{{ job?.jobcard_ref }}</ion-col>
+      <ion-col size="6" class="right">{{ job?.fault_reference }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
@@ -80,16 +80,13 @@
     </ion-grid>
 
     <div class="heading ion-padding">Estimated Time Of Arrival</div>
-    <form #f='ngForm' class="forms ion-padding">
-      <ion-item>
-        <ion-input [(ngModel)]="jobCard.arrival_time" name="arrival_time" placeholder="Estimated Arrival Time" value="{{ time | date: 'yyyy-MM-dd HH:mm' }}" required #arrivalTime="ngModel" id="date" class="ion-text-end" ></ion-input>
-        <ion-popover trigger="date" size="cover">
-          <ng-template>
-            <ion-datetime presentation="date-time"  [(ngModel)]="time" hour-cycle="h23" displayFormat="yyyy-MM-dd HH:mm" name="time"></ion-datetime>
-          </ng-template>
-        </ion-popover>
-      </ion-item>
+    <ion-grid>
+      <ion-row class="border-bottom">
+        <ion-col size="12" class="instructions ">{{ job?.arrival_time | date: 'dd/MM/yyyy HH:mm' }}</ion-col>
+      </ion-row>
+    </ion-grid>
 
+    <form #f='ngForm' class="forms ion-padding">
       <div class="ion-text-center ion-padding photo" *ngIf="panelPhoto" >
         <div class="heading" >Control Panel Photo</div>
         <img width="400" src="{{ url }}fault_images/{{ panelPhoto }}" alt="">
@@ -100,7 +97,7 @@
       </div>
 
       <div class="ion-text-center black-text-13">
-        Please take a photo of the Control Panel or add a photo<br> form your device's gallery.
+        Please take a photo of the Control Panel or add a photo<br> from your device's gallery.
       </div>
 
       <ion-grid>
@@ -117,12 +114,17 @@
           <img src="{{ photo }}" alt="">
       </div>
 
+      <!-- View Saved Before Photo -->
+      <div class="ion-text-center ion-padding photo" *ngIf="viewBeforePhoto" >
+        <img src="{{url}}fault_images/{{ viewBeforePhoto }}" alt="">
+      </div>
+
       <div class="ion-text-center heading">
         ADD A AFTER PHOTO
       </div>
 
       <div class="ion-text-center black-text-13">
-        Please take a photo of the Control Panel or add a photo<br> form your device's gallery.
+        Please take a photo of the Control Panel or add a photo<br> from your device's gallery.
       </div>
 
       <ion-grid>
@@ -135,8 +137,13 @@
         </ion-row>
       </ion-grid>
 
-      <div class="ion-text-center ion-padding photo" *ngIf="photo" >
+      <div class="ion-text-center ion-padding photo" *ngIf="afterPhoto" >
           <img src="{{ afterPhoto }}" alt="">
+      </div>
+
+      <!-- View Saved After Photo -->
+      <div class="ion-text-center ion-padding photo" *ngIf="viewAfterPhoto" >
+        <img src="{{url}}fault_images/{{ viewAfterPhoto }}" alt="">
       </div>
 
 
@@ -162,7 +169,8 @@
       <ion-grid style="margin-bottom: 15px;">
         <ion-row class="border-bottom">
           <ion-col size="12" class="instructions ">
-            <ion-checkbox style="margin-right: 5px; position: relative; top: 2px" (ionChange)="checkBoxChange($event)" [(ngModel)]="jobCard.isReturn" name="isReturn" checked="false"></ion-checkbox> <ion-label class="check-label">Return Visit Required</ion-label>
+            <!-- <ion-checkbox style="margin-right: 5px; position: relative; top: 2px" (ionChange)="checkBoxChange($event)" [(ngModel)]="jobCard.isReturn" name="isReturn" checked="false"></ion-checkbox> <ion-label class="check-label">Return Visit Required</ion-label> -->
+            <ion-checkbox style="margin-right: 5px; position: relative; top: 2px" (ionChange)="checkBoxChange($event)" [(ngModel)]="jobCard.isReturn" name="isReturn" [checked]="false" [value]="false"></ion-checkbox> <ion-label class="check-label">Return Visit Required</ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -202,6 +210,7 @@
       </ion-grid>
 
       <div padding>
+        <ion-input [(ngModel)]="jobCard.isSigned" name="isSigned" placeholder="isSigned" type="hidden"></ion-input>
         <ion-input [(ngModel)]="jobCard.id" name="id" placeholder="job ID" type="hidden"></ion-input>
         <ion-input [(ngModel)]="jobCard.beforePhoto2" name="beforePhoto2" placeholder="Before Photo" type="hidden"></ion-input>
         <ion-input [(ngModel)]="jobCard.afterPhoto2" name="afterPhoto2" placeholder="After Photo" type="hidden"></ion-input>
@@ -213,7 +222,7 @@
         <ion-input [(ngModel)]="jobCard.partyJobFunction" name="partyJobFunction" placeholder="Third Party Job Function" type="hidden"></ion-input>
         <ion-input [(ngModel)]="jobCard.techID" name="techID" placeholder="TechID" type="hidden"></ion-input>
         <ion-input [(ngModel)]="jobCard.jobID" name="jobID" placeholder="JobID" type="hidden"></ion-input>
-        <ion-button shape="round" expand="full" color="primary" block (click)="completeAssignedJobCard()" [disabled]="!f.valid">MARK AS COMPLETE</ion-button>
+        <ion-button shape="round" expand="full" color="primary" block (click)="completeAssignedJobCard()" [disabled]="!f.valid">SAVE / MARK AS COMPLETE</ion-button>
       </div>
     </form>
     <br>

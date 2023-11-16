@@ -16,7 +16,7 @@
   <div class="content-form">
     <form [formGroup]="form"  (ngSubmit)="onSubmit()" class="forms ion-padding">
       <ion-grid>
-        <ion-row *ngFor="let item of devices" >
+        <ion-row class="border-bottom" *ngFor="let item of devices" >
           <ion-col size="5" class="left">
             N/A
           </ion-col>

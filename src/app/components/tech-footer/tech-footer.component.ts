@@ -20,16 +20,17 @@ export class TechFooterComponent implements OnInit {
   ngOnInit() {}
 
   staffFaults() {
-    this.router.navigate(['/technician-menu/technician-service-cards']);
+    this.router.navigate(['/technician-menu/all-job-cards']);
   }
 
   services() {
-    this.router.navigate(['/technician-menu/technician-job-cards']);
+    this.router.navigate(['/technician-menu/all-service-cards']);
   }
 
-  contactUs() {
-    this.router.navigate(['/technician-menu/contact-loggedin']);
+  home() {
+    this.router.navigate(['/technician-menu/technician-dashboard']);
   }
+
   logOut() {
     this.storage.clear();
     console.log('User loggedout!');

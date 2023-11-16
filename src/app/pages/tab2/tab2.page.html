@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-title>BROADCAST DEVICE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-button (click)="bluetoothInit()" [disabled]="!isPlatformReady">Bluetooth init</ion-button>
+  <ion-button (click)="peripheralInit()" [disabled]="!subBluetoothInit">Peripheral init</ion-button>
+  <ion-button (click)="addService()" [disabled]="!subPeripheralInit">Add service</ion-button>
+  <ion-button (click)="advertise()" [disabled]="!subPeripheralInit">Advertise</ion-button>
+
+  <p [innerHtml]="output"></p>
+
+</ion-content>

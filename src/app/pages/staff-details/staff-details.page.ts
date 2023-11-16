@@ -24,13 +24,7 @@ export class StaffDetailsPage implements OnInit {
   ) {
     this.staffID = this.activatedRoute.snapshot.paramMap.get('staffID');
     console.log(this.staffID);
-    this.http.get(this.url + 'get-staff.php?staffID=' + this.staffID).subscribe((data: any) => {
-      console.log(data);
-      this.staff = data[0];
-      this.sites = data[1];
-      this.siteData = this.sites[0];
-      console.log(this.staff);
-    });
+    this.getStaffInfo(this.staffID);
   }
 
   ngOnInit() {
@@ -43,7 +37,7 @@ export class StaffDetailsPage implements OnInit {
 
   removeStaff(staff) {
     console.log(staff);
-    this.http.get(this.url + 'remove-staff.php?staffID=' + staff.id).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-remove-staff.php?staffID=' + staff.id).subscribe((data: any) => {
       console.log(data);
       if (data === 'success') {
         this.siteNotification('Staff member has been successfuly removed!');
@@ -65,7 +59,11 @@ export class StaffDetailsPage implements OnInit {
   ionViewWillEnter() {
     this.staffID = this.activatedRoute.snapshot.paramMap.get('staffID');
     console.log(this.staffID);
-    this.http.get(this.url + 'get-staff.php?staffID=' + this.staffID).subscribe((data: any) => {
+    this.getStaffInfo(this.staffID);
+  }
+
+  getStaffInfo(staffID) {
+    this.http.get(this.url + 'sp-get-staff.php?staffID=' + staffID).subscribe((data: any) => {
       console.log(data);
       this.staff = data[0];
       this.sites = data[1];

@@ -44,7 +44,7 @@
         Company Name
       </ion-col>
       <ion-col size="6" class="right">
-         {{ service?.company_name}}
+         {{ staff?.company_name}}
       </ion-col>
     </ion-row>
 
@@ -62,9 +62,10 @@
         Status
       </ion-col>
       <ion-col size="6" class="right">
-        <span *ngIf="service?.cert_status === 'Available'" style="color: #E9A800">{{ service?.cert_status}}</span>
-        <span *ngIf="service?.cert_status === 'Assigned'" style="color: #E9A800">{{ service?.cert_status}}</span>
-        <span *ngIf="service?.cert_status === 'Accepted'" style="color: #E9A800">{{ service?.cert_status}}</span>
+        <span *ngIf="service?.cert_status === 'Available'" style="color: #E9A800">In Progress</span>
+        <span *ngIf="service?.cert_status === 'Assigned'" style="color: #E9A800">In Progress</span>
+        <span *ngIf="service?.cert_status === 'Accepted' &&  service.job_approve !== 'Approved'" style="color: #E9A800">In Progress</span>
+        <span *ngIf="service?.cert_status === 'Accepted' &&  service.job_approve === 'Approved'" style="color: #11AC00">Assigned</span>
         <span *ngIf="service?.cert_status === 'Completed'" style="color: #11AC00">{{ service?.cert_status}}</span>
       </ion-col>
     </ion-row>
@@ -87,5 +88,5 @@
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-footer></app-footer>
+  <app-staff-footer></app-staff-footer>
 </footer>

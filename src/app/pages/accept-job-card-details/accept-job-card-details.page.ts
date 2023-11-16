@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
-import { ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { NetworkCheckerService } from 'src/app/services/network-checker.service';
 
 @Component({
@@ -22,6 +22,10 @@ export class AcceptJobCardDetailsPage implements OnInit {
   url = environment.url;
   networkStatus: any;
   database: SQLiteObject;
+
+  moduleID: any;
+  currentDateTime: any;
+  techAccept: any;
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
@@ -29,18 +33,23 @@ export class AcceptJobCardDetailsPage implements OnInit {
     private storage: Storage,
     private toastController: ToastController,
     private networkCheckerService: NetworkCheckerService,
-    private sqlite: SQLite
+    private sqlite: SQLite,
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) {
     this.minDate = moment(new Date()).format('YYYY-MM-DD');
+    this.currentDateTime = moment(new Date()).format('YYYY-MM-DD HH:mm');
     console.log(this.minDate);
     this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
     console.log(this.jobID);
-    this.http.get(this.url + 'get-accept-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-get-accept-job-details.php?jobID=' + this.jobID).subscribe((data: any) => {
       console.log(data);
       this.job = data?.job;
       this.staff = data?.staff;
       this.jobCard.id = this.job.id;
-      this.jobCard.arrivalTime = this.job.arrival_time;
+      this.jobCard.arrivalTime = this.currentDateTime;
+      this.moduleID = this.job.module_id;
+      // this.tech_status =
     });
    }
 
@@ -74,7 +83,7 @@ export class AcceptJobCardDetailsPage implements OnInit {
       this.jobID = this.activatedRoute.snapshot.paramMap.get('jobID');
       console.log(this.jobID);
       // eslint-disable-next-line max-len
-      const query = 'SELECT * FROM fire_fault_reports JOIN fire_sites ON fire_fault_reports.site_id = fire_sites.site_id  WHERE fire_fault_reports.fault_id=?';
+      const query = 'SELECT * FROM fire_sp_fault_reports JOIN fire_sp_sites ON fire_sp_fault_reports.site_id = fire_sp_sites.site_id  WHERE fire_sp_fault_reports.fault_id=?';
       this.database.executeSql(query, [this.jobID]).then((res: any) => {
         if (res.rows.length > 0) {
           console.log('Data: ');
@@ -84,7 +93,7 @@ export class AcceptJobCardDetailsPage implements OnInit {
       });
 
       // eslint-disable-next-line max-len
-      const queryClient = 'SELECT * FROM fire_users WHERE fire_users.user_id=?';
+      const queryClient = 'SELECT * FROM fire_sp_users WHERE fire_users.user_id=?';
       this.database.executeSql(queryClient, [this.job.client_id]).then((client: any) => {
         if (client.rows.length > 0) {
           console.log('Clients: ');
@@ -93,24 +102,55 @@ export class AcceptJobCardDetailsPage implements OnInit {
         }
       });
     }).catch(err => {
-      console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
+      // console.log('Table fire_fault_reports could not be created' + JSON.stringify(err));
     });
   }
 
-  acceptJob() {
+
+  async acceptJob() {
+    const alert = await this.alertController.create({
+      header: ' Job Card Confirmation',
+      message: 'Are you sure you want to accept job card with selected date and time?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.submitAcceptJob(this.jobCard);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async submitAcceptJob(values) {
+    const loading = await this.loadingController.create({ message: 'Please wait...' });
+    loading.present();
+    console.log(values);
     this.storage.get('currentUser').then((user: any) => {
       const postData = {
-        techID: user.id, jobID: this.jobCard.id, estimatedArrivalTime: this.jobCard.arrivalTime
+        techID: user.id, jobID: values.id, estimatedArrivalTime: values.arrivalTime
       };
       console.log(postData);
-      this.http.post(this.url + 'update-job-card-acceptance.php', postData).subscribe((data: any) => {
+      this.http.post(this.url + 'sp-update-job-card-acceptance.php', postData).subscribe((data: any) => {
         console.log(data);
+        loading.dismiss();
         if (data?.status === 'success') {
           this.systemNotification('Job card was accepted successfully!');
-          this.router.navigate(['/technician-menu/technician-job-cards']);
+          this.router.navigate(['/technician-menu/technician-job-cards/' + this.moduleID]);
         } else {
           this.systemNotification('Job card could not be accepted successfully!');
         }
+      }, err => {
+        console.log(err);
+        loading.dismiss();
       });
     });
   }
@@ -118,7 +158,7 @@ export class AcceptJobCardDetailsPage implements OnInit {
   async systemNotification(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }

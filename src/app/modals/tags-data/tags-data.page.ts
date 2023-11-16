@@ -12,11 +12,12 @@ export class TagsDataPage implements OnInit {
   tagNumber;
   deviceNumber;
   deviceType;
-  tagMessage;
   tagZone;
+  tagMessage;
   tagDate;
   serviceID;
   serviceTypeID;
+  referenceNumber;
   constructor(
     public  nfc: NFC,
     public  ndef: Ndef,

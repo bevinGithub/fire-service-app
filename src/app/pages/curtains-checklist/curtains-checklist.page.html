@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>AUTOMATED CURTAINS {{ curtain?.ac_number }}</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Location</ion-col>
+      <ion-col size="6" class="right">{{ curtain?.ac_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Actuator Type</ion-col>
+      <ion-col size="6" class="right" >{{ curtain?.ac_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Code</ion-col>
+      <ion-col size="6" class="right" >{{ curtain?.ac_code }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date</ion-col>
+      <ion-col size="6" class="right" >{{ checklist?.date_tested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+      <ion-col size="9"  class="title-head right-border1">
+       Checklist
+      </ion-col>
+      <ion-col size="3"  class="title-head right-border1 right"  style="text-align: right;">Yes/No</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Inspect header box motor and control system</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.header_box }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check voltage on cable to fire curtains motor.</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.voltage_cable }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check curtain guide</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.curtain_guide }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check curtain bottom weight bar</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.weight_bar }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Ensure curtain deploys and retracts with no obstructions</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.curtain_deploys }}</ion-col>
+    </ion-row>
+
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Battery backup tests</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.battery_tests }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check if the MCC is in working order</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.mcc_functional }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Record voltage</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.voltage }}</ion-col>
+    </ion-row>
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check if curtains deploys on fire signal simulation</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.fire_signal }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Make sure the responsible person on site is familiar with the operation of the system</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.operation_system }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Is Automated Curtain Tested</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.isAcTested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">General Comments</ion-col>
+      <ion-col size="12" class="left" >{{ checklist?.general_comments }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer *ngIf="role === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="role === '4'" ></app-tech-footer>
+</footer>

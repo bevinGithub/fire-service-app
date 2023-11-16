@@ -48,7 +48,7 @@ export class StaffEntryPage implements OnInit {
 
   checkUser() {
     console.log(this.userSignUp);
-    this.http.post(this.url + 'check-staff-data.php', this.userSignUp).subscribe((res: any) => {
+    this.http.post(this.url + 'sp-check-staff-data.php', this.userSignUp).subscribe((res: any) => {
       console.log(res);
       if (res === 'No record Found') {
         this.noticeMessage('Invalid registration details!');
@@ -79,7 +79,7 @@ export class StaffEntryPage implements OnInit {
   async noticeMessage(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }
@@ -96,7 +96,7 @@ export class StaffEntryPage implements OnInit {
   }
 
   loginUser() {
-    this.http.post(this.url + 'process-login.php', this.userSignIn).subscribe((userInfo: any) => {
+    this.http.post(this.url + 'sp-process-login.php', this.userSignIn).subscribe((userInfo: any) => {
       this.client = userInfo?.user;
       this.response = userInfo?.status;
       console.log(this.client.role_id);

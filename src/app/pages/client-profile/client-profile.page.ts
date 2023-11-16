@@ -29,7 +29,7 @@ export class ClientProfilePage implements OnInit {
     this.storage.ready().then(() => {
       this.storage.get('currentUser').then((user: any) => {
         this.roleID = user.role_id;
-        this.http.get(this.url + 'get-user.php?userID=' + user.id).subscribe((data: any) => {
+        this.http.get(this.url + 'sp-get-user.php?userID=' + user.id).subscribe((data: any) => {
           console.log(data);
           this.staff = data.user;
           this.sites = data.sites;
@@ -100,7 +100,7 @@ export class ClientProfilePage implements OnInit {
         const postData = {
           userID: user.id, profileImage: this.photo,  basePhoto: imageData
         };
-        this.http.post(this.url + 'process-photo.php', postData).subscribe((data: any) => {
+        this.http.post(this.url + 'sp-process-photo.php', postData).subscribe((data: any) => {
           console.log(data);
           this.getUserData();
         });
@@ -123,7 +123,7 @@ export class ClientProfilePage implements OnInit {
     this.storage.ready().then(() => {
       this.storage.get('currentUser').then((user: any) => {
         this.roleID = user.role_id;
-        this.http.get(this.url + 'get-user.php?userID=' + user.id).subscribe((data: any) => {
+        this.http.get(this.url + 'sp-get-user.php?userID=' + user.id).subscribe((data: any) => {
           console.log(data);
           this.staff = data.user;
           this.sites = data.sites;

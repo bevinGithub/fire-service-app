@@ -22,6 +22,7 @@ export class FaultReportPage implements OnInit {
   fault: any = {};
   photo: any;
   total: any;
+  moduleID: any;
 
   constructor(
     private http: HttpClient,
@@ -36,6 +37,8 @@ export class FaultReportPage implements OnInit {
       console.log(user);
       this.staff = user;
       this.fault.staffID = this.staff.id;
+      this.fault.clientID = this.staff.client_id;
+      this.fault.spID = this.staff.sp_id;
       this.http.get(this.url + 'service-notifications.php?clientID=' + user?.client_id).subscribe((res: any) => {
         console.log(res);
         this.total = res?.total;
@@ -44,13 +47,13 @@ export class FaultReportPage implements OnInit {
 
     this.siteID = this.activatedRoute.snapshot.paramMap.get('siteID');
     console.log(this.siteID);
-    this.http.get(this.url + 'get-site.php?siteID=' + this.siteID).subscribe((siteResp: any) => {
+    this.http.get(this.url + 'sp-get-site.php?siteID=' + this.siteID).subscribe((siteResp: any) => {
       console.log(siteResp);
       this.siteData = siteResp;
       this.fault.siteID = siteResp.id;
     });
 
-    this.http.get(this.url + 'get-booking-reference.php').subscribe((faultRef: any) => {
+    this.http.get(this.url + 'sp-get-booking-reference.php').subscribe((faultRef: any) => {
       console.log(faultRef);
       this.faultReference = faultRef.fault_reference;
       this.refDate = faultRef.refDate;
@@ -62,9 +65,15 @@ export class FaultReportPage implements OnInit {
   ngOnInit() {
   }
 
+  ionViewWillEnter(){
+    this.moduleID = this.activatedRoute.snapshot.paramMap.get('moduleID');
+    console.log('Will enter moduleID: ' + this.moduleID);
+    this.fault.moduleID = this.moduleID;
+  }
+
   submitFaultReport() {
     console.log(this.fault);
-    this.http.post(this.url + 'post-fault-request.php', this.fault).subscribe((data: any) => {
+    this.http.post(this.url + 'sp-post-fault-request-staff.php', this.fault).subscribe((data: any) => {
       console.log(data);
       if (data.status === 'success') {
         this.faultConfirmation('Fault report has been submitted successfully!');
@@ -154,7 +163,7 @@ export class FaultReportPage implements OnInit {
   async faultConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }

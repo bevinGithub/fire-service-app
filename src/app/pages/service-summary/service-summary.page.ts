@@ -289,6 +289,8 @@ export class ServiceSummaryPage implements OnInit {
   manualSwitch: any;
   updateSC: any;
   signOff: boolean;
+  clientData: any;
+  spData: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -388,9 +390,14 @@ export class ServiceSummaryPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    this.storage.get('currentUser').then((user: any) => {
+      this.tech = user;
+      this.service.techName = this.tech?.firstname;
+      this.service.techSurname = this.tech?.surname;
+    });
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
+    this.http.get(this.url + 'sp-get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
       console.log(data);
       this.cert = data?.certificate;
       this.tech = data?.technician;
@@ -412,6 +419,7 @@ export class ServiceSummaryPage implements OnInit {
       this.service.id = this.certficateID;
       this.getOfflineSC(this.certficateID);
     }
+
   }
 
   ionViewDidEnter(){
@@ -427,13 +435,32 @@ export class ServiceSummaryPage implements OnInit {
        console.log(scID);
     const offData = [];
     // eslint-disable-next-line max-len
-    const querySC = 'SELECT * FROM fire_service_certificates INNER JOIN fire_service_type_templates ON fire_service_certificates.service_type_id=fire_service_type_templates.id JOIN fire_sites ON fire_service_certificates.site_id = fire_sites.site_id   WHERE fire_service_certificates.cert_id=?';
+    const querySC = 'SELECT * FROM fire_sp_service_certificates INNER JOIN fire_sp_service_type_templates ON fire_sp_service_certificates.service_type_id=fire_sp_service_type_templates.id JOIN fire_sp_sites ON fire_sp_service_certificates.site_id = fire_sp_sites.site_id JOIN  fire_service_providers ON fire_sp_service_certificates.sp_id=fire_service_providers.sp_id   WHERE fire_sp_service_certificates.cert_id=?';
     this.database.executeSql(querySC,[scID]).then((rec: any) => {
       if (rec.rows.length > 0) {
        this.cert = rec.rows.item(0);
-       console.log('Record Found: ' + JSON.stringify(this.cert));
         this.siteID = this.cert.site_id;
         this.serviceTypeID = this.cert.service_type_id;
+
+        const clientQ = 'SELECT * FROM fire_sp_users WHERE user_id=?';
+        this.database.executeSql(clientQ, [this.cert?.client_id]).then((res: any) => {
+          if (res.rows.length > 0) {
+            this.clientData = res.rows.item(0);
+          }
+        }, err => {
+          console.log(err);
+        });
+
+        //Service Company
+        const serviceC = 'SELECT * FROM fire_service_providers WHERE sp_id=?';
+        this.database.executeSql(serviceC, [this.cert?.sp_id]).then((resSP: any) => {
+          if (resSP.rows.length > 0) {
+            this.spData = resSP.rows.item(0);
+            console.log(this.spData);
+          }
+        }, err => {
+          console.log(err);
+        });
         //  console.log(this.cert);
         if (this.cert?.log_book_analysis_1_1) {
           this.service.log_book_analysis_1_1 = this.cert?.log_book_analysis_1_1;
@@ -858,15 +885,17 @@ export class ServiceSummaryPage implements OnInit {
         }
 
         //#GET TECH DATA
-        const query = 'SELECT * FROM fire_users WHERE user_id=?';
+        const query = 'SELECT * FROM fire_sp_users WHERE user_id=?';
         this.database.executeSql(query, [this.cert?.service_technician_id]).then((res2: any) => {
             console.log('TECH DATA: ' + JSON.stringify(res2));
             if (res2.rows.length > 0) {
               this.tech = res2.rows.item(0);
+              console.log(this.tech);
             }
         });
+
         //GET PANELSQ
-        const queryPanels = 'SELECT * FROM fire_template_panels WHERE service_type_id=? AND site_id=?';
+        const queryPanels = 'SELECT * FROM fire_sp_template_panels WHERE service_type_id=? AND site_id=?';
         this.database.executeSql(queryPanels, [this.cert?.service_type_id, this.cert?.site_id]).then((resP: any) => {
             console.log('PANEL DATA: ' + JSON.stringify(resP));
             const panelList = [];
@@ -1900,7 +1929,7 @@ export class ServiceSummaryPage implements OnInit {
       // eslint-disable-next-line max-len
       this.updateSC = [this.logBook, this.eventArchive, this.analogueVal, this.configCheck, this.disableDevice,this.callPoints, this.buildStructures,this.firePanel1,this.firePanel2,this.firePanel3,this.firePanel4,this.firePanel5,this.firePanel6,this.firePanel7,this.firePanel8,this.firePanel9,this.firePanel10,this.cleanDevice1,this.cleanDevice2,this.cleanDevice3,this.cleanDevice4,this.cleanDevice5,this.cleanDevice6,this.cleanDevice7,this.cleanDevice8,this.cleanDevice9,this.cleanDevice10,this.testDeviceSingleKnock1,this.testDeviceSingleKnock2,this.testDeviceSingleKnock3,this.testDeviceSingleKnock4,this.testDeviceSingleKnock5,this.testDeviceSingleKnock6,this.testDeviceSingleKnock7,this.testDeviceSingleKnock8,this.testDeviceSingleKnock9,this.testDeviceSingleKnock10,this.testSoundersSingleKnock1,this.testSoundersSingleKnock2,this.testSoundersSingleKnock3,this.testSoundersSingleKnock4,this.testSoundersSingleKnock5,this.testSoundersSingleKnock6,this.testSoundersSingleKnock7,this.testSoundersSingleKnock8,this.testSoundersSingleKnock9,this.testSoundersSingleKnock10,this.beamDetection, this.airSampling,this.linerHeat,this.flameDetection,this.wireless,this.stairPressure, this.liftPressure, this.smokeExtraction, this.smokeVentiltion, this.rollerShutter,this.fireDoors, this.escapeDoorRelease,this.autoEvacuation, this.autoRemoteSignal, this.gasValves, this.cookerSuppression, this.liftHoming, this.acShutdown,this.freshAir,this.other7, this.escapeDoors, this.sprinklerFlow,this.sprinklerPumpRoom, this.sumpPump,this.generatorSignals,this.other, this.singleKnock, this.doubleKnock, this.fireBells, this.soundersFunction,this.strobesFunction,this.suppressionDetonators, this.doorMonitor, this.suppressionCylinder, this.manualSwitch, this.service.client_signature,this.service.company_rep_signature, this.service.date_signed_off, this.service.date_client_signed, this.service.service_comments, this.service.service_company_comments, serviceStatus, this.service.isSync,this.service.date_completed];
       // eslint-disable-next-line max-len
-      this.database.executeSql(`UPDATE fire_service_certificates SET log_book_analysis_1_1=?,event_archive_1_2=?, analogue_value_check_1_3=?,configuration_check_programming_1_4=?, disabled_device_check=?,call_points_2_1=?,building_structure_changes_2_2=?,fire_panel_1=?,fire_panel_2=?,fire_panel_3=?,fire_panel_4=?,fire_panel_5=?,fire_panel_6=?,fire_panel_7=?,fire_panel_8=?,fire_panel_9=?,fire_panel_10=?,clean_device_1=?,clean_device_2=?,clean_device_3=?,clean_device_4=?,clean_device_5=?,clean_device_6=?,clean_device_7=?,clean_device_8=?,clean_device_9=?,clean_device_10=?,test_device_single_knock_5_1=?,test_device_single_knock_5_2=?,test_device_single_knock_5_3=?,test_device_single_knock_5_4=?,test_device_single_knock_5_5=?,test_device_single_knock_5_6=?,test_device_single_knock_5_7=?,test_device_single_knock_5_8=?,test_device_single_knock_5_9=?,test_device_single_knock_5_10=?,test_sounders_single_knock_5_1=?,test_sounders_single_knock_5_2=?,test_sounders_single_knock_5_3=?,test_sounders_single_knock_5_4=?,test_sounders_single_knock_5_5=?,test_sounders_single_knock_5_6=?,test_sounders_single_knock_5_7=?,test_sounders_single_knock_5_8=?,test_sounders_single_knock_5_9=?,test_sounders_single_knock_5_10=?,beam_detection_6_1=?,air_sampling_6_2=?,liner_heat_6_3=?,flame_detection_6_4=?,wireless_6_5=?,stair_pressure_fans_7_1=?,lift_pressure_fans_7_2=?,smoke_extraction_fans_7_3=?,smoke_ventilation_louvers_7_4=?,roller_shutter_doors_7_5=?,fire_doors_7_6=?,escape_door_release_7_7=?,auto_evacuation_7_8=?,auto_remote_signal_7_9=?,gas_valves_7_10=?,cooker_suppression_7_11=?,lift_homing_7_12=?,ac_shutdown_7_13=?,fresh_air_shutdown_7_14=?,other_7_15=?,escape_doors_8_1=?,sprinkler_flow_8_2=?, sprinkler_pump_room_8_3=?,sump_pump_8_4=?,generator_signals_8_5=?,other_8_6=?, single_knock_9_1=?,double_knock_9_2=?,fire_bells_9_3=?,sounders_functional_9_4=?,strobes_functional_9_5=?,suppression_detonator_9_6=?,door_monitor_9_7=?,suppression_cylinder_9_8=?,manual_switch_9_9=?,client_signature=?,company_rep_signature=?,date_signed_off=?,date_signed_off_client=?, client_comments=?,service_company_comments=?, service_status=?, isSync=?, date_completed=? WHERE cert_id=${this.certficateID}`, this.updateSC).then((res: any) => {
+      this.database.executeSql(`UPDATE fire_sp_service_certificates SET log_book_analysis_1_1=?,event_archive_1_2=?, analogue_value_check_1_3=?,configuration_check_programming_1_4=?, disabled_device_check=?,call_points_2_1=?,building_structure_changes_2_2=?,fire_panel_1=?,fire_panel_2=?,fire_panel_3=?,fire_panel_4=?,fire_panel_5=?,fire_panel_6=?,fire_panel_7=?,fire_panel_8=?,fire_panel_9=?,fire_panel_10=?,clean_device_1=?,clean_device_2=?,clean_device_3=?,clean_device_4=?,clean_device_5=?,clean_device_6=?,clean_device_7=?,clean_device_8=?,clean_device_9=?,clean_device_10=?,test_device_single_knock_5_1=?,test_device_single_knock_5_2=?,test_device_single_knock_5_3=?,test_device_single_knock_5_4=?,test_device_single_knock_5_5=?,test_device_single_knock_5_6=?,test_device_single_knock_5_7=?,test_device_single_knock_5_8=?,test_device_single_knock_5_9=?,test_device_single_knock_5_10=?,test_sounders_single_knock_5_1=?,test_sounders_single_knock_5_2=?,test_sounders_single_knock_5_3=?,test_sounders_single_knock_5_4=?,test_sounders_single_knock_5_5=?,test_sounders_single_knock_5_6=?,test_sounders_single_knock_5_7=?,test_sounders_single_knock_5_8=?,test_sounders_single_knock_5_9=?,test_sounders_single_knock_5_10=?,beam_detection_6_1=?,air_sampling_6_2=?,liner_heat_6_3=?,flame_detection_6_4=?,wireless_6_5=?,stair_pressure_fans_7_1=?,lift_pressure_fans_7_2=?,smoke_extraction_fans_7_3=?,smoke_ventilation_louvers_7_4=?,roller_shutter_doors_7_5=?,fire_doors_7_6=?,escape_door_release_7_7=?,auto_evacuation_7_8=?,auto_remote_signal_7_9=?,gas_valves_7_10=?,cooker_suppression_7_11=?,lift_homing_7_12=?,ac_shutdown_7_13=?,fresh_air_shutdown_7_14=?,other_7_15=?,escape_doors_8_1=?,sprinkler_flow_8_2=?, sprinkler_pump_room_8_3=?,sump_pump_8_4=?,generator_signals_8_5=?,other_8_6=?, single_knock_9_1=?,double_knock_9_2=?,fire_bells_9_3=?,sounders_functional_9_4=?,strobes_functional_9_5=?,suppression_detonator_9_6=?,door_monitor_9_7=?,suppression_cylinder_9_8=?,manual_switch_9_9=?,client_signature=?,company_rep_signature=?,date_signed_off=?,date_signed_off_client=?, client_comments=?,service_company_comments=?, service_status=?, isSync=?, date_completed=? WHERE cert_id=${this.certficateID}`, this.updateSC).then((res: any) => {
         console.log('Service Card Updated: ' + JSON.stringify(res));
         this.systemNotification('Service certificate was successfully saved!');
         this.navController.back();
@@ -1915,7 +1944,7 @@ export class ServiceSummaryPage implements OnInit {
 async systemNotification(msg) {
   const toast = await this.toastController.create({
     message: msg,
-    duration: 3000
+    duration: 10000
   });
   toast.present();
 }

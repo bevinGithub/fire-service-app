@@ -41,7 +41,7 @@ export class EditStaffPage implements OnInit {
     // this.siteThree = false;
     this.staffID = this.activatedRoute.snapshot.paramMap.get('staffID');
     console.log(this.staffID);
-    this.http.get(this.url + 'edit-client-staff.php?staffID=' + this.staffID).subscribe((staff: any) => {
+    this.http.get(this.url + 'sp-edit-client-staff.php?staffID=' + this.staffID).subscribe((staff: any) => {
       this.staff = staff[0];
       this.assignedSites = staff[1];
       // this.staff.site_one = staff[1].site_id;
@@ -58,12 +58,13 @@ export class EditStaffPage implements OnInit {
       this.clientID = user.id;
       this.staff.clientID = user.id;
       console.log(user);
-      this.http.get(this.url + 'get-client-sites.php?clientID=' + user.id).subscribe((sites: any) => {
+      this.http.get(this.url + 'sp-get-client-sites.php?clientID=' + user.id).subscribe((sites: any) => {
         this.siteList = sites;
         this.siteList2 = sites;
         this.siteList3 = sites;
         // this.staff.site_one = staff[1].site_id;
         console.log(this.siteList);
+        this.assignedSites = this.siteList;
       });
     });
   }
@@ -81,7 +82,7 @@ export class EditStaffPage implements OnInit {
 
   updateStaffMember() {
     console.log(this.staff);
-    this.http.post(this.url + 'client-update-staff.php', this.staff).subscribe((data: any) => {
+    this.http.post(this.url + 'sp-client-update-staff.php', this.staff).subscribe((data: any) => {
       console.log(data);
       if (data.status === 'success') {
         this.systemConfirmation('Staff member successfuly updated!');
@@ -95,7 +96,7 @@ export class EditStaffPage implements OnInit {
   async systemConfirmation(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000
+      duration: 10000
     });
     toast.present();
   }

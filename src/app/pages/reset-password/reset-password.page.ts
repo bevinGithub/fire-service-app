@@ -62,7 +62,7 @@ export class ResetPasswordPage implements OnInit {
   async systemNotification(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 4000
+      duration: 10000
     });
     toast.present();
   }

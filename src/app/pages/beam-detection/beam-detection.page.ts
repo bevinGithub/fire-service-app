@@ -45,7 +45,8 @@ export class BeamDetectionPage implements OnInit {
       this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_beam_detection_template  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         beam_id INTEGER,
-        service_type_id ENTEGER,
+        sp_id INTEGER,
+        service_type_id INTEGER,
         site_id INTEGER,
         service_cert_id INTEGER,
         admin_id INTEGER,
@@ -58,6 +59,47 @@ export class BeamDetectionPage implements OnInit {
         detection_created TEXT)`, []).then((res: any) => {
           console.log('BEAM DETECTION table Created: ' + JSON.stringify(res));
         });
+
+        this.certID = `${this.cert}`;
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        console.log('Connection Status: ' + this.networkStatus);
+        console.log('Service CertID' + this.certID);
+        if (this.networkStatus === 'none') { //Offline
+          const beamSql = 'SELECT * FROM fire_beam_detection_template WHERE service_cert_id=?';
+          this.database.executeSql(beamSql, [this.certID]).then((beamR: any) => {
+            console.log('Record Found: ' + JSON.stringify(beamR));
+            if (beamR.rows.length > 0) {
+              const beam = beamR.rows.item(0);
+              console.log(beam);
+              this.beam.type_make = beam?.type_make;
+              this.beam.units = beam?.units;
+              this.beam.beams_tested = beam?.beams_tested;
+              this.beam.comment = beam?.comment;
+              this.beam.tech_id = beam?.tech_id;
+              this.beam.service_type_id = beam?.service_type_id;
+              this.beam.service_cert_id = beam?.service_cert_id;
+              this.beam.site_id = beam?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+
+          const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.beam.service_type_id = log?.service_type_id;
+              this.beam.site_id = log?.site_id;
+              this.beam.service_cert_id = log?.cert_id;
+              this.beam.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
     });
    }
 
@@ -65,7 +107,7 @@ export class BeamDetectionPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    this.certID = this.cert;
+    this.certID = `${this.cert}`;
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
     console.log('Connection Status: ' + this.networkStatus);
@@ -90,7 +132,7 @@ export class BeamDetectionPage implements OnInit {
         console.log('Cert error: ' + JSON.stringify(err));
       });
 
-      const certSql = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -121,28 +163,28 @@ export class BeamDetectionPage implements OnInit {
         if (bsRes.rows.length > 0) {
           console.log('Record Available');
           const beam = bsRes.rows.item(0);
-          if (this.beam.type_make) {
-            this.typeMake = this.beam.type_make;
+          if (this.beam?.type_make) {
+            this.typeMake = this.beam?.type_make;
           } else {
             this.typeMake = '';
           }
           if (this.beam.units) {
-            this.units = this.beam.units;
+            this.units = this.beam?.units;
           } else {
             this.units = '';
           }
-          if (this.beam.beams_tested) {
-            this.beamsTested = this.beam.beams_tested;
+          if (this.beam?.beams_tested) {
+            this.beamsTested = this.beam?.beams_tested;
           } else {
             this.beamsTested = '';
           }
           if (this.beam.comment) {
-            this.comments = this.beam.comment;
+            this.comments = this.beam?.comment;
           } else {
             this.comments = '';
           }
           // eslint-disable-next-line max-len
-          const updateBeam = [this.beam.service_type_id,this.beam.site_id,this.beam.service_cert_id,this.beam.tech_id,this.typeMake,this.units,this.beamsTested,this.comments];
+          const updateBeam = [this.beam?.service_type_id,this.beam?.site_id,this.beam?.service_cert_id,this.beam?.tech_id,this.typeMake,this.units,this.beamsTested,this.comments];
           // eslint-disable-next-line max-len
           this.database.executeSql(`UPDATE fire_beam_detection_template SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, type_make=?, units=?, beams_tested=?, comment=? WHERE id=${beam.id}`, updateBeam)
           .then((bs: any) => {
@@ -154,29 +196,29 @@ export class BeamDetectionPage implements OnInit {
             this.presentToast('BEAM detection could not be saved!');
           });
         } else {
-          if (this.beam.type_make) {
-            this.typeMake = this.beam.type_make;
+          if (this.beam?.type_make) {
+            this.typeMake = this.beam?.type_make;
           } else {
             this.typeMake = '';
           }
           if (this.beam.units) {
-            this.units = this.beam.units;
+            this.units = this.beam?.units;
           } else {
             this.units = '';
           }
-          if (this.beam.beams_tested) {
-            this.beamsTested = this.beam.beams_tested;
+          if (this.beam?.beams_tested) {
+            this.beamsTested = this.beam?.beams_tested;
           } else {
             this.beamsTested = '';
           }
-          if (this.beam.comment) {
-            this.comments = this.beam.comment;
+          if (this.beam?.comment) {
+            this.comments = this.beam?.comment;
           } else {
             this.comments = '';
           }
           const isSync = 'No';
           // eslint-disable-next-line max-len
-          this.database.executeSql(`INSERT INTO fire_beam_detection_template (service_type_id, site_id, service_cert_id, tech_id, type_make, units, beams_tested, comment, isSync, detection_created) VALUES ('${this.beam.service_type_id}','${this.beam.site_id}','${this.beam.service_cert_id}','${this.beam.tech_id}','${this.typeMake}','${this.units}','${this.beamsTested}','${this.comments}', '${isSync}','${this.beam.detection_created}')`, [])
+          this.database.executeSql(`INSERT INTO fire_beam_detection_template (service_type_id, site_id, service_cert_id, tech_id, type_make, units, beams_tested, comment, isSync, detection_created) VALUES ('${this.beam?.service_type_id}','${this.beam?.site_id}','${this.beam?.service_cert_id}','${this.beam?.tech_id}','${this.typeMake}','${this.units}','${this.beamsTested}','${this.comments}', '${isSync}','${this.beam?.detection_created}')`, [])
           .then((bs: any) => {
             console.log('BEAM ADDED: ' + JSON.stringify(bs));
             this.presentToast('Beam detection successfully saved!');
@@ -194,7 +236,7 @@ export class BeamDetectionPage implements OnInit {
   async presentToast(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }

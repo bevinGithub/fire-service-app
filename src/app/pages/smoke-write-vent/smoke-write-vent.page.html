@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>PANELS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p class="heading">Search Device Address</p>
+    <ion-list  class="search">
+      <ion-item >
+        <ion-input [(ngModel)]="vent.panelCode" shape="round" name="panelCode" type="text" placeholder="Search Device Address" (ionChange)="searchDevice($event)" color="primary" class="search-input" required>
+      </ion-input>
+      </ion-item>
+      <ion-input [(ngModel)]="vent.cert_id" shape="round" name="cert_id" type="hidden"></ion-input>
+    </ion-list>
+
+    <div class="devices">
+      <!-- <ng-container *ngFor="let item of panelsList" >
+        <ion-card>
+          <ion-card-content>
+            <ion-grid fixed class="container">
+              <ion-row>
+                <ion-col size="6" class="left">Panel Number: </ion-col>
+                <ion-col size="6" class="right">{{ item?.panel_number }}</ion-col>
+                <ion-col size="6" class="left">Panel Code: </ion-col>
+                <ion-col size="6" class="right">{{ item?.panel_code }}</ion-col>
+                <ion-col size="6" class="left">Panel Type: </ion-col>
+                <ion-col size="6" class="right">{{ item?.item_number }}</ion-col>
+                <ion-col size="6" class="left">Panel Location: </ion-col>
+                <ion-col size="6" class="right">{{ item?.location }}</ion-col>
+                <ion-col size="12" class="left">
+                  <ion-button expand="block" color="primary" shape="round" (click)="writeTag({item})" >
+                    Write To RFID
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ng-container> -->
+    </div>
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-tech-footer></app-tech-footer>
+</footer>

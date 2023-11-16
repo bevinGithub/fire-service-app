@@ -10,6 +10,9 @@ import { Subscription } from 'rxjs';
 import { TagsDataPage } from 'src/app/modals/tags-data/tags-data.page';
 import { AudioService } from 'src/app/services/audio.service';
 
+import { NetworkCheckerService } from 'src/app/services/network-checker.service';
+import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
+
 @Component({
   selector: 'app-readwrite',
   templateUrl: './readwrite.page.html',
@@ -47,6 +50,7 @@ export class ReadwritePage implements OnInit, AfterViewInit {
   public serviceTypeID: any;
   public tagNumber: any;
   public audioSound: any;
+  public referenceNumber;
 
   showDevice = false;
   readingTag = false;
@@ -54,6 +58,8 @@ export class ReadwritePage implements OnInit, AfterViewInit {
   isWriting = false;
   audio: any;
   songs: any;
+  networkStatus: any;
+  database: any;
   subscriptions: Array<Subscription> = new Array<Subscription>();
 
   constructor(
@@ -68,19 +74,11 @@ export class ReadwritePage implements OnInit, AfterViewInit {
     private modalController: ModalController,
     private zone: NgZone,
     private activatedRoute: ActivatedRoute,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private networkCheckerService: NetworkCheckerService,
+    private sqlite: SQLite,
   ) {
-    this.storage.get('currentUser').then((user: any) => {
-      console.log(user);
-      this.techID = user?.id;
-      this.writeDate = moment().format('DD-MM-YYYY');
-      this.tag.writeTime = this.writeDate;
-      console.log(this.writeDate);
-      this.http.get(this.url + 'get-site-writing.php?userID=' + user.id).subscribe((res: any) => {
-        console.log(res);
-        this.sites = res;
-      });
-    });
+
   }
 
   ngOnInit() {
@@ -88,11 +86,12 @@ export class ReadwritePage implements OnInit, AfterViewInit {
   }
   // Load the Audio
   ngAfterViewInit(){
-    // this.audioService.preloadAlertSound('alert', 'assets/audio/notify.wav');
     this.audioService.preloadAlertSound('alert', 'assets/audio/beep.mp3');
   }
 
   ionViewWillEnter(){
+    this.networkCheckerService.checkNetworkChange();
+    this.networkStatus = this.networkCheckerService.connectionType();
     this.state = this.activatedRoute.snapshot.paramMap.get('state');
     console.log(this.state);
     if (this.state === 'read') {
@@ -105,6 +104,38 @@ export class ReadwritePage implements OnInit, AfterViewInit {
       this.pageTitle = 'WRITING TO RFID';
       this.writingTag = true;
     }
+
+    this.storage.get('currentUser').then((user: any) => {
+      this.techID = user?.id;
+      this.writeDate = moment().format('DD-MM-YYYY');
+      this.tag.writeTime = this.writeDate;
+      this.http.get(this.url + 'sp-get-site-writing.php?userID=' + user.id).subscribe((res: any) => {
+        console.log(res);
+        this.sites = res;
+      });
+      if (this.networkStatus === 'none') {
+        this.sqlite.create({
+          name: 'fireservices.db',
+          location: 'default',
+        }).then((db: SQLiteObject) => {
+          this.database = db;
+          const scQuery = 'SELECT *, cert_id AS id FROM fire_sp_service_certificates WHERE service_technician_id=? AND service_status=?';
+          this.database.executeSql(scQuery, [this.techID, 'Accepted']).then((scRes: any) => {
+            const sites = [];
+            if (scRes.rows.length > 0) {
+              for(let i=0; i < scRes.rows.length; i++) {
+                sites.push(scRes.rows.item(i));
+              }
+              this.sites = sites;
+              console.log(this.sites);
+              // alert(JSON.stringify(this.sites));
+            } else {
+              this.sites = [];
+            }
+          });
+        });
+      }
+    });
   }
 
   nfcReadData() {
@@ -112,17 +143,79 @@ export class ReadwritePage implements OnInit, AfterViewInit {
     // eslint-disable-next-line no-bitwise
     this.flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
     this.readerMode = this.nfc.readerMode(this.flags).subscribe((tag: any) => {
-      console.log(JSON.stringify(tag));
       console.log(tag);
-      this.readingTag = false;
-      this.getTagData(tag);
-      this.readingTag = false;
+      const tagCheck = tag.ndefMessage;
+      if (!tagCheck) {
+        this.presentToast('The tag is empty!');
+      } else {
+        this.readingTag = false;
+        this.getTagData(tag);
+        this.readingTag = false;
+      }
     }, err => {
       console.log(err);
     });
   }
 
+  async flashMessage(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
+
   async getTagData(tag) {
+    if (tag.ndefMessage[0]) {
+      this.referenceNumber  = this.nfc.bytesToString(tag.ndefMessage[0].payload).substring(3);
+    } else {
+      this.referenceNumber = '';
+    }
+    if (tag.ndefMessage[1]) {
+      this.tagDate  = this.nfc.bytesToString(tag.ndefMessage[1].payload).substring(3);
+    } else {
+      this.tagDate = '';
+    }
+    if (tag.ndefMessage[2]) {
+      this.serviceTypeID  = this.nfc.bytesToString(tag.ndefMessage[2].payload).substring(3);
+    } else {
+      this.serviceTypeID = '';
+    }
+    if (this.referenceNumber !== '') {
+      this.openModal(tag);
+      const readData = {
+        referenceNumber: this.referenceNumber,
+        techID: this.techID,
+        serviceTypeId: this.serviceTypeID,
+      };
+      this.http.post(this.url + 'sp-post-tag-data-new2.php', readData).subscribe((data: any) => {
+        console.log(data);
+        this.deviceData = data;
+        if (data !== 'No Record Found') {
+          this.showDevice = true;
+        } else {
+          //EMPTY SCAN RESULTS
+          this.alertPlaySound('Scan result is empty!');
+        }
+      });
+      if (this.networkStatus === 'none') {
+        console.log(this.serviceID);
+        const scQuery = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+        this.database.executeSql(scQuery, [this.serviceID]).then((scRes: any) => {
+          console.log(scRes);
+          const certs = [];
+          for(let i=0; i < scRes.rows.length; i++) {
+            certs.push(scRes.rows.item(i));
+          }
+        });
+      }
+      this.openModal(tag);
+    } else {
+      this.presentAlert('Tag is Empty');
+    }
+  }
+
+  async getTagData2(tag) {
     if (tag.ndefMessage[0]) {
       this.siteID  = this.nfc.bytesToString(tag.ndefMessage[0].payload).substring(3);
     } else {
@@ -185,7 +278,7 @@ export class ReadwritePage implements OnInit, AfterViewInit {
         techID: this.techID,
       };
       console.log(readData);
-      this.http.post(this.url + 'post-tag-data.php', readData).subscribe((data: any) => {
+      this.http.post(this.url + 'sp-post-tag-data.php', readData).subscribe((data: any) => {
         console.log(data);
         this.deviceData = data;
         if (data !== 'No Record Found') {
@@ -195,6 +288,17 @@ export class ReadwritePage implements OnInit, AfterViewInit {
           this.alertPlaySound('Scan result is empty!');
         }
       });
+      if (this.networkStatus === 'none') {
+        console.log(this.serviceID);
+        const scQuery = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+        this.database.executeSql(scQuery, [this.serviceID]).then((scRes: any) => {
+          console.log(scRes);
+          const certs = [];
+          for(let i=0; i < scRes.rows.length; i++) {
+            certs.push(scRes.rows.item(i));
+          }
+        });
+      }
       this.openModal(tag);
     } else {
       this.presentAlert('Tag is Empty');
@@ -236,6 +340,27 @@ export class ReadwritePage implements OnInit, AfterViewInit {
   }
 
   async openModal(tag) {
+    if (tag.ndefMessage[0]) {
+      this.referenceNumber  = this.nfc.bytesToString(tag.ndefMessage[0].payload).substring(3);
+    } else {
+      this.referenceNumber = '';
+    }
+    if (tag.ndefMessage[1]) {
+      this.tagDate  = this.nfc.bytesToString(tag.ndefMessage[1].payload).substring(3);
+    } else {
+      this.tagDate = '';
+    }
+    const modal = await this.modalController.create({
+      component: TagsDataPage,
+      componentProps: {
+      referenceNumber: this.referenceNumber,
+      tagDate: this.tagDate,
+      }
+    });
+    await modal.present();
+  }
+
+  async openModal2(tag) {
     if (tag.ndefMessage[0]) {
       this.siteID  = this.nfc.bytesToString(tag.ndefMessage[0].payload).substring(3);
     } else {
@@ -320,7 +445,7 @@ writeTag() {
       const date = this.ndef.textRecord(this.tag.writeTime);
       const serviceID = this.ndef.textRecord(this.tag.serviceID);
       const serviceTypeID = this.ndef.textRecord(this.tag.serviceTypeID);
-
+      console.log('Ready for Writing' + siteID);
       this.nfc.write([siteID,tagNumber, deviceNumber,deviceType,zone,message,date,serviceID,serviceTypeID]).then(success => {
         console.log('Writing Complete: ' + success);
         if (success === 'OK') {
@@ -342,57 +467,10 @@ writeTag() {
   });
 }
 
-// Moved Up one step  13 September 2022 to write tag
-// updateTagData(data){
-//   this.platform.ready().then(() => {
-//     this.writingTag = true;
-//     this.listener = this.nfc.addNdefListener((res: any) => {
-//       console.log('Listener is Active: ' + res);
-//     }, (error) => {
-//       console.log(error);
-//       this.presentToast(error);
-//     }).subscribe(() => {
-//       console.log('Ready for Writing');
-//       const siteID = this.ndef.textRecord(data.siteID);
-//       const tagNumber = this.ndef.textRecord(data.tagNumber);
-//       const deviceNumber = this.ndef.textRecord(data.deviceNumber);
-//       const deviceType = this.ndef.textRecord(data.deviceType);
-//       const message = this.ndef.textRecord(data.deviceMessage);
-//       const zone = this.ndef.textRecord(data.zone);
-//       const date = this.ndef.textRecord(data.writeTime);
-//       const serviceID = this.ndef.textRecord(data.serviceID);
-//       const serviceTypeID = this.ndef.textRecord(data.serviceTypeID);
-
-//       this.nfc.write([siteID,tagNumber, deviceNumber,deviceType,zone,message,date,serviceID,serviceTypeID]).then(success => {
-//         console.log('Writing Complete: ' + success);
-//         if (success === 'OK') {
-//           this.presentToast('Successfully written to RFID Chip!');
-//           this.listener.unsubscribe();
-//           this.zone.run(() => {
-//             this.tag = '';
-//             this.router.navigate(['/technician-menu/technician-dashboard']);
-//           });
-//         }
-//       }).catch(error => {
-//           console.log(error);
-//           this.presentToast(error);
-//         });
-//     }, err => {
-//       this.presentToast(err);
-//       console.log('Subscribe: ' + err);
-//     });
-//   });
-// }
-
-// async presentAlert2(msg) {
-//   const alert = await this.alertController.create({
-//     header: 'RFID RESPONSE',
-//     message: msg,
-//     buttons: ['OK']
-//   });
-
-//   await alert.present();
-// }
+submitDeviceQuery() {
+  console.log(this.tag);
+  this.router.navigate(['/service-devices'], {queryParams: this.tag});
+}
 
 async presentAlert(msg) {
   const alert = await this.alertController.create({
@@ -438,10 +516,25 @@ async presentToast(msg) {
       console.log(data);
       this.tag.serviceTypeID = data?.certificate.service_type_id;
       this.tag.siteID = data?.site.id;
+      this.tag.certID = data?.site.cert_id;
     });
+    if (this.networkStatus === 'none') {
+      const scQuery = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+      this.database.executeSql(scQuery, [certID]).then((scRes: any) => {
+        console.log(scRes);
+        if (scRes.rows.length > 0) {
+          const scData = scRes.rows.item(0);
+          this.tag.serviceTypeID = scData?.service_type_id;
+          this.tag.siteID = scData?.site_id;
+          this.tag.certID = scData?.cert_id;
+        }
+      });
+    }
   }
 
   ionViewDidLeave(){
+    this.readerMode.unsubscribe();
+    console.log('Reader Mode unsubscribed!!');
     this.audioService.stopAlertSound('alert');
   }
 

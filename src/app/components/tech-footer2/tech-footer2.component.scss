@@ -1,0 +1,27 @@
+.footer-icons {
+  width: 25%;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: #313131;
+}
+.footer-section {
+  border-top: 1px solid #eeeeee;
+  font-size: 10px;
+}
+.footer-section {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.footer-icons span {
+  font-family: "Poppins Medium";
+  font-size: 11px !important;
+  color: #fff;
+}
+
+.footer-icons img {
+  position: relative;
+  top: 5px;
+}

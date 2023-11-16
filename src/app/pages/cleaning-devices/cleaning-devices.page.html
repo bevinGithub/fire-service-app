@@ -18,6 +18,12 @@
       <ion-grid>
         <ion-row *ngFor="let item of devices" >
           <ion-col size="5" class="left">
+            Ref Number
+          </ion-col>
+          <ion-col size="7" class="text ion-text-center">
+            {{ item?.reference_number }}
+          </ion-col>
+          <ion-col size="5" class="left">
             N/A
           </ion-col>
           <ion-col size="7" class="text ion-text-center">

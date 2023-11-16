@@ -54,12 +54,13 @@ export class CookerHeadPage implements OnInit {
       //  this.dropTable();
       this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_cooker_head_suppression  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        stair_id ENTEGER,
-        service_type_id ENTEGER,
-        site_id ENTEGER,
-        service_cert_id ENTEGER,
-        admin_id ENTEGER,
-        tech_id ENTEGER,
+        stair_id INTEGER,
+        service_type_id INTEGER,
+        site_id INTEGER,
+        sp_id INTEGER,
+        service_cert_id INTEGER,
+        admin_id INTEGER,
+        tech_id INTEGER,
         location_1 TEXT,
         functional_1 TEXT,
         comment_1 TEXT,
@@ -79,19 +80,69 @@ export class CookerHeadPage implements OnInit {
         created_on TEXT)`, []).then((res: any) => {
           console.log('fire_cooker_head_suppression table Created: ' + JSON.stringify(res));
         });
+
+        this.certID = this.cert;
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        if (this.networkStatus === 'none') { //Offline
+          const stairPressureSql = 'SELECT * FROM fire_cooker_head_suppression WHERE service_cert_id=?';
+          this.database.executeSql(stairPressureSql, [this.certID]).then((stairPressureR: any) => {
+            console.log('Record Found: ' + JSON.stringify(stairPressureR));
+            if (stairPressureR.rows.length > 0) {
+              const stairPressure = stairPressureR.rows.item(0);
+              console.log(stairPressure);
+              this.stairPressure.location_1 = stairPressure?.location_1;
+              this.stairPressure.functional_1 = stairPressure?.functional_1;
+              this.stairPressure.comment_1 = stairPressure?.comment_1;
+              this.stairPressure.location_2 = stairPressure?.location_2;
+              this.stairPressure.functional_2 = stairPressure?.functional_2;
+              this.stairPressure.comment_2 = stairPressure?.comment_2;
+              this.stairPressure.location_3 = stairPressure?.location_3;
+              this.stairPressure.functional_3 = stairPressure?.functional_3;
+              this.stairPressure.comment_3 = stairPressure?.comment_3;
+              this.stairPressure.location_3 = stairPressure?.location_3;
+              this.stairPressure.functional_3 = stairPressure?.functional_3;
+              this.stairPressure.comment_3 = stairPressure?.comment_3;
+              this.stairPressure.location_4 = stairPressure?.location_4;
+              this.stairPressure.functional_4 = stairPressure?.functional_4;
+              this.stairPressure.comment_4 = stairPressure?.comment_4;
+              this.stairPressure.location_5 = stairPressure?.location_5;
+              this.stairPressure.functional_5 = stairPressure?.functional_5;
+              this.stairPressure.comment_5 = stairPressure?.comment_5;
+              this.stairPressure.tech_id = stairPressure?.tech_id;
+              this.stairPressure.service_type_id = stairPressure?.service_type_id;
+              this.stairPressure.service_cert_id = stairPressure?.service_cert_id;
+              this.stairPressure.site_id = stairPressure?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+          const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.stairPressure.service_type_id = log?.service_type_id;
+              this.stairPressure.site_id = log?.site_id;
+              this.stairPressure.service_cert_id = log?.cert_id;
+              this.stairPressure.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
     });
   }
 
   ngOnInit() {
-    this.certID = this.cert;
+
   }
 
   ionViewWillEnter(){
     this.certID = this.cert;
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
-    console.log('Connection Status: ' + this.networkStatus);
-    console.log('ID' + this.certID);
     if (this.networkStatus === 'none') { //Offline
       const stairPressureSql = 'SELECT * FROM fire_cooker_head_suppression WHERE service_cert_id=?';
       this.database.executeSql(stairPressureSql, [this.certID]).then((stairPressureR: any) => {
@@ -125,7 +176,7 @@ export class CookerHeadPage implements OnInit {
       }, err => {
         console.log('Cert error: ' + JSON.stringify(err));
       });
-      const certSql = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -242,11 +293,9 @@ export class CookerHeadPage implements OnInit {
           // eslint-disable-next-line max-len
           this.database.executeSql(`UPDATE fire_cooker_head_suppression SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, location_1=?, functional_1=?, comment_1=?, location_2=?, functional_2=?, comment_2=?, location_3=?, functional_3=?, comment_3=?, location_4=?, functional_4=?, comment_4=?, location_5=?, functional_5=?, comment_5=? WHERE id=${pressure.id}`, updateData)
           .then((bs: any) => {
-            console.log('fire_cooker_head_suppression UPDATED: ' + JSON.stringify(bs));
             this.presentToast('Cooker head suppression successfully saved!');
             this.modalController.dismiss();
           }, err => {
-            console.log('fire_cooker_head_suppression ERROR: ' + JSON.stringify(err));
             this.presentToast('Cooker head suppression could not be saved!');
           });
 

@@ -135,6 +135,7 @@
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-footer></app-footer>
+  <app-footer *ngIf="roleID === '2'"></app-footer>
+  <app-staff-footer *ngIf="roleID === '3'" ></app-staff-footer>
 </footer>
 

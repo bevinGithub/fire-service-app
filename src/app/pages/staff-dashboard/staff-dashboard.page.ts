@@ -14,6 +14,7 @@ export class StaffDashboardPage implements OnInit {
   url = environment.url;
   config: any;
   total: any;
+  modules: any;
   constructor(
     private storage: Storage,
     private http: HttpClient,
@@ -21,29 +22,23 @@ export class StaffDashboardPage implements OnInit {
   ) {
     this.storage.get('currentUser').then((user: any) => {
       this.platform.ready().then(() => {
-      OneSignal.getDeviceState((stateChanges: any) => {
-        console.log('Device State: ' + JSON.stringify(stateChanges));
-        const userID = user?.id;
-        const playerID = stateChanges.userId;
-        const posttData = {
-          userId: userID,
-          playerId: playerID
-        };
-        console.log(posttData);
-        this.http.post(this.url + 'update-onesignal-data.php', posttData).subscribe((res: any) => {
-          console.log(res);
-        });
-        //Get Notifiation
-        this.http.get(this.url + 'service-notifications.php?clientID=' + user?.client_id).subscribe((res: any) => {
-          console.log(res);
-          this.total = res?.total;
+        OneSignal.getDeviceState((stateChanges: any) => {
+          console.log('Device State: ' + JSON.stringify(stateChanges));
+          const userID = user?.id;
+          const playerID = stateChanges.userId;
+          const posttData = {
+            userId: userID,
+            playerId: playerID
+          };
+          console.log(posttData);
+          this.http.post(this.url + 'sp-update-onesignal-data.php', posttData).subscribe((res: any) => {
+            console.log(res);
+          });
         });
       });
-
+      this.getActiveModules(user?.id, user?.client_id);
     });
-
-    });
-   }
+  }
 
   ngOnInit() {
   }
@@ -51,20 +46,24 @@ export class StaffDashboardPage implements OnInit {
   ionViewWillEnter(){
     //Get Notifiation
     this.storage.get('currentUser').then((user: any) => {
-      this.http.get(this.url + 'service-notifications.php?clientID=' + user?.client_id).subscribe((res: any) => {
-        console.log(res);
-        this.total = res?.total;
-      });
+      console.log(user);
+      this.getServiceNotifications(user?.client_id);
+      this.getActiveModules(user?.id, user?.client_id);
     });
   }
 
-  ionViewDidEnter(){
-      //Get Notifiation
-      this.storage.get('currentUser').then((user: any) => {
-      this.http.get(this.url + 'service-notifications.php?clientID=' + user?.client_id).subscribe((res: any) => {
-        console.log(res);
-        this.total = res?.total;
-      });
+  getServiceNotifications(clientID) {
+    this.http.get(this.url + 'service-notifications.php?clientID=' + clientID).subscribe((res: any) => {
+      console.log(res);
+      this.total = res?.total;
+    });
+  }
+
+  //GET ACTIVE MODULES
+  getActiveModules(userID, clientID) {
+    this.http.get(this.url + 'sp-get-staff-active-modules.php?userID=' + userID  + '&clientID=' + clientID).subscribe((mod: any) => {
+      console.log(mod);
+      this.modules = mod;
     });
   }
 }

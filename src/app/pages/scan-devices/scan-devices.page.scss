@@ -1,0 +1,61 @@
+.title-default {
+  width: 100%;
+  font-family: "Poppins Semi Bold";
+  font-size: 15px;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+
+ion-button {
+  height: 45px !important;
+  width: 100%;
+}
+.heading {
+  color: #040505;
+  font-family: 'Poppins Medium';
+  font-size: 16px;
+}
+
+ion-grid {
+  padding: 0px;
+}
+ion-col {
+  padding: 5px;
+}
+.border-bottom {
+  border-bottom: 1px solid #e4e4e4
+}
+
+.left {
+  text-align: left;
+  font-size: 12px;
+  font-family: 'Roboto';
+}
+
+.right {
+  text-align: right;
+  font-size: 12px;
+  font-family: 'Roboto';
+}
+
+.spacer-30 {
+  height: 40px;
+}
+
+.bnt-text {
+  padding: 15px;
+  width: 100% !important;
+  background: #000;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 10px;;
+}
+
+.devices {
+  padding: 10px;
+  border: 1px solid #333;
+  margin-bottom: 10px;
+}

@@ -43,11 +43,11 @@
   <ion-grid>
 
     <ion-row class="border-bottom">
-      <ion-col size="12" class="left heading">{{ site?.site_name }}</ion-col>
+      <ion-col size="12" class="left heading">{{ cert?.site_name }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
-      <ion-col size="12" class="left">{{ site?.system_category }}</ion-col>
+      <ion-col size="12" class="left">{{ cert?.system_category }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
@@ -67,12 +67,12 @@
 
     <ion-row class="border-bottom">
       <ion-col size="4" class="left">Address</ion-col>
-      <ion-col size="8" class="right">{{ site?.site_address }}</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_address }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
       <ion-col size="4" class="left">Protected Areas</ion-col>
-      <ion-col size="8" class="right">{{ site?.protected_areas }}</ion-col>
+      <ion-col size="8" class="right">{{ cert?.protected_areas }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
@@ -82,12 +82,12 @@
 
     <ion-row class="border-bottom">
       <ion-col size="4" class="left">Responsible Person</ion-col>
-      <ion-col size="8" class="right">{{ site?.responsible_person }}</ion-col>
+      <ion-col size="8" class="right">{{ cert?.responsible_person }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
       <ion-col size="4" class="left">Contact Number</ion-col>
-      <ion-col size="8" class="right">{{ site?.site_contact_number }}</ion-col>
+      <ion-col size="8" class="right">{{ cert?.site_contact_number }}</ion-col>
     </ion-row>
 
     <ion-row class="border-bottom">
@@ -96,7 +96,7 @@
 
     <ion-row class="border-bottom">
       <ion-col size="5" class="left">System Code</ion-col>
-      <ion-col size="7" class="right">{{ site?.system_code }}</ion-col>
+      <ion-col size="7" class="right">{{ cert?.system_code }}</ion-col>
     </ion-row>
 
   </ion-grid>
@@ -613,7 +613,7 @@
       <ion-row class="">
         <ion-col size="1"  class="title-head right-border1">6.5</ion-col>
         <ion-col size="9" class="left">Wireless</ion-col>
-        <ion-col size="2"  class="right">{{ cert?.wireless_6_5 }}</ion-col>
+        <ion-col size="2"  class="text ion-text-center">{{ cert?.wireless_6_5 }}</ion-col>
       </ion-row>
     </ng-container>
     <!-- 7.0 Auxiliary -->

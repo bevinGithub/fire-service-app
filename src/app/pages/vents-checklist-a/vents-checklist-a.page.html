@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center">
+
+    <ion-buttons slot="start">
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>VENT {{ vent?.vent_number }}</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Location</ion-col>
+      <ion-col size="6" class="right">{{ vent?.vent_location }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Vent Type</ion-col>
+      <ion-col size="6" class="right" >{{ vent?.vent_type }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="6" class="left">Date</ion-col>
+      <ion-col size="6" class="right" >{{ checklist?.date_tested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="dark-bg  mb-10 ion-text-center" style="margin-bottom: 15px;">
+      <ion-col size="9"  class="title-head right-border1">
+       Checklist A
+      </ion-col>
+      <ion-col size="3"  class="title-head right-border1 right" style="text-align: right">Yes/No</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Debris removed from ventilators rain channel</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.vent_rain_channel }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Ventilators checked for mechanical damage</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.mechanical_damage }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check spring, Actuator & Fusible Link Mechanism/Mounting</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.mechanism_mounting }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check ventilators moving parts</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.vent_moving_parts }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check ventilators Linkages</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.vent_linkages }}</ion-col>
+    </ion-row>
+
+
+    <!-- <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check ventilator cabling can pulleys/Linkages</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.ventilator_cabling }}</ion-col>
+    </ion-row> -->
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Clean ventilators components</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.clean_vent_components }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Debris removed from roof in vicinity of ventilators</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.debris_removed }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Check connection of ventilators to the building</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.check_connections }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Make sure the responsible person on site is familiar with the operation of the system</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.operation_system }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="9" class="left">Is vent tested</ion-col>
+      <ion-col size="3" class="right" >{{ checklist?.isVentTested }}</ion-col>
+    </ion-row>
+
+    <ion-row class="border-bottom">
+      <ion-col size="12" class="left">General Comments</ion-col>
+      <ion-col size="12" class="left" >{{ checklist?.general_comments }}</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+
+</ion-content>
+<footer class="footer">
+  <div class="ion-text-center logo-bottom">
+    <img valign="center" src="/assets/img/footer-icon.png" alt="">
+  </div>
+  <app-staff-footer *ngIf="role === '3'" ></app-staff-footer>
+  <app-tech-footer *ngIf="role === '4'" ></app-tech-footer>
+</footer>

@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  url: 'https://www.theformuladev2.co.za/app-services/',
-  // url: 'https://www.admin.fire-service-app.com/app-services/',
+  // url: 'https://www.theformuladev2.co.za/fire-services-new/app-services/',
+  url: 'https://www.admin.fire-service-app.com/app-services/',
+  apiUrl: 'https://www.admin.fire-service-app.com/site/wp-json/wp/v2/',
 };
 
 /*

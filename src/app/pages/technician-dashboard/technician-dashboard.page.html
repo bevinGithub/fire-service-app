@@ -1,17 +1,24 @@
 <ion-header>
   <ion-toolbar class="ion-text-center">
 
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
-    </ion-buttons>
+    </ion-buttons> -->
 
-    <ion-title>DASHBOARD</ion-title>
+    <ion-title>TECHNICIAN MODULES</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <ion-grid>
+    <ion-row  >
+      <ion-col class="ion-text-center" *ngFor="let item of modules" size="6" class="padding-10" routerLink="/tech-selected-modules/{{ item?.id }}">
+        <img src="/assets/img/{{ item?.module_icon }}" alt="">
+        <div class="ion-text-center">{{item[0]?.business_name}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-grid>
 
     <ion-row>
       <ion-col size="6" class="padding-10" routerLink="/technician-menu/technician-job-cards">
@@ -22,11 +29,8 @@
       </ion-col>
     </ion-row>
 
-  </ion-grid>
+  </ion-grid> -->
 
-  <!-- <ion-button routerLink="/tag-writing" expand="block">DEMO WRITE</ion-button> -->
-  <!-- <br /> -->
-  <!-- <ion-button routerLink="/tag-reading" expand="block">READ CHIP</ion-button> -->
   <br />
 
   <ion-button routerLink="/readwrite/read" expand="block">READ RFID</ion-button>
@@ -39,12 +43,12 @@
   <br>
   <ion-button color="secondary" (click)="openSettings()"  expand="block">CONNECTION STATUS</ion-button>
   <br>
-  <ion-button routerLink="/test-camera" expand="block">SCAN BLUETOOTH</ion-button>
+  <ion-button routerLink="/technician-menu/tabs" expand="block">SCAN BLUETOOTH</ion-button>
 </ion-content>
 <footer class="footer">
   <div class="ion-text-center logo-bottom">
     <img valign="center" src="/assets/img/footer-icon.png" alt="">
   </div>
-  <app-tech-footer></app-tech-footer>
-</footer> 
+  <app-tech-footer2></app-tech-footer2>
+</footer>
 

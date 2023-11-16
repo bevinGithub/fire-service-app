@@ -30,6 +30,7 @@ export class ContactLoggedinPage implements OnInit {
       this.contact.email = user.email;
       this.contact.mobile_number = user.mobile_number;
       this.contact.userID = user.id;
+      this.contact.spID = user.role_id;
       this.roleID = user.role_id;
     });
    }
@@ -39,7 +40,7 @@ export class ContactLoggedinPage implements OnInit {
 
   sendEnquiry() {
     this.storage.get('currentUser').then((user: any) => {
-      this.http.post(this.url + 'process-contact-form.php', this.contact).subscribe((data: any) => {
+      this.http.post(this.url + 'process-contact-form-logged.php', this.contact).subscribe((data: any) => {
         console.log(data);
         if (data.status === 'success') {
           this.systemNotify('Your enquiry has been submitted successfully!');

@@ -37,29 +37,66 @@ export class CallPointsPage implements OnInit {
       name: 'fireservices.db',
       location: 'default',
      }).then((db: SQLiteObject) => {
-       this.database = db;
-      //  this.dropTable();
-      // eslint-disable-next-line max-len
-      this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_manual_call_points  (id INTEGER PRIMARY KEY AUTOINCREMENT, call_id ENTEGER, service_type_id ENTEGER, site_id ENTEGER, service_cert_id ENTEGER, admin_id ENTEGER, tech_id ENTEGER, manual_call_point_comments TEXT, isSync TEXT, date_created TEXT)`,[])
-      .then((res: any) => {
-        console.log('CallPoint table Created: ' + JSON.stringify(res));
-      });
+        this.database = db;
+        //  this.dropTable();
+        // eslint-disable-next-line max-len
+        this.database.executeSql(`CREATE TABLE IF NOT EXISTS fire_manual_call_points  (id INTEGER PRIMARY KEY AUTOINCREMENT, call_id INTEGER, service_type_id INTEGER, site_id INTEGER, service_cert_id INTEGER, admin_id INTEGER, tech_id INTEGER, manual_call_point_comments TEXT, isSync TEXT, date_created TEXT)`,[])
+        .then((res: any) => {
+          console.log('CallPoint table Created: ' + JSON.stringify(res));
+        });
+
+        this.certID = `${this.cert}`;
+        //alert(this.certID);
+        this.networkCheckerService.checkNetworkChange();
+        this.networkStatus = this.networkCheckerService.connectionType();
+        console.log('Connection Status: ' + this.networkStatus);
+        if (this.networkStatus === 'none') {
+          this.certID = `${this.cert}`;
+          const certSql = 'SELECT * FROM fire_manual_call_points WHERE service_cert_id=?';
+          this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.callPoint.manual_call_point_comments = log?.manual_call_point_comments;
+              this.callPoint.tech_id = log?.tech_id;
+              this.callPoint.service_type_id = log?.service_type_id;
+              this.callPoint.service_cert_id = log?.service_cert_id;
+              this.callPoint.site_id = log?.site_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+          const certSql2 = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
+          this.database.executeSql(certSql2, [this.certID]).then((logR: any) => {
+            console.log('Record Found: ' + JSON.stringify(logR));
+            if (logR.rows.length > 0) {
+              const log = logR.rows.item(0);
+              console.log(log);
+              this.callPoint.service_type_id = log?.service_type_id;
+              this.callPoint.site_id = log?.site_id;
+              this.callPoint.service_cert_id = log?.cert_id;
+              this.callPoint.tech_id = log?.service_technician_id;
+            }
+          }, err => {
+            console.log('Cert error: ' + JSON.stringify(err));
+          });
+        }
      });
   }
 
   ngOnInit() {
-    this.certID = `${this.cert}`;
-    console.log('Cert Data' + this.certID);
-    this.callPoint.service_cert_id = this.certID;
+
   }
 
   ionViewWillEnter(){
     this.certID = `${this.cert}`;
-    console.log('Will Enter: ' + this.cert);
+    console.log('Will Enter: ' + this.callPoint.service_cert_id);
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
     console.log('Connection Status: ' + this.networkStatus);
     if (this.networkStatus === 'none') {
+      this.certID = `${this.cert}`;
       const certSql = 'SELECT * FROM fire_manual_call_points WHERE service_cert_id=?';
       this.database.executeSql(certSql, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
@@ -75,7 +112,7 @@ export class CallPointsPage implements OnInit {
       }, err => {
         console.log('Cert error: ' + JSON.stringify(err));
       });
-      const certSql2 = 'SELECT * FROM fire_service_certificates WHERE cert_id=?';
+      const certSql2 = 'SELECT * FROM fire_sp_service_certificates WHERE cert_id=?';
       this.database.executeSql(certSql2, [this.certID]).then((logR: any) => {
         console.log('Record Found: ' + JSON.stringify(logR));
         if (logR.rows.length > 0) {
@@ -95,7 +132,7 @@ export class CallPointsPage implements OnInit {
   async presentToast(msg) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 3000
+      duration: 10000
     });
     toast.present();
   }
@@ -116,10 +153,11 @@ export class CallPointsPage implements OnInit {
           } else {
             this.callPointComments = '';
           }
+          const isSync = 'No';
           // eslint-disable-next-line max-len
-          const updateData = [this.callPoint.service_type_id, this.callPoint.site_id, this.callPoint.service_cert_id, this.callPoint.tech_id, this.callPointComments, this.callPoint.date_created];
+          const updateData = [this.callPoint?.service_type_id, this.callPoint?.site_id, this.callPoint?.service_cert_id, this.callPoint?.tech_id, this.callPointComments, isSync, this.callPoint?.date_created];
           // eslint-disable-next-line max-len
-          this.database.executeSql(`UPDATE fire_manual_call_points SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, manual_call_point_comments=?, date_created=? WHERE id=${data.id}`, updateData)
+          this.database.executeSql(`UPDATE fire_manual_call_points SET service_type_id=?, site_id=?, service_cert_id=?, tech_id=?, manual_call_point_comments=?, isSync=?, date_created=? WHERE id=${data.id}`, updateData)
           .then((log: any) => {
             console.log('UPDATE DATA: ' + JSON.stringify(log));
             this.presentToast('Call point successfully saved!');
@@ -133,8 +171,9 @@ export class CallPointsPage implements OnInit {
           } else {
             this.callPointComments = '';
           }
+          const isSync = 'No';
           // eslint-disable-next-line max-len
-          this.database.executeSql(`INSERT INTO fire_manual_call_points (service_type_id, site_id, service_cert_id, tech_id, manual_call_point_comments, date_created) VALUES ('${this.callPoint.service_type_id}', '${this.callPoint.site_id}', '${this.callPoint.service_cert_id}', '${this.callPoint.tech_id}', '${this.callPointComments}', '${this.callPoint.date_created}')`,[])
+          this.database.executeSql(`INSERT INTO fire_manual_call_points (service_type_id, site_id, service_cert_id, tech_id, manual_call_point_comments, isSync, date_created) VALUES ('${this.callPoint?.service_type_id}', '${this.callPoint?.site_id}', '${this.callPoint?.service_cert_id}', '${this.callPoint?.tech_id}', '${this.callPointComments}', '${isSync}', '${this.callPoint?.date_created}')`,[])
           .then((log: any) => {
             console.log('ADD DATA: ' + JSON.stringify(log));
             this.presentToast('Call point successfully saved!');

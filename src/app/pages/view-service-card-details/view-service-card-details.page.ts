@@ -41,14 +41,7 @@ export class ViewServiceCardDetailsPage implements OnInit {
   ) {
     this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
     console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
-      console.log(data);
-      this.cert = data?.certificate;
-      this.tech = data?.technician;
-      this.staff = data?.staff;
-      this.site = data?.site;
-      this.service.id = this.cert?.id;
-    });
+    this.viewCompletedServiceCardDetails(this.certficateID);
     this.hideClientBtn  = false;
     this.hideRepBtn = false;
     this.dateClientSigned = moment(new Date()).format('YYYY-MM-DD');
@@ -61,18 +54,6 @@ export class ViewServiceCardDetailsPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    this.certficateID = this.activatedRoute.snapshot.paramMap.get('certificateID');
-    console.log(this.certficateID);
-    this.http.get(this.url + 'get-service-certificate.php?id=' + this.certficateID).subscribe((data: any) => {
-      console.log(data);
-      this.cert = data?.certificate;
-      this.tech = data?.technician;
-      this.staff = data?.staff;
-      this.site = data?.site;
-      this.service.id = this.cert?.id;
-      this.service.service_certificate_number = this?.cert.service_certificate_number;
-      this.service.technician_id = this?.cert.technician_id;
-    });
     this.networkCheckerService.checkNetworkChange();
     this.networkStatus = this.networkCheckerService.connectionType();
     console.log('Connection Status: ' + this.networkStatus);
@@ -87,37 +68,46 @@ export class ViewServiceCardDetailsPage implements OnInit {
     }
   }
 
+  viewCompletedServiceCardDetails(certficateID) {
+    this.http.get(this.url + 'sp-get-service-certificate.php?id=' + certficateID).subscribe((data: any) => {
+      console.log(data);
+      this.cert = data?.certificate;
+      this.tech = data?.technician;
+      this.staff = data?.staff;
+      this.site = data?.site;
+      this.service.id = this.cert?.id;
+      this.service.service_certificate_number = this?.cert.service_certificate_number;
+      this.service.technician_id = this?.cert.technician_id;
+    });
+  }
+
   getOfflineSC(scID) {
     console.log(scID);
     const offData = [];
     // eslint-disable-next-line max-len
-    const querySC = 'SELECT *,fire_service_certificates.service_status AS cert_status  FROM fire_service_certificates JOIN fire_users ON fire_service_certificates.client_id=fire_users.user_id JOIN fire_sites ON fire_service_certificates.site_id = fire_sites.site_id  WHERE fire_service_certificates.cert_id=?';
+    const querySC = 'SELECT *,fire_sp_service_certificates.service_status AS cert_status  FROM fire_sp_service_certificates JOIN fire_sp_users ON fire_sp_service_certificates.client_id=fire_sp_users.user_id JOIN fire_sp_sites ON fire_sp_service_certificates.site_id = fire_sites.site_id  WHERE fire_sp_service_certificates.cert_id=?';
     this.database.executeSql(querySC,[scID]).then((rec: any) => {
       console.log('SC: ' + JSON.stringify(rec));
       console.log('Record Found: ' + rec.rows.length);
       if (rec.rows.length > 0) {
        this.cert = rec.rows.item(0);
-       console.log(this.cert);
        //#GET TECH DATA
-       const query = 'SELECT * FROM fire_users WHERE user_id=?';
+       const query = 'SELECT * FROM fire_sp_users WHERE user_id=?';
        this.database.executeSql(query, [this.cert?.service_technician_id]).then((res2: any) => {
-          console.log('TECH DATA: ' + JSON.stringify(res2));
           if (res2.rows.length > 0) {
             this.tech = res2.rows.item(0);
           }
        });
        //GET CLIENT DATA
-       const queryClient = 'SELECT * FROM fire_users WHERE client_id=?';
+       const queryClient = 'SELECT * FROM fire_sp_users WHERE client_id=?';
        this.database.executeSql(queryClient, [this.cert?.client_id]).then((resClient: any) => {
-          console.log('TECH DATA: ' + JSON.stringify(resClient));
           if (resClient.rows.length > 0) {
             this.staff = resClient.rows.item(0);
           }
        });
        //GET SITE DATA
-       const querySite = 'SELECT * FROM fire_sites WHERE site_id=?';
+       const querySite = 'SELECT * FROM fire_sp_sites WHERE site_id=?';
        this.database.executeSql(querySite, [this.cert?.site_id]).then((resSite: any) => {
-          console.log('TECH DATA: ' + JSON.stringify(resSite));
           if (resSite.rows.length > 0) {
             this.site = resSite.rows.item(0);
           }

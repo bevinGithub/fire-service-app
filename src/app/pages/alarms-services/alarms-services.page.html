@@ -2,72 +2,127 @@
   <ion-toolbar class="ion-text-center">
 
     <ion-buttons slot="start">
-      <ion-menu-button class="menu-btn" color="primary"></ion-menu-button>
+      <ion-back-button class="menu-btn" color="primary"></ion-back-button>
     </ion-buttons>
 
-    <ion-buttons slot="end" routerLink="/staff-menu/notifications">
-      <ion-icon style="font-size: 21px" name="notifications-outline" color="primary"></ion-icon>
-      <span class="counter">{{ total }}</span>
-    </ion-buttons>
-
-    <ion-title>SERVICES</ion-title>
+    <ion-title>SERVICE CERTIFICATES</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
 
-  <div class="btn-container ion-padding">
-    <ion-button expand="block" shape="round" color="primary" routerLink="/add-service">REQUEST A SERVICE</ion-button>
-  </div>
-
+<ion-content>
+  <div class="spacer"></div>
   <div class="ion-text-center heading-text">
-    OPEN SERVICES
+    OPEN SERVICE CARDS
   </div>
 
-  <ng-container *ngIf="services?.length === 0">
-    <ion-card>
-      <ion-card-content class="ion-tect-center">
-        There are no service certificates at the moment!
+  <!-- SMOKE CONTROL -->
+  <div *ngIf="moduleType === 'SC'" >
+    <div *ngIf="openCerts?.length === 0" >
+      <ion-card>
+        <ion-card-content class="ion-text-center">
+          There is currently no service cards at the moment!
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="faults"  *ngIf="openCerts?.length > 0">
+      <ion-card *ngFor="let item of openCerts" routerLink="/view-staff-smoke-details/{{ item.cert_id }}">
+        <ion-card-content class="list" *ngIf="item.status !== 'Completed'">
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+          <div class="title">Service Certificate #{{ item.service_certificate_number }}</div>
+          <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+          <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+            <span class="orange" *ngIf="item.service_status === 'Available'">In Progress</span>
+            <span class="orange" *ngIf="item.service_status === 'In Progress'">In Progress</span>
+            <span class="orange" *ngIf="item.service_status === 'Assigned'">In Progress</span>
+            <span class="orange" *ngIf="item.service_status === 'Accepted' &&  item.job_approve !== 'Approved'">In Progress</span>
+            <span class="green" *ngIf="item.service_status === 'Accepted' &&  item.job_approve === 'Approved'">Assigned</span>
+          </div>
+          <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.service_name }}</div>
+          <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.service_card_created | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="spacer"></div>
+    <div class="ion-text-center heading-text">
+      COMPLETED SERVICE CARDS
+    </div>
+    <div *ngIf="closedCerts?.length === 0" >
+      <ion-card>
+        <ion-card-content class="ion-text-center">
+          There is currently no completed job cards at the moment!
+        </ion-card-content>
+      </ion-card>
+  </div>
+    <div class="faults"  *ngIf="closedCerts?.length > 0">
+      <ion-card *ngFor="let item of closedCerts" routerLink="/staff-menu/complete-staff-service-smoke/{{ item.cert_id }}">
+        <ion-card-content class="list" *ngIf="item.service_status === 'Completed'" >
+          <div class="title">Service Provider: {{ item?.business_name }}</div>
+          <div class="title">Service Certificate #{{ item.service_certificate_number }}</div>
+          <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+          <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+            <span class="green" *ngIf="item.service_status === 'Completed'">{{ item.service_status }}</span></div>
+          <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.service_name }}</div>
+          <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- FIRE PROTECTION -->
+  <div *ngIf="moduleType === 'FD'" >
+    <div *ngIf="openCerts?.length === 0" >
+      <ion-card>
+        <ion-card-content class="ion-text-center">
+          There is currently no service cards at the moment!
+        </ion-card-content>
+      </ion-card>
+  </div>
+
+  <div class="faults"  *ngIf="openCerts?.length > 0">
+    <ion-card *ngFor="let item of openCerts" routerLink="/view-site-certificate-details/{{ item.cert_id }}">
+      <ion-card-content class="list" *ngIf="item.service_status !== 'Completed'">
+        <div class="title">Service Provider: {{ item?.business_name }}</div>
+        <div class="title">Service Certificate #{{ item.service_certificate_number }}</div>
+        <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+        <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+          <span class="orange" *ngIf="item.service_status === 'Available'">In Progress</span>
+          <span class="orange" *ngIf="item.service_status === 'In Progress'">In Progress</span>
+          <span class="orange" *ngIf="item.service_status === 'Assigned'">In Progress</span>
+          <span class="orange" *ngIf="item.service_status === 'Accepted' &&  item.job_approve !== 'Approved'">In Progress</span>
+          <span class="green" *ngIf="item.service_status === 'Accepted' &&  item.job_approve === 'Approved'">Assigned</span>
+
+        </div>
+        <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.service_name }}</div>
+        <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.service_card_created | date: 'dd/MM/yyyy HH:mm' }}</div>
       </ion-card-content>
     </ion-card>
-  </ng-container>
-
- <ng-container style="padding: 15px;" *ngIf="services?.length > 0">
-   <ng-container *ngFor="let item of services">
-     <div *ngIf="item.cert_status === 'Assigned'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
-       <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
-       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
-       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
-       <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_assigned | date: 'dd/MM/yyyy HH:mm' }}</div>
-     </div>
-     <!-- <div *ngIf="item.cert_status === 'Available'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
-       <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
-       <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
-       <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
-       <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.service_card_created | date: 'dd/MM/yyyy' }}</div>
-     </div> -->
-     <div *ngIf="item.cert_status === 'Accepted'" class="border-liner list ion-padding" routerLink="/view-service-request/{{ item.id }}">
-      <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
-      <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
-      <div class="status" style="color: #E9A800;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
-      <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_accepted | date: 'dd/MM/yyyy HH:mm' }}</div>
-    </div>
-   </ng-container>
-  </ng-container>
-
-  <div class="ion-text-center heading-text">
-    SERVICES HISTORY
   </div>
 
-  <ng-container style="padding: 15px;" *ngIf="services?.length > 0">
-    <ng-container *ngFor="let item of services">
-      <div *ngIf="item.cert_status === 'Completed'" class="border-liner list ion-padding" routerLink="/complete-service-history/{{ item.id }}">
-        <div class="title">Service Certificate No. {{ item?.service_certificate_number }}</div>
-        <div class="site"><img src="/assets/img/list/marker.png" alt="">{{ item?.site_name }}</div>
-        <div class="status" style="color: #11AC00;"><img src="/assets/img/list/viewer.png" alt="">{{ item?.cert_status }}</div>
-        <div class="date"><img src="/assets/img/list/calendar.png" alt="">{{ item?.date_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
-      </div>
-    </ng-container>
-  </ng-container>
+  <div class="ion-text-center heading-text">
+    COMPLETED SERVICE CARDS
+  </div>
+  <div *ngIf="closedCerts?.length === 0" >
+    <ion-card>
+      <ion-card-content class="ion-text-center">
+        There is currently no completed job cards at the moment!
+      </ion-card-content>
+    </ion-card>
+</div>
+  <div class="faults"  *ngIf="closedCerts?.length > 0">
+    <ion-card *ngFor="let item of closedCerts" routerLink="/complete-service-history/{{ item.cert_id }}">
+      <ion-card-content class="list" *ngIf="item.service_status === 'Completed'" >
+        <div class="title">Service Provider: {{ item?.business_name }}</div>
+        <div class="title">Service Certificate #{{ item.service_certificate_number }}</div>
+        <div class="site-title"><img src="/assets/img/list/marker.png" alt="">{{ item.site_name }}</div>
+        <div class="status"><img src="/assets/img/list/viewer.png" alt="">
+          <span class="green" *ngIf="item.service_status === 'Completed'">{{ item.service_status }}</span></div>
+        <div class="details"><img src="/assets/img/list/services.png" alt="">{{ item.service_name }}</div>
+        <div class="details"><ion-icon color="primary" name="time-outline"></ion-icon> {{ item?.date_service_completed | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  </div>
 
 </ion-content>
 <footer class="footer">

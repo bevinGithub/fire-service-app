@@ -8,7 +8,7 @@ import { TechnicianJobCardsPageRoutingModule } from './technician-job-cards-rout
 
 import { TechnicianJobCardsPage } from './technician-job-cards.page';
 
-import { SharedModule } from '../../components/shared.module'
+import { SharedModule } from '../../components/shared.module';
 
 @NgModule({
   imports: [

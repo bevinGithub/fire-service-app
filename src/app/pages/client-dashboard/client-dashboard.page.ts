@@ -13,6 +13,7 @@ import { Platform } from '@ionic/angular';
 export class ClientDashboardPage implements OnInit {
   url = environment.url;
   config: any;
+  modules: any;
 
   constructor(
     private storage: Storage,
@@ -21,27 +22,35 @@ export class ClientDashboardPage implements OnInit {
   ) {
     this.storage.get('currentUser').then((user: any) => {
       this.platform.ready().then(() => {
-      OneSignal.getDeviceState((stateChanges: any) => {
-        console.log('Device State: ' + JSON.stringify(stateChanges));
-        const userID = user?.id;
-        const playerID = stateChanges.userId;
-        const posttData = {
-          userId: userID,
-          playerId: playerID
-        };
-        console.log(posttData);
-        this.http.post(this.url + 'update-onesignal-data.php', posttData).subscribe((res: any) => {
-          console.log(res);
+        OneSignal.getDeviceState((stateChanges: any) => {
+          console.log('Device State: ' + JSON.stringify(stateChanges));
+          const userID = user?.id;
+          const playerID = stateChanges.userId;
+          const posttData = {
+            userId: userID,
+            playerId: playerID
+          };
+          console.log(posttData);
+          this.http.post(this.url + 'sp-update-onesignal-data.php', posttData).subscribe((res: any) => {
+            console.log(res);
+          });
         });
+
       });
-
-    });
-
+      //GET MODULES
+      this.getActiveModules(user.id);
     });
     console.log(this.url);
    }
 
   ngOnInit() {
+  }
+
+  getActiveModules(techID) {
+    this.http.get(this.url + 'sp-get-active-modules.php?techID=' + techID).subscribe((mod: any) => {
+      console.log(mod);
+      this.modules = mod;
+    });
   }
 
 }

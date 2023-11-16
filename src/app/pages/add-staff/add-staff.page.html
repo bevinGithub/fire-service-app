@@ -93,6 +93,7 @@
       </ion-list>
 
       <div padding>
+        <ion-input [(ngModel)]="staff.spID" name="spID" placeholder="spID" type="hidden"></ion-input>
         <ion-input [(ngModel)]="staff.clientID" name="clientID" placeholder="ClientID" type="hidden"></ion-input>
         <ion-button shape="round" expand="full" color="primary" block (click)="addStaffMember()" [disabled]="!f.valid || !validEmail">ADD STAFF MEMBER</ion-button>
       </div>

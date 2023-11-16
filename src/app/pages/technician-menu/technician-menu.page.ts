@@ -17,11 +17,13 @@ export class TechnicianMenuPage implements OnInit {
     },
     {
       title: 'JOB CARDS',
-      url: 'technician-job-cards'
+      // url: 'technician-job-cards'
+      url: 'all-job-cards'
     },
     {
       title: 'SERVICE CARDS',
-      url: 'technician-service-cards'
+      // url: 'technician-service-cards'
+      url: 'all-service-cards'
     },
     {
       title: 'PROFILE',

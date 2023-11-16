@@ -62,6 +62,47 @@ export class AppComponent {
     OneSignal.promptForPushNotificationsWithUserResponse((accepted: any) => {
         console.log('User accepted notifications: ' + accepted);
     });
+    OneSignal.setNotificationOpenedHandler((tapped: any) => {
+      console.log(tapped.notification);
+      const title = tapped.notification.title;
+      const msg = tapped.notification.body;
+      const task = tapped.notification.additionalData;
+
+      this.openNotification(title, msg, task);
+    });
+  }
+
+  async openNotification(title, msg, task) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: msg,
+      buttons: [
+        {
+          text: 'Ok ',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.openPage(task);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  openPage(data) {
+    console.log(data);
+    if (data?.spID && data?.receiverID && data?.requestID) {
+      console.log('Has 3 IDs');
+      this.router.navigate([`/${data?.controller}/${data?.id}/${data?.requestNumber}/${data?.receiverID}/${data?.requestID}`]);
+    } else if (data?.spID) {
+      console.log('Has Record ID' + data?.spID);
+      this.router.navigate([`/${data?.controller}/${data?.spID}`]);
+    } else if (data?.moduleName) {
+      this.router.navigate([`/${data?.controller}`]);
+    } else {
+      console.log('No Record ID');
+      this.router.navigate(['/' + data?.controller]);
+    }
   }
 
 }
